@@ -1,40 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import LevelPanel from "../components/LevelPanel";
 import { useMachine } from "@xstate/react";
 import GameMachine from "../machines/GameMachine";
 import InventoryPanel from "../components/InventoryPanel";
 import EquipmentsPanel from "../components/EquipmentsPanel";
+import LogsPanel from "../components/LogsPanel";
 import { getData } from "../services/data";
 // import WorldPanel from "../components/WorldPanel";
 
 const Wrapper = styled.div`
   padding: 1rem;
 
-  .level-panel {
-    width: 15rem;
+  .menu,
+  .level-panel,
+  .equipments-panel,
+  .log-panel {
     margin-bottom: 1rem;
-  }
-  .equipments-panel {
-    width: 15rem;
-    margin-bottom: 1rem;
-  }
-  .inventory-panel {
-    width: 15rem;
-  }
-  .world-panel {
-    width: 100%;
   }
 `;
 
 const Dashboard = ({ sendToViewMachine }: any) => {
-  const MachineWithContext = GameMachine.withContext(getData());
+  const MachineWithContext = GameMachine.withContext({ ...getData(), log: "" });
   const [state, send] = useMachine(MachineWithContext);
-  // const [log, setLog] = useState("");
+
+  if (!state.context) return null;
 
   return (
     <Wrapper className="container-fluid">
-      <div className="row">
+      <div className="row menu">
         <div className="col-12 text-center">
           <button
             type="button"
@@ -54,6 +48,7 @@ const Dashboard = ({ sendToViewMachine }: any) => {
           <InventoryPanel send={send} inventory={state.context.inventory} />
         </div>
         <div className="col-8">
+          <LogsPanel />
           {/* <WorldPanel state={state} log={log} setLog={setLog} /> */}
         </div>
       </div>

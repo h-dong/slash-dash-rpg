@@ -2,17 +2,11 @@ import { Machine } from "xstate";
 import { getData, setData, clearData } from "../services/data";
 import { Equipments, Character, InventoryItemInterface } from "./GameMachine";
 import { WEAR_POSITION } from "../database/items";
-import { assign } from "xstate";
 
 export const VIEW = {
   DASHBOARD: "DASHBOARD",
   SETTINGS: "SETTINGS",
   WELCOME: "WELCOME"
-};
-
-const calcInitState = () => {
-  const data = getData();
-  return data?.character.name ? "game" : "welcome";
 };
 
 // const newCharacterStats = {
@@ -63,27 +57,39 @@ const testCharacterData = {
   ] as InventoryItemInterface[]
 };
 
-const ViewMachine = Machine({
+const hasData = () =>
+  new Promise((resolve, reject) => {
+    const data = getData();
+    if (data?.character?.name) return resolve();
+    return reject();
+  });
+
+interface ViewMachineEvents {
+  type: "CREATE_CHARACTER" | "DELETE_CHARACTER";
+  name: string;
+}
+
+const ViewMachine = Machine<{}, ViewMachineEvents>({
   id: "view",
   initial: "initialising",
   states: {
     initialising: {
       invoke: {
         id: "loadSavedData",
-        src: new Promise((resolve, reject) => {
-          const data = getData();
-          if (data?.character?.name) return resolve();
-          return reject();
-        }),
-        onDone: "game",
-        onError: "welcome"
+        src: hasData,
+        onDone: {
+          target: "game"
+        },
+        onError: {
+          target: "welcome"
+        }
       }
     },
     welcome: {
       on: {
         CREATE_CHARACTER: {
           target: "game",
-          actions: (context: any, { name }: { name: string }) => {
+          actions: (_, { name }) => {
             testCharacterData.character.name = name;
             setData(testCharacterData);
           }
@@ -98,7 +104,7 @@ const ViewMachine = Machine({
         }
       }
     }
-  } as any
+  }
 });
 
 export default ViewMachine;

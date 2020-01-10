@@ -1,6 +1,5 @@
 import { Machine, assign } from "xstate";
-import { WEAR_POSITION } from "../database/items";
-import { getData } from "../services/data";
+import LogStates from "./LogStates";
 import {
   moveEquipmentItemToInventory,
   moveInventoryItemToEquipment
@@ -28,20 +27,28 @@ export interface InventoryItemInterface {
   quantity: number;
 }
 
-interface Context {
+export interface GameMachineContextInterface {
   character: Character;
   equipments: Equipments;
   inventory: InventoryItemInterface[];
+  logs: string;
 }
 
 export type GameMachineEvents = {
-  type: "DIE" | "REVIVE" | "UNEQUIP_ITEM" | "EXAMINE_ITEM" | "EQUIP_ITEM";
+  type:
+    | "DIE"
+    | "REVIVE"
+    | "UNEQUIP_ITEM"
+    | "EXAMINE_ITEM"
+    | "EQUIP_ITEM"
+    | "ADD_LOG"
+    | "LOG_ADDED";
   itemId: number;
 };
 
-const GameMachine = Machine<Context, GameMachineEvents>(
+const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
   {
-    id: "character",
+    id: "game",
     initial: "alive",
     states: {
       alive: {
@@ -58,7 +65,8 @@ const GameMachine = Machine<Context, GameMachineEvents>(
               console.log("EXAMINE_ITEM", event);
             }
           }
-        }
+        },
+        ...LogStates
       },
       dead: {
         on: {

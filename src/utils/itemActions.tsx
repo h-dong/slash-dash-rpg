@@ -26,13 +26,13 @@ export function getInventoryItemActions(
   if (fullItem) {
     actions.push({
       type: "EXAMINE_ITEM",
-      order: 1,
+      order: 2,
       itemId: fullItem.id
     });
     if (fullItem.equipment) {
       actions.push({
         type: "EQUIP_ITEM",
-        order: 2,
+        order: 1,
         itemId: fullItem.id
       });
     }

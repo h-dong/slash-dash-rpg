@@ -17,7 +17,6 @@ import { InventoryItemInterface } from "../machines/GameMachine";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  font-size: small;
 
   .empty {
     width: 100%;
@@ -33,6 +32,7 @@ const Wrapper = styled.div`
     border: 1px solid black;
     border-top: 0;
     text-align: left;
+    font-size: small;
 
     .item-row {
       display: flex;
