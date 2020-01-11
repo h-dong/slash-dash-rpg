@@ -7,6 +7,7 @@ import InventoryPanel from "../components/InventoryPanel";
 import EquipmentsPanel from "../components/EquipmentsPanel";
 import LogsPanel from "../components/LogsPanel";
 import { getData } from "../services/data";
+import { getTimestamp } from "../utils/dateAndTime";
 // import WorldPanel from "../components/WorldPanel";
 
 const Wrapper = styled.div`
@@ -21,7 +22,10 @@ const Wrapper = styled.div`
 `;
 
 const Dashboard = ({ sendToViewMachine }: any) => {
-  const MachineWithContext = GameMachine.withContext({ ...getData(), log: "" });
+  const MachineWithContext = GameMachine.withContext({
+    ...getData(),
+    logs: `<span>${getTimestamp()} - Welcome back, traveller!</span>`
+  });
   const [state, send] = useMachine(MachineWithContext);
 
   if (!state.context) return null;
@@ -48,7 +52,7 @@ const Dashboard = ({ sendToViewMachine }: any) => {
           <InventoryPanel send={send} inventory={state.context.inventory} />
         </div>
         <div className="col-8">
-          <LogsPanel />
+          <LogsPanel logs={state.context.logs} />
           {/* <WorldPanel state={state} log={log} setLog={setLog} /> */}
         </div>
       </div>

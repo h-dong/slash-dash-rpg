@@ -1,9 +1,10 @@
 import { Machine, assign } from "xstate";
-import LogStates from "./LogStates";
+// import LogStates from "./LogStates";
 import {
   moveEquipmentItemToInventory,
   moveInventoryItemToEquipment
 } from "../utils/itemActions";
+import { getTimestamp } from "../utils/dateAndTime";
 
 export interface Character {
   name: string;
@@ -44,6 +45,7 @@ export type GameMachineEvents = {
     | "ADD_LOG"
     | "LOG_ADDED";
   itemId: number;
+  log: string;
 };
 
 const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
@@ -61,12 +63,10 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
             actions: "equipItem"
           },
           EXAMINE_ITEM: {
-            actions: (ctx, event) => {
-              console.log("EXAMINE_ITEM", event);
-            }
+            actions: "addLog"
           }
-        },
-        ...LogStates
+        }
+        // ...LogStates
       },
       dead: {
         on: {
@@ -91,7 +91,9 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           itemId
         )
       ),
-      examineItem: (context, event) => console.log("examined an item")
+      addLog: assign((context, { log }): any => ({
+        logs: `<span>${getTimestamp()} - ${log}</span><br />${context.logs}`
+      }))
     }
   }
 );

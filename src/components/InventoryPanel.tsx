@@ -76,6 +76,8 @@ const InventoryPanel = ({
   const getIcon = (send: any, action: InventoryItemActionInterface) => {
     switch (action.type) {
       case "EXAMINE_ITEM":
+        const fullItem = getItemById(action.itemId);
+
         return (
           <Tooltip
             title="Examine"
@@ -86,7 +88,9 @@ const InventoryPanel = ({
           >
             <FontAwesomeIcon
               icon={faQuestionCircle}
-              onClick={() => send({ type: action.type, itemId: action.itemId })}
+              onClick={() =>
+                send({ type: action.type, log: fullItem?.description })
+              }
             />
           </Tooltip>
         );
@@ -139,11 +143,10 @@ const InventoryPanel = ({
   const renderInventory = () => {
     if (inventory.length === 0) return <span className="empty">Empty</span>;
 
-    const items: any = [];
-    inventory.forEach((inventoryItem: { itemId: number; quantity: number }) => {
-      const item = renderInventoryItem(inventoryItem);
-      items.push(item);
-    });
+    const items = inventory.map(
+      (inventoryItem: { itemId: number; quantity: number }) =>
+        renderInventoryItem(inventoryItem)
+    );
 
     return <div className="items">{items}</div>;
   };

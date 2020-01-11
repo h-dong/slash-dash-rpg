@@ -414,12 +414,11 @@ const rawData: Item[] = [
   // SILVER_SPEAR: {}
 ];
 
-const ITEMS = rawData;
+let ITEMS = rawData;
 
-ITEMS.map((item, index) => ({
+ITEMS = ITEMS.map((item, index) => ({
   description: "Found nothing interesting.",
-  ...item,
-  id: index
+  ...item
 }));
 
 export { ITEMS as default, WEAR_POSITION, RARITY };

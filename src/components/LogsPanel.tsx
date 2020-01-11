@@ -5,6 +5,7 @@ import PanelHeader from "./PanelHeader";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  scroll-behavior: smooth;
 
   .panel-body {
     display: flex;
@@ -47,15 +48,13 @@ const LogWrapper = styled.div`
   text-align: left;
 `;
 
-const log = "<div>Hello this is my default log</div>";
-
-const LogsPanel = () => {
+const LogsPanel = ({ logs }: { logs: string }) => {
   return (
     <Wrapper className="log-panel">
       <PanelHeader name="Logs" />
       <div className="panel-body">
         <LogWrapper
-          dangerouslySetInnerHTML={{ __html: log }}
+          dangerouslySetInnerHTML={{ __html: logs }}
           // ref={el => {
           //   this.messagesEnd = el;
           // }}
