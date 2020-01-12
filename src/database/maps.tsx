@@ -1,4 +1,4 @@
-import MONSTERS from "./monsters";
+import { MONSTERS } from "./monsters";
 import { RARITY, ITEMS } from "./items";
 
 export enum MAPS {
@@ -8,8 +8,8 @@ export enum MAPS {
   DARK_FOREST = "DARK_FOREST"
 }
 
-interface TreasureInterface {
-  item: string;
+export interface TreasureInterface {
+  itemKey: ITEMS;
   rarity: RARITY;
   quantity: {
     min: number;
@@ -18,11 +18,11 @@ interface TreasureInterface {
 }
 
 interface MapMonsterInterface {
-  monster: string;
+  monsterKey: MONSTERS;
   chanceOfAppear: number;
 }
 
-interface MapInterface {
+export interface MapInterface {
   name: string;
   key: MAPS;
   levelGuide?: string;
@@ -40,55 +40,55 @@ const FULL_MAPS: MapInterface[] = [
     key: MAPS.TRAINING_GROUND,
     levelGuide: "(Recommended level 1-3)",
     monsters: [
-      { monster: MONSTERS.CHICKEN.key, chanceOfAppear: 0.5 },
-      { monster: MONSTERS.DUCK.key, chanceOfAppear: 0.5 },
-      { monster: MONSTERS.PIG.key, chanceOfAppear: 0.3 },
-      { monster: MONSTERS.COW.key, chanceOfAppear: 0.3 },
-      { monster: MONSTERS.FARMER.key, chanceOfAppear: 0.1 }
+      { monsterKey: MONSTERS.CHICKEN, chanceOfAppear: 0.5 },
+      { monsterKey: MONSTERS.DUCK, chanceOfAppear: 0.5 },
+      { monsterKey: MONSTERS.PIG, chanceOfAppear: 0.3 },
+      { monsterKey: MONSTERS.COW, chanceOfAppear: 0.3 },
+      { monsterKey: MONSTERS.FARMER, chanceOfAppear: 0.1 }
     ],
     treasure: [
       {
-        item: ITEMS.COIN,
+        itemKey: ITEMS.COIN,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 100 }
       },
       {
-        item: ITEMS.SMALL_HEALTH_POTIONS,
+        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 2 }
       },
       {
-        item: ITEMS.MEDIUM_HEALTH_POTIONS,
+        itemKey: ITEMS.MEDIUM_HEALTH_POTIONS,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 2 }
       },
       {
-        item: ITEMS.WOODEN_SWORD,
+        itemKey: ITEMS.WOODEN_SWORD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: ITEMS.WOODEN_HELMET,
+        itemKey: ITEMS.WOODEN_HELMET,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: ITEMS.WOODEN_PLATE_BODY,
+        itemKey: ITEMS.WOODEN_PLATE_BODY,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: ITEMS.WOODEN_PLATE_LEGS,
+        itemKey: ITEMS.WOODEN_PLATE_LEGS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: ITEMS.WOODEN_SPEAR,
+        itemKey: ITEMS.WOODEN_SPEAR,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: ITEMS.WOODEN_SHIELD,
+        itemKey: ITEMS.WOODEN_SHIELD,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 1 }
       }

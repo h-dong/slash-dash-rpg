@@ -1,21 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import PanelHeader from "./PanelHeader";
 import FULL_MAPS, { MAPS } from "../database/maps";
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  scroll-behavior: smooth;
-
-  .panel-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid black;
-    border-top: 0;
-  }
-`;
 
 const TravelWrapper = styled.ul`
   display: flex;
@@ -59,12 +44,12 @@ const TravelPanel = ({
   };
 
   return (
-    <Wrapper className="log-panel">
-      <PanelHeader name="Fast Travel" />
-      <div className="panel-body">
+    <div className="card border-secondary mb-3">
+      <div className="card-header">Fast Travel</div>
+      <div className="card-body">
         <TravelWrapper>{renderButtons()}</TravelWrapper>
       </div>
-    </Wrapper>
+    </div>
   );
 };
 

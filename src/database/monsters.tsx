@@ -24,9 +24,17 @@ import { RARITY } from "./items";
 // Troll L18
 // Unicorn L20
 
-const MONSTERS = {
-  CHICKEN: {
-    key: "CHICKEN",
+export enum MONSTERS {
+  CHICKEN = "CHICKEN",
+  DUCK = "DUCK",
+  PIG = "PIG",
+  COW = "COW",
+  FARMER = "FARMER"
+}
+
+const FULL_MONSTERS = [
+  {
+    key: MONSTERS.CHICKEN,
     name: "Chicken",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/a/a3/Chicken.png/revision/latest?cb=20161207181258",
@@ -34,8 +42,8 @@ const MONSTERS = {
     level: 1,
     drops: [{ item: "LOW_QUALITY_MEAT", rarity: RARITY.ALWAYS }]
   },
-  DUCK: {
-    key: "DUCK",
+  {
+    key: MONSTERS.DUCK,
     name: "Duck",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/38/Duck.png/revision/latest?cb=20150905042847",
@@ -43,8 +51,8 @@ const MONSTERS = {
     level: 1,
     drops: [{ item: "LOW_QUALITY_MEAT", rarity: RARITY.ALWAYS }]
   },
-  PIG: {
-    key: "PIG",
+  {
+    key: MONSTERS.PIG,
     name: "Pig",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/30/Pig.png/revision/latest/scale-to-width-down/700?cb=20180303064642",
@@ -52,8 +60,8 @@ const MONSTERS = {
     level: 2,
     drops: [{ item: "HIGH_QUALITY_MEAT", rarity: RARITY.ALWAYS }]
   },
-  COW: {
-    key: "COW",
+  {
+    key: MONSTERS.COW,
     name: "Cow",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/8/84/Cow.png/revision/latest/scale-to-width-down/700?cb=20160613020452",
@@ -61,8 +69,8 @@ const MONSTERS = {
     level: 2,
     drops: [{ item: "HIGH_QUALITY_MEAT", rarity: RARITY.ALWAYS }]
   },
-  FARMER: {
-    key: "FARMER",
+  {
+    key: MONSTERS.FARMER,
     name: "Farmer",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/3d/Farmer.png/revision/latest?cb=20170225131827",
@@ -81,6 +89,6 @@ const MONSTERS = {
       }
     ]
   }
-};
+];
 
-export default MONSTERS;
+export default FULL_MONSTERS;

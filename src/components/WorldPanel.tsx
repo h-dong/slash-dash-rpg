@@ -1,81 +1,53 @@
-// import React, { useState } from "react";
-// import styled from "styled-components";
-// import PanelHeader from "./PanelHeader";
-// import fight from "../utils/combat";
-// import WorldPanelNavigation from "./WorldPanelNavigation";
-// import WorldPanelLogs from "./WorldPanelLogs";
-// import WorldPanelShop from "./WorldPanelShop";
-// import WorldPanelActions from "./WorldPanelActions";
-// import WorldPanelDrops from "./WorldPanelDrops";
-// import FULL_MAPS from "../database/maps";
+import React, { useState } from "react";
+import fight from "../utils/combat";
+import WorldPanelShop from "./WorldPanelShop";
+import WorldPanelDrops from "./WorldPanelDrops";
+import FULL_MAPS, { MAPS } from "../database/maps";
+import { GameMachineContextInterface } from "../machines/GameMachine";
+import WorldPanelActions from "./WorldPanelAction";
+import { ITEMS } from "../database/items";
 
-// const Wrapper = styled.div`
-//   display: flex;
-//   flex-direction: column;
+export interface ItemDropsInterface {
+  itemKey: ITEMS;
+  quantity: number;
+}
 
-//   .panel-body {
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: space-between;
-//     border: 1px solid black;
-//     border-top: 0;
-//     padding: 0.25rem 0.5rem;
-//     font-size: small;
-//   }
-// `;
+const WorldPanel = ({
+  send,
+  state
+}: {
+  send: any;
+  state: GameMachineContextInterface;
+}) => {
+  const { character, location } = state;
+  const [drops, setDrops] = useState<ItemDropsInterface[]>([]);
 
-// const WorldPanel = ({ character, state, log, setLog }) => {
-//   const { inventory, pickUpItem } = state;
+  const renderActionsAndDrops = () => {
+    if (location === MAPS.SHOP) {
+      return <WorldPanelShop />;
+    } else {
+      return (
+        <div>
+          <WorldPanelActions
+            send={send}
+            character={character}
+            location={location}
+            setDrops={setDrops}
+          />
+          <WorldPanelDrops send={send} drops={drops} setDrops={setDrops} />
+        </div>
+      );
+    }
+  };
 
-//   const [drops, setDrops] = useState([]);
-//   // const [location, setLocation] = useState(FULL_MAPS.SHOP.key);
-//   const [location, setLocation] = useState(FULL_MAPS.TRAINING_GROUND.key);
+  const locationName = FULL_MAPS.find(elem => elem.key === location)?.name;
 
-//   const renderActionsAndDrops = () => {
-//     if (location === FULL_MAPS.SHOP.key) {
-//       return <WorldPanelShop />;
-//     } else {
-//       return (
-//         <div>
-//           <WorldPanelActions
-//             character={character}
-//             location={location}
-//             setDrops={setDrops}
-//             setLog={setLog}
-//           />
-//           <WorldPanelDrops
-//             inventory={inventory}
-//             pickUpItem={pickUpItem}
-//             drops={drops}
-//             setDrops={setDrops}
-//           />
-//         </div>
-//       );
-//     }
-//   };
-
-//   return (
-//     <Wrapper className="world-panel">
-//       <PanelHeader name={"World"} />
-//       <div className="panel-body">
-//         <div>
-//           <h6>Logs</h6>
-//           <WorldPanelLogs log={log} />
-//         </div>
-//         <div>
-//           <hr />
-//           <h6>Location - {FULL_MAPS[location].name}</h6>
-//           {renderActionsAndDrops()}
-//         </div>
-//         <div>
-//           <hr />
-//           <h6>Fast Travel</h6>
-//           <WorldPanelNavigation setLocation={setLocation} setDrops={setDrops} />
-//         </div>
-//       </div>
-//     </Wrapper>
-//   );
-// };
-const WorldPanel = () => {};
+  return (
+    <div className="card border-secondary mb-3">
+      <div className="card-header">{`Current Location - ${locationName}`}</div>
+      <div className="card-body">{renderActionsAndDrops()}</div>
+    </div>
+  );
+};
 
 export default WorldPanel;

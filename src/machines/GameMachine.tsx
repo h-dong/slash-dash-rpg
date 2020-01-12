@@ -44,8 +44,8 @@ export type GameMachineEvents = {
     | "UNEQUIP_ITEM"
     | "EXAMINE_ITEM"
     | "EQUIP_ITEM"
+    | "PICK_UP_ITEM"
     | "ADD_LOG"
-    | "LOG_ADDED"
     | "CHANGE_LOCATION";
   itemKey: ITEMS;
   log: string;

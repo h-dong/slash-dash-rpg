@@ -6,7 +6,6 @@ import {
   faQuestionCircle,
   faPlusSquare
 } from "@fortawesome/free-solid-svg-icons";
-import PanelHeader from "./PanelHeader";
 import {
   getInventoryItemActions,
   InventoryItemActionInterface
@@ -14,13 +13,10 @@ import {
 import { getItemByKey } from "../utils/findItem";
 import { InventoryItemInterface } from "../machines/GameMachine";
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-
+const InventoryWrapper = styled.div`
   .empty {
     width: 100%;
-    border: 1px solid black;
+    border: 1px solid grey;
     border-top: 0;
     padding: 1rem;
     text-align: center;
@@ -29,8 +25,6 @@ const Wrapper = styled.div`
   .items {
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
-    border-top: 0;
     text-align: left;
     font-size: small;
 
@@ -38,9 +32,7 @@ const Wrapper = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border: 1px solid black;
-      margin: 0.25rem;
-      padding: 0.25rem;
+      margin: 0.5rem 0.25rem;
 
       .item {
         display: flex;
@@ -134,7 +126,8 @@ const InventoryPanel = ({
       <div key={fullItem.id} className="item-row">
         <Tooltip title={fullItem.name} position="right" trigger="mouseenter">
           <div className="item">
-            <img alt={fullItem.name} src={fullItem.icon} /> ({quantity})
+            <img alt={fullItem.name} src={fullItem.icon} />
+            <span className="label label-default">({quantity})</span>
           </div>
         </Tooltip>
         <div className="item-actions">{availableActions}</div>
@@ -153,10 +146,12 @@ const InventoryPanel = ({
   };
 
   return (
-    <Wrapper className="inventory-panel">
-      <PanelHeader name="Inventory" />
-      {renderInventory()}
-    </Wrapper>
+    <div className="card border-secondary mb-3">
+      <div className="card-header">Inventory</div>
+      <div className="card-body">
+        <InventoryWrapper>{renderInventory()}</InventoryWrapper>
+      </div>
+    </div>
   );
 };
 

@@ -9,7 +9,7 @@ import LogsPanel from "../components/LogsPanel";
 import { getData } from "../services/data";
 import TravelPanel from "../components/TravelPanel";
 import { MAPS } from "../database/maps";
-// import WorldPanel from "../components/WorldPanel";
+import WorldPanel from "../components/WorldPanel";
 
 import "react-tippy/dist/tippy.css";
 import { generateLog } from "../utils/logs";
@@ -20,7 +20,8 @@ const Wrapper = styled.div`
   .menu,
   .level-panel,
   .equipments-panel,
-  .log-panel {
+  .log-panel,
+  .world-panel {
     margin-bottom: 1rem;
   }
 `;
@@ -36,7 +37,7 @@ const Dashboard = ({ sendToViewMachine }: any) => {
   if (!state.context) return null;
 
   return (
-    <Wrapper className="container-fluid">
+    <Wrapper className="container">
       <div className="row menu">
         <div className="col-12 text-center">
           <button
@@ -58,8 +59,8 @@ const Dashboard = ({ sendToViewMachine }: any) => {
         </div>
         <div className="col-8">
           <LogsPanel logs={state.context.logs} />
+          <WorldPanel send={send} state={state.context} />
           <TravelPanel send={send} currentLocation={state.context.location} />
-          {/* <WorldPanel state={state} log={log} setLog={setLog} /> */}
         </div>
       </div>
     </Wrapper>
