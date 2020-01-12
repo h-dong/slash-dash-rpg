@@ -8,7 +8,11 @@ import EquipmentsPanel from "../components/EquipmentsPanel";
 import LogsPanel from "../components/LogsPanel";
 import { getData } from "../services/data";
 import { getTimestamp } from "../utils/dateAndTime";
+import TravelPanel from "../components/TravelPanel";
+import { MAPS } from "../database/maps";
 // import WorldPanel from "../components/WorldPanel";
+
+import "react-tippy/dist/tippy.css";
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -24,7 +28,8 @@ const Wrapper = styled.div`
 const Dashboard = ({ sendToViewMachine }: any) => {
   const MachineWithContext = GameMachine.withContext({
     ...getData(),
-    logs: `<span>${getTimestamp()} - Welcome back, traveller!</span>`
+    logs: `<span>${getTimestamp()} - Welcome back, traveller!</span>`,
+    location: MAPS.TRAINING_GROUND
   });
   const [state, send] = useMachine(MachineWithContext);
 
@@ -53,6 +58,7 @@ const Dashboard = ({ sendToViewMachine }: any) => {
         </div>
         <div className="col-8">
           <LogsPanel logs={state.context.logs} />
+          <TravelPanel send={send} currentLocation={state.context.location} />
           {/* <WorldPanel state={state} log={log} setLog={setLog} /> */}
         </div>
       </div>

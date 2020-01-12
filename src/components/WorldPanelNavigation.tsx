@@ -1,6 +1,6 @@
 // import React from "react";
 // import styled from "styled-components";
-// import MAPS from "../database/maps";
+// import FULL_MAPS from "../database/maps";
 
 // const Wrapper = styled.ul`
 //   display: flex;
@@ -23,8 +23,8 @@
 //   };
 
 //   const renderButtons = () => {
-//     return Object.keys(MAPS).map(key => {
-//       const map = MAPS[key];
+//     return Object.keys(FULL_MAPS).map(key => {
+//       const map = FULL_MAPS[key];
 //       return (
 //         <li key={map.name}>
 //           <button

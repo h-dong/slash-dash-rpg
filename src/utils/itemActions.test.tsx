@@ -1,14 +1,14 @@
-import ITEMS, { WEAR_POSITION } from "../database/items";
+import FULL_ITEMS, { WEAR_POSITION } from "../database/items";
 import { equipToTakeOff } from "./itemActions";
 
 describe("Item Actions", () => {
   describe("Hand Position Equipments", () => {
-    const woodenSword = ITEMS.WOODEN_SWORD;
-    const woodenShield = ITEMS.WOODEN_SHIELD;
-    const woodenSpear = ITEMS.WOODEN_SPEAR;
-    const bronzeSword = ITEMS.BRONZE_SWORD;
-    const bronzeShield = ITEMS.BRONZE_SHIELD;
-    const bronzeSpear = ITEMS.BRONZE_SPEAR;
+    const woodenSword = FULL_ITEMS.WOODEN_SWORD;
+    const woodenShield = FULL_ITEMS.WOODEN_SHIELD;
+    const woodenSpear = FULL_ITEMS.WOODEN_SPEAR;
+    const bronzeSword = FULL_ITEMS.BRONZE_SWORD;
+    const bronzeShield = FULL_ITEMS.BRONZE_SHIELD;
+    const bronzeSpear = FULL_ITEMS.BRONZE_SPEAR;
 
     test.each`
       case  | currentMainHand | currentOffHand  | toEquip         | output
@@ -41,12 +41,12 @@ describe("Item Actions", () => {
   });
 
   describe("Other Combat Equipments", () => {
-    const woodenHelmet = ITEMS.WOODEN_HELMET;
-    const woodenPlateBody = ITEMS.WOODEN_PLATE_BODY;
-    const woodenPlateLegs = ITEMS.WOODEN_PLATE_LEGS;
-    const bronzeHelmet = ITEMS.BRONZE_HELMET;
-    const bronzePlateBody = ITEMS.BRONZE_PLATE_BODY;
-    const bronzePlateLegs = ITEMS.BRONZE_PLATE_LEGS;
+    const woodenHelmet = FULL_ITEMS.WOODEN_HELMET;
+    const woodenPlateBody = FULL_ITEMS.WOODEN_PLATE_BODY;
+    const woodenPlateLegs = FULL_ITEMS.WOODEN_PLATE_LEGS;
+    const bronzeHelmet = FULL_ITEMS.BRONZE_HELMET;
+    const bronzePlateBody = FULL_ITEMS.BRONZE_PLATE_BODY;
+    const bronzePlateLegs = FULL_ITEMS.BRONZE_PLATE_LEGS;
 
     test.each`
       case | currentEquipped    | toEquip            | output

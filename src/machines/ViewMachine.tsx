@@ -1,13 +1,13 @@
 import { Machine } from "xstate";
 import { getData, setData, clearData } from "../services/data";
 import { Equipments, Character, InventoryItemInterface } from "./GameMachine";
-import { WEAR_POSITION } from "../database/items";
+import { WEAR_POSITION, ITEMS } from "../database/items";
 
-export const VIEW = {
-  DASHBOARD: "DASHBOARD",
-  SETTINGS: "SETTINGS",
-  WELCOME: "WELCOME"
-};
+export enum VIEW {
+  DASHBOARD = "DASHBOARD",
+  SETTINGS = "SETTINGS",
+  WELCOME = "WELCOME"
+}
 
 // const newCharacterStats = {
 //   level: 1,
@@ -27,31 +27,31 @@ const testCharacterData = {
     defence: 1
   } as Character,
   equipments: {
-    [WEAR_POSITION.MAIN_HAND]: 12
+    [WEAR_POSITION.MAIN_HAND]: ITEMS.WOODEN_SWORD
   } as Equipments,
   inventory: [
     {
-      itemId: 1, // COIN
+      itemKey: ITEMS.COIN,
       quantity: 100000
     },
     {
-      itemId: 11, // WOODEN_SHIELD
+      itemKey: ITEMS.WOODEN_SHIELD,
       quantity: 2
     },
     {
-      itemId: 17, // BRONZE_SHIELD
+      itemKey: ITEMS.BRONZE_SHIELD,
       quantity: 1
     },
     {
-      itemId: 16, // BRONZE_PLATE_LEGS
+      itemKey: ITEMS.BRONZE_PLATE_LEGS,
       quantity: 1
     },
     {
-      itemId: 10, // WOODEN_PLATE_LEGS
+      itemKey: ITEMS.WOODEN_PLATE_LEGS,
       quantity: 1
     },
     {
-      itemId: 13, // WOODEN_SPEAR
+      itemKey: ITEMS.WOODEN_SPEAR,
       quantity: 1
     }
   ] as InventoryItemInterface[]

@@ -1,18 +1,44 @@
 import MONSTERS from "./monsters";
-import ITEMS, { RARITY } from "./items";
+import { RARITY, ITEMS } from "./items";
 
-const MAPS = {
-  SHOP: {
+export enum MAPS {
+  SHOP = "SHOP",
+  TRAINING_GROUND = "TRAINING_GROUND",
+  GOBLIN_WOODS = "GOBLIN_WOODS",
+  DARK_FOREST = "DARK_FOREST"
+}
+
+interface TreasureInterface {
+  item: string;
+  rarity: RARITY;
+  quantity: {
+    min: number;
+    max: number;
+  };
+}
+
+interface MapMonsterInterface {
+  monster: string;
+  chanceOfAppear: number;
+}
+
+interface MapInterface {
+  name: string;
+  key: MAPS;
+  levelGuide?: string;
+  monsters?: MapMonsterInterface[];
+  treasure?: TreasureInterface[];
+}
+
+const FULL_MAPS: MapInterface[] = [
+  {
     name: "Shop",
-    key: "SHOP",
-    levelGuide: null,
-
-    monsters: null
+    key: MAPS.SHOP
   },
-  TRAINING_GROUND: {
+  {
     name: "Training Ground",
-    key: "TRAINING_GROUND",
-    levelGuide: "(Level 1-3)",
+    key: MAPS.TRAINING_GROUND,
+    levelGuide: "(Recommended level 1-3)",
     monsters: [
       { monster: MONSTERS.CHICKEN.key, chanceOfAppear: 0.5 },
       { monster: MONSTERS.DUCK.key, chanceOfAppear: 0.5 },
@@ -22,64 +48,64 @@ const MAPS = {
     ],
     treasure: [
       {
-        item: "COIN",
+        item: ITEMS.COIN,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 100 }
       },
       {
-        item: "SMALL_HEALTH_POTIONS",
+        item: ITEMS.SMALL_HEALTH_POTIONS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 2 }
       },
       {
-        item: "MEDIUM_HEALTH_POTIONS",
+        item: ITEMS.MEDIUM_HEALTH_POTIONS,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 2 }
       },
       {
-        item: "WOODEN_SWORD",
+        item: ITEMS.WOODEN_SWORD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: "WOODEN_HELMET",
+        item: ITEMS.WOODEN_HELMET,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: "WOODEN_PLATE_BODY",
+        item: ITEMS.WOODEN_PLATE_BODY,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: "WOODEN_PLATE_LEGS",
+        item: ITEMS.WOODEN_PLATE_LEGS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: "WOODEN_SPEAR",
+        item: ITEMS.WOODEN_SPEAR,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        item: "WOODEN_SHIELD",
+        item: ITEMS.WOODEN_SHIELD,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 1 }
       }
     ]
   },
-  GOBLIN_WOODS: {
+  {
     name: "Goblin Woods",
-    key: "GOBLIN_WOODS",
-    levelGuide: "(Level 3-6)",
+    key: MAPS.GOBLIN_WOODS,
+    levelGuide: "(Recommended level 3-6)",
     monsters: []
   },
-  DARK_FOREST: {
+  {
     name: "Dark Forest",
-    key: "DARK_FOREST",
-    levelGuide: "(Level 6-10)",
+    key: MAPS.DARK_FOREST,
+    levelGuide: "(Recommended level 6-10)",
     monsters: []
   }
-};
+];
 
-export default MAPS;
+export default FULL_MAPS;

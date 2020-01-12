@@ -7,7 +7,7 @@
 // import WorldPanelShop from "./WorldPanelShop";
 // import WorldPanelActions from "./WorldPanelActions";
 // import WorldPanelDrops from "./WorldPanelDrops";
-// import MAPS from "../database/maps";
+// import FULL_MAPS from "../database/maps";
 
 // const Wrapper = styled.div`
 //   display: flex;
@@ -28,11 +28,11 @@
 //   const { inventory, pickUpItem } = state;
 
 //   const [drops, setDrops] = useState([]);
-//   // const [location, setLocation] = useState(MAPS.SHOP.key);
-//   const [location, setLocation] = useState(MAPS.TRAINING_GROUND.key);
+//   // const [location, setLocation] = useState(FULL_MAPS.SHOP.key);
+//   const [location, setLocation] = useState(FULL_MAPS.TRAINING_GROUND.key);
 
 //   const renderActionsAndDrops = () => {
-//     if (location === MAPS.SHOP.key) {
+//     if (location === FULL_MAPS.SHOP.key) {
 //       return <WorldPanelShop />;
 //     } else {
 //       return (
@@ -64,7 +64,7 @@
 //         </div>
 //         <div>
 //           <hr />
-//           <h6>Location - {MAPS[location].name}</h6>
+//           <h6>Location - {FULL_MAPS[location].name}</h6>
 //           {renderActionsAndDrops()}
 //         </div>
 //         <div>

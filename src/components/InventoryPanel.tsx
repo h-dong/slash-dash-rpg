@@ -11,7 +11,7 @@ import {
   getInventoryItemActions,
   InventoryItemActionInterface
 } from "../utils/itemActions";
-import { getItemById } from "../utils/findItem";
+import { getItemByKey } from "../utils/findItem";
 import { InventoryItemInterface } from "../machines/GameMachine";
 
 const Wrapper = styled.div`
@@ -76,7 +76,7 @@ const InventoryPanel = ({
   const getIcon = (send: any, action: InventoryItemActionInterface) => {
     switch (action.type) {
       case "EXAMINE_ITEM":
-        const fullItem = getItemById(action.itemId);
+        const fullItem = getItemByKey(action.itemKey);
 
         return (
           <Tooltip
@@ -105,7 +105,9 @@ const InventoryPanel = ({
           >
             <FontAwesomeIcon
               icon={faPlusSquare}
-              onClick={() => send({ type: action.type, itemId: action.itemId })}
+              onClick={() =>
+                send({ type: action.type, itemKey: action.itemKey })
+              }
             />
           </Tooltip>
         );
@@ -115,10 +117,10 @@ const InventoryPanel = ({
   };
 
   const renderInventoryItem = ({
-    itemId,
+    itemKey,
     quantity
   }: InventoryItemInterface) => {
-    const fullItem = getItemById(itemId);
+    const fullItem = getItemByKey(itemKey);
 
     if (!fullItem) return null;
 
@@ -143,9 +145,8 @@ const InventoryPanel = ({
   const renderInventory = () => {
     if (inventory.length === 0) return <span className="empty">Empty</span>;
 
-    const items = inventory.map(
-      (inventoryItem: { itemId: number; quantity: number }) =>
-        renderInventoryItem(inventoryItem)
+    const items = inventory.map((inventoryItem: InventoryItemInterface) =>
+      renderInventoryItem(inventoryItem)
     );
 
     return <div className="items">{items}</div>;

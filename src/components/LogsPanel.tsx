@@ -13,28 +13,6 @@ const Wrapper = styled.div`
     justify-content: space-between;
     border: 1px solid black;
     border-top: 0;
-
-    ul {
-      display: flex;
-      justify-content: space-between;
-      margin: 0;
-      padding: 0.25rem 0.5rem 0 0.5rem;
-      font-size: small;
-      font-weight: bold;
-
-      &:first-child {
-        text-align: left;
-      }
-
-      &:last-child {
-        text-align: right;
-        padding-bottom: 0.25rem;
-      }
-
-      li {
-        list-style-type: none;
-      }
-    }
   }
 `;
 
@@ -48,20 +26,18 @@ const LogWrapper = styled.div`
   text-align: left;
 `;
 
-const LogsPanel = ({ logs }: { logs: string }) => {
-  return (
-    <Wrapper className="log-panel">
-      <PanelHeader name="Logs" />
-      <div className="panel-body">
-        <LogWrapper
-          dangerouslySetInnerHTML={{ __html: logs }}
-          // ref={el => {
-          //   this.messagesEnd = el;
-          // }}
-        />
-      </div>
-    </Wrapper>
-  );
-};
+const LogsPanel = ({ logs }: { logs: string }) => (
+  <Wrapper className="log-panel">
+    <PanelHeader name="Logs" />
+    <div className="panel-body">
+      <LogWrapper
+        dangerouslySetInnerHTML={{ __html: logs }}
+        // ref={el => {
+        //   this.messagesEnd = el;
+        // }}
+      />
+    </div>
+  </Wrapper>
+);
 
 export default LogsPanel;

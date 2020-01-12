@@ -1,9 +1,9 @@
 // import React, { useState } from "react";
 // import styled from "styled-components";
 // import { Tooltip } from "react-tippy";
-// import ITEMS from "../database/items";
+// import FULL_ITEMS from "../database/items";
 // import { getRandomNumByMinMax } from "../utils/random";
-// import MAPS from "../database/maps";
+// import FULL_MAPS from "../database/maps";
 // import MONSTERS from "../database/monsters";
 // import fight from "../utils/combat";
 
@@ -47,7 +47,7 @@
 //   const [monsters, setMonsters] = useState([]);
 
 //   const generateMonsters = () => {
-//     const { monsters: monstersOnMap } = MAPS[location];
+//     const { monsters: monstersOnMap } = FULL_MAPS[location];
 //     if (monstersOnMap) {
 //       const tempMonsters = monstersOnMap.map(elem => MONSTERS[elem.monster]);
 //       setMonsters(tempMonsters);
@@ -55,7 +55,7 @@
 //   };
 
 //   const generateItems = () => {
-//     const { treasure } = MAPS[location];
+//     const { treasure } = FULL_MAPS[location];
 //     if (treasure) {
 //       const tempDrops = [];
 //       treasure.forEach(elem => {
@@ -66,7 +66,7 @@
 //             elem.quantity.min,
 //             elem.quantity.max
 //           );
-//           const item = ITEMS[elem.item];
+//           const item = FULL_ITEMS[elem.item];
 //           tempDrops.push({ item, quantity });
 //         }
 //       });

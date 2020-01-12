@@ -1,4 +1,4 @@
-import ITEMS, { RARITY } from "./items";
+import { RARITY } from "./items";
 
 // goblin woods 3 - 6
 // Rabbit L1

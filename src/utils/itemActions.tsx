@@ -1,6 +1,6 @@
-import { WEAR_POSITION, Item } from "../database/items";
+import { WEAR_POSITION, ItemInterface, ITEMS } from "../database/items";
 import { Equipments, InventoryItemInterface } from "../machines/GameMachine";
-import { getItemById } from "./findItem";
+import { getItemByKey } from "./findItem";
 
 // export const ITEM_ACTIONS = {
 //   EQUIP: "Equip",
@@ -10,30 +10,30 @@ import { getItemById } from "./findItem";
 
 export interface EquipmentItemActionInterface {
   type: string;
-  itemId: number;
+  itemKey: ITEMS;
 }
 
 export interface InventoryItemActionInterface {
   type: string;
   order: number;
-  itemId: number;
+  itemKey: ITEMS;
 }
 
 export function getInventoryItemActions(
-  fullItem: Item
+  fullItem: ItemInterface
 ): InventoryItemActionInterface[] {
   const actions: InventoryItemActionInterface[] = [];
   if (fullItem) {
     actions.push({
       type: "EXAMINE_ITEM",
       order: 2,
-      itemId: fullItem.id
+      itemKey: fullItem.key
     });
     if (fullItem.equipment) {
       actions.push({
         type: "EQUIP_ITEM",
         order: 1,
-        itemId: fullItem.id
+        itemKey: fullItem.key
       });
     }
   }
@@ -41,12 +41,12 @@ export function getInventoryItemActions(
 }
 
 export function getEquippedItemActions(
-  itemId: number
+  itemKey: ITEMS
 ): EquipmentItemActionInterface[] {
   return [
     {
       type: "UNEQUIP_ITEM",
-      itemId
+      itemKey
     }
   ];
 }
@@ -54,51 +54,54 @@ export function getEquippedItemActions(
 export function moveEquipmentItemToInventory(
   equipments: Equipments,
   inventory: InventoryItemInterface[],
-  itemId: number
+  itemKey: ITEMS
 ): { equipments: Equipments; inventory: InventoryItemInterface[] } {
   return {
-    equipments: removeItemFromEquipment({ ...equipments }, itemId),
-    inventory: addItemToInventory([...inventory], itemId)
+    equipments: removeItemFromEquipment({ ...equipments }, itemKey),
+    inventory: addItemToInventory([...inventory], itemKey)
   };
 }
 
 export function moveInventoryItemToEquipment(
   equipments: Equipments,
   inventory: InventoryItemInterface[],
-  itemId: number
+  itemKey: ITEMS
 ) {
-  const fullItem = getItemById(itemId);
+  const fullItem = getItemByKey(itemKey);
   let newEquipments = { ...equipments };
   let newInventory = [...inventory];
 
   if (fullItem?.equipment) {
-    const itemIdToUnequip: number[] = calcEquipToTakeOff(newEquipments, itemId);
+    const itemKeyToUnequip: ITEMS[] = calcEquipToTakeOff(
+      newEquipments,
+      itemKey
+    );
 
-    itemIdToUnequip.forEach(id => {
+    itemKeyToUnequip.forEach(id => {
       newInventory = addItemToInventory(newInventory, id);
       newEquipments = removeItemFromEquipment(newEquipments, id);
     });
 
-    newEquipments = addItemToEquipment(newEquipments, itemId);
-    newInventory = removeItemFromInventory(newInventory, itemId);
+    newEquipments = addItemToEquipment(newEquipments, itemKey);
+    newInventory = removeItemFromInventory(newInventory, itemKey);
   }
 
   return { equipments: newEquipments, inventory: newInventory };
 }
 
-function addItemToEquipment(equipments: Equipments, itemId: number) {
+function addItemToEquipment(equipments: Equipments, itemKey: ITEMS) {
   const newEquipments = { ...equipments };
-  const fullItem = getItemById(itemId);
+  const fullItem = getItemByKey(itemKey);
 
   if (fullItem?.equipment?.position)
-    newEquipments[fullItem?.equipment?.position] = itemId;
+    newEquipments[fullItem?.equipment?.position] = itemKey;
 
   return newEquipments;
 }
 
-function removeItemFromEquipment(equipments: Equipments, itemId: number) {
+function removeItemFromEquipment(equipments: Equipments, itemKey: ITEMS) {
   const newEquipments = { ...equipments };
-  const fullItem = getItemById(itemId);
+  const fullItem = getItemByKey(itemKey);
 
   if (fullItem?.equipment?.position)
     delete newEquipments[fullItem.equipment.position];
@@ -108,24 +111,24 @@ function removeItemFromEquipment(equipments: Equipments, itemId: number) {
 
 function addItemToInventory(
   inventory: InventoryItemInterface[],
-  itemId: number
+  itemKey: ITEMS
 ) {
   const newInventory = [...inventory];
-  const itemInInventory = newInventory.find(item => item.itemId === itemId);
+  const itemInInventory = newInventory.find(item => item.itemKey === itemKey);
 
   itemInInventory
     ? (itemInInventory.quantity += 1)
-    : newInventory.push({ itemId, quantity: 1 });
+    : newInventory.push({ itemKey, quantity: 1 });
 
   return newInventory;
 }
 
 function removeItemFromInventory(
   inventory: InventoryItemInterface[],
-  itemId: number
+  itemKey: ITEMS
 ) {
   const newInventory = [...inventory];
-  const inventoryItem = newInventory.find(item => item.itemId === itemId);
+  const inventoryItem = newInventory.find(item => item.itemKey === itemKey);
 
   if (inventoryItem) {
     if (inventoryItem.quantity > 1) {
@@ -133,7 +136,7 @@ function removeItemFromInventory(
       inventoryItem.quantity -= 1;
     } else {
       // remove item completely from Inventory
-      const index = newInventory.findIndex(item => item.itemId === itemId);
+      const index = newInventory.findIndex(item => item.itemKey === itemKey);
       newInventory.splice(index, 1);
     }
   }
@@ -141,8 +144,8 @@ function removeItemFromInventory(
   return newInventory;
 }
 
-function calcEquipToTakeOff(equipments: Equipments, itemId: number): number[] {
-  const fullItem = getItemById(itemId);
+function calcEquipToTakeOff(equipments: Equipments, itemKey: ITEMS): ITEMS[] {
+  const fullItem = getItemByKey(itemKey);
 
   if (!fullItem?.equipment) return [];
 
@@ -151,99 +154,36 @@ function calcEquipToTakeOff(equipments: Equipments, itemId: number): number[] {
     requirements: requirementsToEquip
   } = fullItem.equipment;
 
-  const itemInPosition = getItemById(Number(equipments[positionToEquip]));
+  const itemInPosition = getItemByKey(equipments[positionToEquip]);
 
   // when equiping an off hand item, unequip current two handed weapon
   if (positionToEquip === WEAR_POSITION.OFF_HAND) {
-    const currentMainHand = getItemById(
-      Number(equipments[WEAR_POSITION.MAIN_HAND])
-    );
+    const currentMainHand: ItemInterface | null =
+      getItemByKey(equipments[WEAR_POSITION.MAIN_HAND]) || null;
 
     if (currentMainHand) {
       const requirements = currentMainHand?.equipment?.requirements;
-      if (requirements?.twoHanded) return [currentMainHand.id];
+      if (requirements?.twoHanded) return [currentMainHand.key];
     }
   }
 
   if (positionToEquip === WEAR_POSITION.MAIN_HAND && requirementsToEquip) {
     const { twoHanded } = requirementsToEquip;
     if (twoHanded) {
-      const currentMainHand = getItemById(
-        Number(equipments[WEAR_POSITION.MAIN_HAND])
-      );
-      const currentOffHand = getItemById(
-        Number(equipments[WEAR_POSITION.OFF_HAND])
-      );
-      return [currentMainHand, currentOffHand]
-        .filter(elem => elem)
-        .map(elem => Number(elem?.id));
+      const currentMainHand: ItemInterface | null =
+        getItemByKey(equipments[WEAR_POSITION.MAIN_HAND]) || null;
+      const currentOffHand: ItemInterface | null =
+        getItemByKey(equipments[WEAR_POSITION.OFF_HAND]) || null;
+      const itemsToUnequip: ITEMS[] = [];
+      [currentMainHand, currentOffHand].forEach(elem => {
+        if (elem?.key) {
+          itemsToUnequip.push(elem.key);
+        }
+      });
+      return itemsToUnequip;
     }
   }
 
-  // if nothing is equipped return [], else return array with id
-  return !itemInPosition ? [] : [itemInPosition.id];
+  // if nothing is equipped return [], else return array with key
+  return !itemInPosition ? [] : [itemInPosition.key];
 }
-
-// export function equipItemAction(inventory, equipments, item) {
-//   const itemsToMoveToInventory = equipToTakeOff(equipments, item);
-//   itemsToMoveToInventory.forEach(itemToMove => {
-//     const existingItemInInventory = inventory.find(elem => {
-//       return elem.item.id === itemToMove.id;
-//     });
-//     if (existingItemInInventory) {
-//       // if item already exist in inventory
-//       existingItemInInventory.quantity += 1;
-//     } else {
-//       // if item doesn't exist in inventory
-//       inventory.push({ item: itemToMove, quantity: 1 });
-//     }
-
-//     // remove from equipments
-//     delete equipments[itemToMove.equipment.position];
-//   });
-
-//   // equip selected item
-//   equipments[item.equipment.position] = { item };
-
-//   // remove item from inventory if quantity is 1, else decrement quaity by 1
-//   const itemInventoryIndex = inventory.findIndex(elem => {
-//     return elem.item.key === item.key;
-//   });
-//   if (itemInventoryIndex > 0 && inventory[itemInventoryIndex].quantity > 1) {
-//     inventory[itemInventoryIndex].quantity -= 1;
-//   } else {
-//     inventory.splice(itemInventoryIndex, 1);
-//   }
-
-//   return { inventory, equipments };
-// }
-
-// function updateInventoryWithItem(inventory, item, quantity = 1) {
-//   const tempInventory = [...inventory];
-//   // console.log("ada", tempInventory, item);
-//   const itemInInventory = tempInventory.find(elem => {
-//     return elem.item.key === item.key;
-//   });
-//   if (itemInInventory) {
-//     // if item already exist in inventory
-//     itemInInventory.quantity += quantity;
-//   } else {
-//     // if item doesn't exist in inventory
-//     tempInventory.push({ item: item, quantity });
-//   }
-//   return tempInventory;
-// }
-
-// export function unequipItemAction(inventory, equipments, item) {
-//   const newInventory = updateInventoryWithItem(inventory, item);
-
-//   // remove item from equipments
-//   delete equipments[item.equipment.position];
-
-//   return { inventory: newInventory, equipments };
-// }
-
-// export function pickUpItemAction(inventory, item, quantity) {
-//   const newInventory = updateInventoryWithItem(inventory, item, quantity);
-//   return { inventory: newInventory };
-// }

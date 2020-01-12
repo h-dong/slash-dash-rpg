@@ -1,10 +1,11 @@
 import { Machine, assign } from "xstate";
-// import LogStates from "./LogStates";
 import {
   moveEquipmentItemToInventory,
   moveInventoryItemToEquipment
 } from "../utils/itemActions";
 import { getTimestamp } from "../utils/dateAndTime";
+import { MAPS } from "../database/maps";
+import { ITEMS } from "../database/items";
 
 export interface Character {
   name: string;
@@ -16,15 +17,15 @@ export interface Character {
 }
 
 export interface Equipments {
-  HEAD?: number;
-  BODY?: number;
-  LEGS?: number;
-  MAIN_HAND?: number;
-  OFF_HAND?: number;
+  HEAD: ITEMS;
+  BODY: ITEMS;
+  LEGS: ITEMS;
+  MAIN_HAND: ITEMS;
+  OFF_HAND: ITEMS;
 }
 
 export interface InventoryItemInterface {
-  itemId: number;
+  itemKey: ITEMS;
   quantity: number;
 }
 
@@ -33,6 +34,7 @@ export interface GameMachineContextInterface {
   equipments: Equipments;
   inventory: InventoryItemInterface[];
   logs: string;
+  location: MAPS;
 }
 
 export type GameMachineEvents = {
@@ -43,9 +45,11 @@ export type GameMachineEvents = {
     | "EXAMINE_ITEM"
     | "EQUIP_ITEM"
     | "ADD_LOG"
-    | "LOG_ADDED";
-  itemId: number;
+    | "LOG_ADDED"
+    | "CHANGE_LOCATION";
+  itemKey: ITEMS;
   log: string;
+  location: MAPS;
 };
 
 const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
@@ -64,9 +68,11 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           },
           EXAMINE_ITEM: {
             actions: "addLog"
+          },
+          CHANGE_LOCATION: {
+            actions: "changeLoction"
           }
         }
-        // ...LogStates
       },
       dead: {
         on: {
@@ -77,22 +83,25 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
   },
   {
     actions: {
-      unequipItem: assign((context, { itemId }) =>
+      unequipItem: assign((context, { itemKey }) =>
         moveEquipmentItemToInventory(
           context.equipments,
           context.inventory,
-          itemId
+          itemKey
         )
       ),
-      equipItem: assign((context, { itemId }) =>
+      equipItem: assign((context, { itemKey }) =>
         moveInventoryItemToEquipment(
           context.equipments,
           context.inventory,
-          itemId
+          itemKey
         )
       ),
       addLog: assign((context, { log }): any => ({
         logs: `<span>${getTimestamp()} - ${log}</span><br />${context.logs}`
+      })),
+      changeLoction: assign((_, { location }) => ({
+        location
       }))
     }
   }

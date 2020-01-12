@@ -9,7 +9,7 @@ import {
   getEquippedItemActions,
   EquipmentItemActionInterface
 } from "../utils/itemActions";
-import { getItemById } from "../utils/findItem";
+import { getItemByKey } from "../utils/findItem";
 
 const Wrapper = styled.div`
   display: flex;
@@ -53,46 +53,46 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
     {
       name: "Head",
       position: WEAR_POSITION.HEAD,
-      itemId: null
+      itemKey: null
     },
     {
       name: "Body",
       position: WEAR_POSITION.BODY,
-      itemId: null
+      itemKey: null
     },
     {
       name: "Legs",
       position: WEAR_POSITION.LEGS,
-      itemId: null
+      itemKey: null
     },
     {
       name: "Main-hand",
       position: WEAR_POSITION.MAIN_HAND,
-      itemId: null
+      itemKey: null
     },
     {
       name: "Off-hand",
       position: WEAR_POSITION.OFF_HAND,
-      itemId: null
+      itemKey: null
     }
   ];
 
   // fill equipments into slot
   Object.keys(equipments).forEach(key => {
-    const itemId = equipments[key];
-    const fullItem = getItemById(itemId);
+    const itemKey = equipments[key];
+    const fullItem = getItemByKey(itemKey);
     const itemSlot: any = equipmentSlots.find(slot =>
       fullItem?.equipment
         ? slot.position === fullItem.equipment.position
         : false
     );
-    itemSlot.itemId = itemId;
+    itemSlot.itemKey = itemKey;
   });
 
   const renderItemActions = (actions: EquipmentItemActionInterface[]) => {
     if (!actions) return null;
 
-    return actions.map(({ type, itemId }: EquipmentItemActionInterface) => (
+    return actions.map(({ type, itemKey }: EquipmentItemActionInterface) => (
       <Tooltip
         title="Examine"
         position="right"
@@ -102,17 +102,17 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
       >
         <FontAwesomeIcon
           icon={faMinusSquare}
-          onClick={() => send({ type, itemId })}
+          onClick={() => send({ type, itemKey })}
         />
       </Tooltip>
     ));
   };
 
   const renderEquipments = () => {
-    return equipmentSlots.map(({ name, itemId }: any) => {
-      const fullItem = getItemById(itemId);
+    return equipmentSlots.map(({ name, itemKey }: any) => {
+      const fullItem = getItemByKey(itemKey);
 
-      if (!itemId || !fullItem || !fullItem.equipment) {
+      if (!itemKey || !fullItem || !fullItem.equipment) {
         return (
           <div key={name} className="slot">
             <strong>{name}</strong>
@@ -122,7 +122,7 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
       }
 
       // const { position } = fullItem.equipment;
-      const actions = getEquippedItemActions(itemId);
+      const actions = getEquippedItemActions(itemKey);
 
       return (
         <div key={name} className="slot">
