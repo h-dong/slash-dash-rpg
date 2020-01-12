@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import fight from "../utils/combat";
 import WorldPanelShop from "./WorldPanelShop";
 import WorldPanelDrops from "./WorldPanelDrops";
 import FULL_MAPS, { MAPS } from "../database/maps";

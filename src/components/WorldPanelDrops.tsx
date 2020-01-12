@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
-import { InventoryItemInterface } from "../machines/GameMachine";
-
-import "react-tippy/dist/tippy.css";
-import { ITEMS } from "../database/items";
 import { getItemByKey } from "../utils/findItem";
 import { ItemDropsInterface } from "./WorldPanel";
+
+import "react-tippy/dist/tippy.css";
 
 const Wrapper = styled.div`
   padding: 0.5rem;
