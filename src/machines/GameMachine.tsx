@@ -3,9 +3,9 @@ import {
   moveEquipmentItemToInventory,
   moveInventoryItemToEquipment
 } from "../utils/itemActions";
-import { getTimestamp } from "../utils/dateAndTime";
-import { MAPS } from "../database/maps";
+import FULL_MAPS, { MAPS } from "../database/maps";
 import { ITEMS } from "../database/items";
+import { generateLog } from "../utils/logs";
 
 export interface Character {
   name: string;
@@ -98,11 +98,15 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
         )
       ),
       addLog: assign((context, { log }): any => ({
-        logs: `<span>${getTimestamp()} - ${log}</span><br />${context.logs}`
+        logs: generateLog(context.logs, log)
       })),
-      changeLoction: assign((_, { location }) => ({
-        location
-      }))
+      changeLoction: assign((context, { location }) => {
+        const mapName = FULL_MAPS.find(map => map.key === location)?.name;
+        return {
+          location,
+          logs: generateLog(context.logs, `Fast travelled to ${mapName}`)
+        };
+      })
     }
   }
 );

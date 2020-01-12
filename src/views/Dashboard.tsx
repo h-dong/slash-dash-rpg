@@ -7,12 +7,12 @@ import InventoryPanel from "../components/InventoryPanel";
 import EquipmentsPanel from "../components/EquipmentsPanel";
 import LogsPanel from "../components/LogsPanel";
 import { getData } from "../services/data";
-import { getTimestamp } from "../utils/dateAndTime";
 import TravelPanel from "../components/TravelPanel";
 import { MAPS } from "../database/maps";
 // import WorldPanel from "../components/WorldPanel";
 
 import "react-tippy/dist/tippy.css";
+import { generateLog } from "../utils/logs";
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
 const Dashboard = ({ sendToViewMachine }: any) => {
   const MachineWithContext = GameMachine.withContext({
     ...getData(),
-    logs: `<span>${getTimestamp()} - Welcome back, traveller!</span>`,
+    logs: generateLog("", "Welcome back, traveller!"),
     location: MAPS.TRAINING_GROUND
   });
   const [state, send] = useMachine(MachineWithContext);
