@@ -7,6 +7,7 @@ import {
 import FULL_MAPS, { MAPS } from "../database/maps";
 import { ITEMS } from "../database/items";
 import { generateLog } from "../utils/logs";
+import { setData } from "../services/data";
 
 export interface Character {
   name: string;
@@ -62,16 +63,16 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
         on: {
           DIE: "dead",
           UNEQUIP_ITEM: {
-            actions: "unequipItem"
+            actions: ["unequipItem", "persist"]
           },
           EQUIP_ITEM: {
-            actions: "equipItem"
+            actions: ["equipItem", "persist"]
           },
           EXAMINE_ITEM: {
             actions: "addLog"
           },
           PICK_UP_ITEM: {
-            actions: "pickUpItem"
+            actions: ["pickUpItem", "persist"]
           },
           CHANGE_LOCATION: {
             actions: "changeLoction"
@@ -113,7 +114,10 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           location,
           logs: generateLog(context.logs, `Fast travelled to ${mapName}`)
         };
-      })
+      }),
+      persist: ({ character, equipments, inventory }, _) => {
+        setData({ character, equipments, inventory });
+      }
     }
   }
 );
