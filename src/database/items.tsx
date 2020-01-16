@@ -43,14 +43,10 @@ interface EquipmentSchema {
     level?: 1;
   };
   combat?: {
-    attackSpeed?: number;
-    damage?: number;
-    armour?: number;
     attack?: number;
     strength?: number;
     defence?: number;
-    criticalStrick?: number;
-    criticalBlock?: number;
+    movementSpeed?: number;
   };
   effect?: {
     inventory?: number;
@@ -76,7 +72,7 @@ export enum ITEMS {
   BRONZE_PLATE_LEGS = "BRONZE_PLATE_LEGS",
   BRONZE_SHIELD = "BRONZE_SHIELD",
   BRONZE_SWORD = "BRONZE_SWORD",
-  BRONZE_AXE = "BRONZE_AXE",
+  BRONZE_BATTLE_AXE = "BRONZE_BATTLE_AXE",
   BRONZE_SPEAR = "BRONZE_SPEAR"
 }
 
@@ -237,7 +233,8 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.HEAD,
       combat: {
-        armour: 5
+        defence: 1,
+        movementSpeed: -2
       }
     }
   },
@@ -251,7 +248,8 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.BODY,
       combat: {
-        armour: 10
+        defence: 2,
+        movementSpeed: -5
       }
     }
   },
@@ -265,7 +263,8 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.LEGS,
       combat: {
-        armour: 8
+        defence: 2,
+        movementSpeed: -5
       }
     }
   },
@@ -279,7 +278,8 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.OFF_HAND,
       combat: {
-        armour: 15
+        defence: 2,
+        movementSpeed: -3
       }
     }
   },
@@ -293,8 +293,7 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
-        attackSpeed: 10,
-        damage: 10
+        strength: 1
       }
     }
   },
@@ -311,8 +310,8 @@ const rawData: ItemInterface[] = [
         twoHanded: true
       },
       combat: {
-        attackSpeed: -25,
-        damage: 25
+        strength: 3,
+        movementSpeed: -3
       }
     }
   },
@@ -326,7 +325,8 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.HEAD,
       combat: {
-        armour: 10
+        defence: 2,
+        movementSpeed: -2
       }
     }
   },
@@ -340,7 +340,8 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.BODY,
       combat: {
-        armour: 20
+        defence: 4,
+        movementSpeed: -5
       }
     }
   },
@@ -354,7 +355,8 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.LEGS,
       combat: {
-        armour: 16
+        defence: 4,
+        movementSpeed: -5
       }
     }
   },
@@ -368,7 +370,8 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.OFF_HAND,
       combat: {
-        armour: 30
+        defence: 4,
+        movementSpeed: -3
       }
     }
   },
@@ -382,23 +385,22 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
-        attackSpeed: 20,
-        damage: 20
+        strength: 2
       }
     }
   },
   {
     id: 19,
-    key: ITEMS.BRONZE_AXE,
-    name: "Bronze Axe",
+    key: ITEMS.BRONZE_BATTLE_AXE,
+    name: "Bronze Battle Axe",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/0/0f/Bronze_battleaxe.png/revision/latest?cb=20130920174444",
     equipment: {
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
-        attackSpeed: 0,
-        damage: 30
+        strength: 3,
+        movementSpeed: -2
       }
     }
   },
@@ -415,8 +417,8 @@ const rawData: ItemInterface[] = [
         twoHanded: true
       },
       combat: {
-        attackSpeed: -25,
-        damage: 50
+        strength: 6,
+        movementSpeed: -3
       }
     }
   }

@@ -4,6 +4,10 @@ import { getLevel } from "../utils/levelHelper";
 import { MAX_LEVEL } from "../config";
 import { Character } from "../machines/GameMachine";
 
+const MaxLevelWrapper = styled.small`
+  margin-left: 0.5rem;
+`;
+
 const LevelWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -42,7 +46,12 @@ const LevelPanel = ({ character }: { character: Character }) => {
 
   return (
     <div className="card border-secondary mb-3">
-      <div className="card-header">{`Level ${characterLevel}`}</div>
+      <div className="card-header">
+        {`Level ${characterLevel}`}
+        <MaxLevelWrapper className="text-center">
+          (Max level {MAX_LEVEL})
+        </MaxLevelWrapper>
+      </div>
       <div className="card-body">
         <LevelWrapper>
           <ul>
@@ -61,7 +70,6 @@ const LevelPanel = ({ character }: { character: Character }) => {
             <li>Defence</li>
             <li>{character.defence}</li>
           </ul>
-          <small className="text-center">(Max level {MAX_LEVEL})</small>
         </LevelWrapper>
       </div>
     </div>

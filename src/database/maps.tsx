@@ -38,7 +38,7 @@ const FULL_MAPS: MapInterface[] = [
   {
     name: "Training Ground",
     key: MAPS.TRAINING_GROUND,
-    levelGuide: "(Recommended level 1-3)",
+    levelGuide: "(level 1-3)",
     monsters: [
       { monsterKey: MONSTERS.CHICKEN, chanceOfAppear: 0.5 },
       { monsterKey: MONSTERS.DUCK, chanceOfAppear: 0.5 },
@@ -97,13 +97,13 @@ const FULL_MAPS: MapInterface[] = [
   {
     name: "Goblin Woods",
     key: MAPS.GOBLIN_WOODS,
-    levelGuide: "(Recommended level 3-6)",
+    levelGuide: "(level 3-6)",
     monsters: []
   },
   {
     name: "Dark Forest",
     key: MAPS.DARK_FOREST,
-    levelGuide: "(Recommended level 6-10)",
+    levelGuide: "(level 6-10)",
     monsters: []
   }
 ];

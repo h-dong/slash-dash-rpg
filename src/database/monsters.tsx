@@ -1,4 +1,4 @@
-import { RARITY } from "./items";
+import { RARITY, ITEMS } from "./items";
 
 // goblin woods 3 - 6
 // Rabbit L1
@@ -40,7 +40,7 @@ const FULL_MONSTERS = [
       "https://vignette.wikia.nocookie.net/2007scape/images/a/a3/Chicken.png/revision/latest?cb=20161207181258",
     description: "Yep. Definitely a chicken.",
     level: 1,
-    drops: [{ item: "LOW_QUALITY_MEAT", rarity: RARITY.ALWAYS }]
+    drops: [{ itemKey: ITEMS.LOW_QUALITY_MEAT, rarity: RARITY.ALWAYS }]
   },
   {
     key: MONSTERS.DUCK,
@@ -49,7 +49,7 @@ const FULL_MONSTERS = [
       "https://vignette.wikia.nocookie.net/2007scape/images/3/38/Duck.png/revision/latest?cb=20150905042847",
     description: "Waddle waddle waddle quack.",
     level: 1,
-    drops: [{ item: "LOW_QUALITY_MEAT", rarity: RARITY.ALWAYS }]
+    drops: [{ itemKey: ITEMS.LOW_QUALITY_MEAT, rarity: RARITY.ALWAYS }]
   },
   {
     key: MONSTERS.PIG,
@@ -58,7 +58,7 @@ const FULL_MONSTERS = [
       "https://vignette.wikia.nocookie.net/2007scape/images/3/30/Pig.png/revision/latest/scale-to-width-down/700?cb=20180303064642",
     description: "Swine",
     level: 2,
-    drops: [{ item: "HIGH_QUALITY_MEAT", rarity: RARITY.ALWAYS }]
+    drops: [{ itemKey: ITEMS.HIGH_QUALITY_MEAT, rarity: RARITY.ALWAYS }]
   },
   {
     key: MONSTERS.COW,
@@ -67,7 +67,7 @@ const FULL_MONSTERS = [
       "https://vignette.wikia.nocookie.net/2007scape/images/8/84/Cow.png/revision/latest/scale-to-width-down/700?cb=20160613020452",
     description: "Converts grass to beef",
     level: 2,
-    drops: [{ item: "HIGH_QUALITY_MEAT", rarity: RARITY.ALWAYS }]
+    drops: [{ itemKey: ITEMS.HIGH_QUALITY_MEAT, rarity: RARITY.ALWAYS }]
   },
   {
     key: MONSTERS.FARMER,
@@ -78,12 +78,12 @@ const FULL_MONSTERS = [
     level: 3,
     drops: [
       {
-        item: "COIN",
+        itemKey: ITEMS.COIN,
         rarity: RARITY.ALWAYS,
         quatity: { min: 1, max: 50 }
       },
       {
-        item: "SMALL_HEALTH_POTIONS",
+        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
         rarity: RARITY.RARE,
         quatity: { min: 1, max: 2 }
       }

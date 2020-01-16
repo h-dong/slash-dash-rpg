@@ -58,7 +58,7 @@ export function moveEquipmentItemToInventory(
 ): { equipments: Equipments; inventory: InventoryItemInterface[] } {
   return {
     equipments: removeItemFromEquipment({ ...equipments }, itemKey),
-    inventory: addItemToInventory([...inventory], itemKey)
+    inventory: addItemToInventory([...inventory], itemKey, 1)
   };
 }
 
@@ -78,7 +78,7 @@ export function moveInventoryItemToEquipment(
     );
 
     itemKeyToUnequip.forEach(id => {
-      newInventory = addItemToInventory(newInventory, id);
+      newInventory = addItemToInventory(newInventory, id, 1);
       newEquipments = removeItemFromEquipment(newEquipments, id);
     });
 
@@ -109,16 +109,17 @@ function removeItemFromEquipment(equipments: Equipments, itemKey: ITEMS) {
   return newEquipments;
 }
 
-function addItemToInventory(
+export function addItemToInventory(
   inventory: InventoryItemInterface[],
-  itemKey: ITEMS
+  itemKey: ITEMS,
+  itemQuantity: number
 ) {
   const newInventory = [...inventory];
   const itemInInventory = newInventory.find(item => item.itemKey === itemKey);
 
   itemInInventory
-    ? (itemInInventory.quantity += 1)
-    : newInventory.push({ itemKey, quantity: 1 });
+    ? (itemInInventory.quantity += itemQuantity)
+    : newInventory.push({ itemKey, quantity: itemQuantity });
 
   return newInventory;
 }

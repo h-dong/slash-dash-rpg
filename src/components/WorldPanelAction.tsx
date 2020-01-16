@@ -104,12 +104,12 @@ const WorldPanelActions = ({
   };
 
   const monsterClicked = (index: number) => {
-    console.log("attack!");
-    const monster = monsters[index];
-    console.log(monster);
-    const fightLog = fight(character, monster);
-    console.log(fightLog);
-    send({ type: "ADD_LOG", log: fightLog });
+    // console.log("attack!");
+    // const monster = monsters[index];
+    // console.log(monster);
+    // const fightLog = fight(character, monster);
+    // console.log(fightLog);
+    send({ type: "ADD_LOG", log: "Prepare for battle!" });
   };
 
   const renderMonsters = () => {

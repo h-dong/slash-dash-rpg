@@ -50,8 +50,11 @@ const WorldPanelDrops = ({
   function itemClick(index: number) {
     const tempDrops: ItemDropsInterface[] = [...drops];
     const itemSelected: ItemDropsInterface = tempDrops[index];
-    send({ type: "PICK_UP_ITEM", itemKey: itemSelected.itemKey });
-    // pickUpItem(inventory, itemSelected.item, itemSelected.quantity);
+    send({
+      type: "PICK_UP_ITEM",
+      itemKey: itemSelected.itemKey,
+      itemQuantity: itemSelected.quantity
+    });
     tempDrops.splice(index, 1);
     setDrops(tempDrops);
   }

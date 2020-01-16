@@ -1,7 +1,8 @@
 import { Machine, assign } from "xstate";
 import {
   moveEquipmentItemToInventory,
-  moveInventoryItemToEquipment
+  moveInventoryItemToEquipment,
+  addItemToInventory
 } from "../utils/itemActions";
 import FULL_MAPS, { MAPS } from "../database/maps";
 import { ITEMS } from "../database/items";
@@ -9,7 +10,6 @@ import { generateLog } from "../utils/logs";
 
 export interface Character {
   name: string;
-  level: number;
   hp: number;
   attack: number;
   strength: number;
@@ -48,6 +48,7 @@ export type GameMachineEvents = {
     | "ADD_LOG"
     | "CHANGE_LOCATION";
   itemKey: ITEMS;
+  itemQuantity: number;
   log: string;
   location: MAPS;
 };
@@ -68,6 +69,9 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           },
           EXAMINE_ITEM: {
             actions: "addLog"
+          },
+          PICK_UP_ITEM: {
+            actions: "pickUpItem"
           },
           CHANGE_LOCATION: {
             actions: "changeLoction"
@@ -97,6 +101,9 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           itemKey
         )
       ),
+      pickUpItem: assign((context, { itemKey, itemQuantity }) => ({
+        inventory: addItemToInventory(context.inventory, itemKey, itemQuantity)
+      })),
       addLog: assign((context, { log }): any => ({
         logs: generateLog(context.logs, log)
       })),

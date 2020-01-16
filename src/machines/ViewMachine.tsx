@@ -20,11 +20,10 @@ export enum VIEW {
 const testCharacterData = {
   character: {
     name: "asd",
-    level: 1,
     hp: 20,
-    attack: 1,
-    strength: 1,
-    defence: 1
+    attack: 3,
+    strength: 3,
+    defence: 3
   } as Character,
   equipments: {
     [WEAR_POSITION.MAIN_HAND]: ITEMS.WOODEN_SWORD

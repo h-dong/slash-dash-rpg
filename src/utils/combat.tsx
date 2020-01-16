@@ -1,12 +1,14 @@
-import { getRandomNumByMinMax } from "./random";
+import { getRandomNumByMinMax, getRandomBooleanByProbability } from "./random";
 
 /*
-protagonist bless +10% of all level effect
-primal rage (boss) +50% of all level effect
+Protagonist blessing +20% of all level effect
+(normal) +0% of all level effect
+Primal rage (elite) +30% of one level effect, +50% of two level effect, +100% of one level effect, 
+Ancient Instinct (boss) +100% of all level effect
 
 Attack speed: 100% + item boosts
 
-Strike: 50 + log(attack * 2) (max 85%)
+Strike: 50% + log(attack * 2) (max 85%)
 Damage: (own strength * 2) + own item boosts - opponent defence - opponent item block boosts
 Crit %: 5% + (10% * own strength) + item boosts (max 50%) (dmg * 2)
 block %: 5% + (10% * own defence) + item boosts (max 20%) (no dmg taken)
@@ -34,75 +36,101 @@ attack xp:
 
 // export default fight;
 
-function shouldPlayerOneAttaskFirst() {
-  if (getRandomNumByMinMax(1, 2)) return true;
-  return false;
+export enum COMBATANT_TYPE {
+  PLAYER = "PLAYER",
+  NORMAL_MONSTER = "NORMAL_MONSTER",
+  ELITE_MONSTER = "ELITE_MONSTER",
+  BOSS_MONSTER = "BOSS_MONSTER"
 }
 
-function attack(playerA: any, playerB: any) {
-  let attackLog = "";
-  const probabilityOfLandingAttack =
-    getRandomNumByMinMax(0, 100) + playerA.attack - playerB.defence;
-  const isAttackSuccessful =
-    getRandomNumByMinMax(0, 100) <= probabilityOfLandingAttack;
-  if (!isAttackSuccessful) {
-    attackLog += "<p>Missed!</p>";
-  } else {
-    let calcDamage = getRandomNumByMinMax(1, playerA.strength);
-    const criticalHit = getRandomNumByMinMax(1, 100) < 5;
-    if (criticalHit) {
-      attackLog += "<p>OMG, it was a critical hit!<p>";
-      calcDamage *= 2;
-    }
-
-    attackLog += `<p>-${calcDamage}HP<p>`;
-    playerB.hp -= calcDamage;
-  }
-  return attackLog;
+interface CombatantInterface {
+  attack: number;
+  strength: number;
+  defence: number;
+  movementSpeed: number;
+  combatantType: COMBATANT_TYPE;
 }
 
-export default function fight(player1: any, player2: any) {
-  let logs = "";
-  let roundNum = 1;
-  while (player1.hp > 0 && player2.hp > 0) {
-    //emergencyStop
-    if (roundNum > 10000) break;
+interface CombatResultInterface {
+  damage: number;
+  blocked: boolean;
+}
 
-    logs += `<p>Round ${roundNum}!</p>`;
-    if (shouldPlayerOneAttaskFirst()) {
-      logs += `<p>Player: ${player1.name} attacks first</p>`;
-      logs += attack(player1, player2);
-      if (player2.hp <= 0) {
-        logs += `<p>Player: ${player2.name} has fainted!</p>`;
-        logs += "<p>Round ended!</p>";
-        break;
-      }
-      logs += `<p>Player: ${player2.name} returns attacks</p>`;
-      attack(player2, player1);
-    } else {
-      logs += `<p>Player: ${player2.name} attacks first</p>`;
-      attack(player2, player1);
-      if (player1.hp <= 0) {
-        logs += "<p>Player 1 has fainted!</p>";
-        logs += "<p>Round ended!</p>";
-        break;
-      }
-      logs += `<p>Player: ${player1.name} returns attacks</p>`;
-      attack(player1, player2);
-    }
-    roundNum++;
-    logs += "<p>Round ended!</p>";
-    logs += `<p>Player: ${player1.name}</p>`;
-    logs += `<p>Player: ${player2.name}</p>`;
+function applyStatsBoosts(combatant: CombatantInterface): CombatantInterface {
+  const boostedCombatant = { ...combatant };
 
-    if (player1.hp < 0) logs += `<p>Player: ${player1.name} has fainted!</p>`;
-    if (player2.hp < 0) logs += `<p>Player: ${player2.name} has fainted!</p>`;
+  switch (combatant.combatantType) {
+    case COMBATANT_TYPE.BOSS_MONSTER:
+      // Ancient Instinct (boss) +100% of all level effect
+      boostedCombatant.attack = boostedCombatant.attack * 2;
+      boostedCombatant.defence = boostedCombatant.defence * 2;
+      boostedCombatant.attack = boostedCombatant.attack * 2;
+      break;
+    case COMBATANT_TYPE.ELITE_MONSTER:
+      // Primal rage (elite) +50% of all level effect
+      boostedCombatant.attack = boostedCombatant.attack * 1.5;
+      boostedCombatant.defence = boostedCombatant.defence * 1.5;
+      boostedCombatant.attack = boostedCombatant.attack * 1.5;
+      break;
+
+    case COMBATANT_TYPE.PLAYER:
+      // Protagonist blessing +20% of all level effect
+      boostedCombatant.attack = boostedCombatant.attack * 1.2;
+      boostedCombatant.defence = boostedCombatant.defence * 1.2;
+      boostedCombatant.attack = boostedCombatant.attack * 1.2;
+      break;
+    default:
+      // +0%
+      break;
   }
 
-  if (player1.hp > 0)
-    logs += `<p>Player: ${player1.name} has won the fight!</p>`;
-  if (player2.hp > 0)
-    logs += `<p>Player: ${player2.name} has won the fight!</p>`;
+  return boostedCombatant;
+}
 
-  return logs;
+function calcDamage(attackerStrength: number, defenderDefence: number): number {
+  // always has a base damage
+  const baseDamage = getRandomNumByMinMax(1, attackerStrength);
+  // then depending on attacker's strength and defender's defence, there could be more damage
+  const attackDamage = Math.floor(attackerStrength * 2 - defenderDefence);
+  const damage = baseDamage + attackDamage;
+  let critChance = Math.floor((2 + 10 * attackerStrength) / 100);
+  // max crit 10%
+  if (critChance > 10) critChance = 10;
+  let isCrit = getRandomBooleanByProbability(critChance);
+  return isCrit ? damage * 2 : damage;
+}
+
+export default function fight(
+  attackSide: CombatantInterface,
+  defendSide: CombatantInterface
+): CombatResultInterface {
+  const boostedAttackSide = applyStatsBoosts(attackSide);
+  const boostedDefendSide = applyStatsBoosts(defendSide);
+
+  // block %: 5% + (10% * own defence) + item boosts (max 20%) (no dmg taken)
+  const defendingSideBlockChance = Math.floor(
+    (5 + 10 * boostedDefendSide.defence) * 100
+  );
+
+  let attackingSideStrikeChance = Math.floor(
+    50 +
+      Math.log(boostedAttackSide.attack * 2) -
+      (100 - attackSide.movementSpeed)
+  );
+
+  // Max strike chance is 85%
+  if (attackingSideStrikeChance > 85) attackingSideStrikeChance = 85;
+
+  const damage = calcDamage(
+    boostedAttackSide.strength,
+    boostedDefendSide.strength
+  );
+
+  const landAttack = getRandomBooleanByProbability(
+    Math.floor((attackingSideStrikeChance - defendingSideBlockChance) / 100)
+  );
+
+  if (!landAttack) return { damage, blocked: true };
+
+  return { damage, blocked: false };
 }
