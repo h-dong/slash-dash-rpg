@@ -7,6 +7,7 @@ import WorldPanelActions from "./WorldPanelAction";
 import { ITEMS } from "../database/items";
 import styled from "styled-components";
 import CollapseChevron from "../atomic/CollapseChevron";
+import WorldPanelTravel from "./WorldPanelTravel";
 
 export interface ItemDropsInterface {
   itemKey: ITEMS;
@@ -49,15 +50,21 @@ const WorldPanel = ({ send, state }: Props) => {
   const locationName = FULL_MAPS.find(elem => elem.key === location)?.name;
 
   return (
-    <div className="card border-secondary mb-3">
-      <div className="card-header">
-        <CardHeaderWrapper>
-          <span>{`Current Location - ${locationName}`}</span>
-          <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
-        </CardHeaderWrapper>
+    <React.Fragment>
+      <div className="card border-secondary mb-3">
+        <div className="card-header">
+          <CardHeaderWrapper>
+            <span>{`Current Location - ${locationName}`}</span>
+            <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
+          </CardHeaderWrapper>
+        </div>
+        {!collapse && (
+          <div className="card-body">{renderActionsAndDrops()}</div>
+        )}
       </div>
-      {!collapse && <div className="card-body">{renderActionsAndDrops()}</div>}
-    </div>
+      {drops}
+      <WorldPanelTravel send={send} currentLocation={location} setDrops={setDrops} />
+    </React.Fragment>
   );
 };
 

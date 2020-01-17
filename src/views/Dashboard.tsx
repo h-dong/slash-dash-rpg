@@ -7,7 +7,6 @@ import InventoryPanel from "../components/InventoryPanel";
 import EquipmentsPanel from "../components/EquipmentsPanel";
 import LogsPanel from "../components/LogsPanel";
 import { getData } from "../services/data";
-import TravelPanel from "../components/TravelPanel";
 import { MAPS } from "../database/maps";
 import WorldPanel from "../components/WorldPanel";
 
@@ -60,7 +59,6 @@ const Dashboard = ({ sendToViewMachine }: any) => {
         <div className="col-lg-8 col-12">
           <LogsPanel logs={state.context.logs} />
           <WorldPanel send={send} state={state.context} />
-          <TravelPanel send={send} currentLocation={state.context.location} />
         </div>
       </div>
     </Wrapper>

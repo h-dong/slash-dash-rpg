@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import FULL_MAPS, { MAPS } from "../database/maps";
 import CollapseChevron from "../atomic/CollapseChevron";
+import { ItemDropsInterface } from "./WorldPanel";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
@@ -29,9 +30,10 @@ const TravelWrapper = styled.ul`
 type Props = {
   send: any;
   currentLocation: MAPS;
+  setDrops: React.Dispatch<React.SetStateAction<ItemDropsInterface[]>>;
 };
 
-const TravelPanel = ({ send, currentLocation }: Props) => {
+const WorldPanelTravel = ({ send, currentLocation, setDrops }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
 
   const renderButtons = () => {
@@ -41,7 +43,10 @@ const TravelPanel = ({ send, currentLocation }: Props) => {
           type="button"
           className="btn btn-link btn-sm"
           disabled={map.key === currentLocation}
-          onClick={() => send({ type: "CHANGE_LOCATION", location: map.key })}
+          onClick={() => {
+              setDrops([]);
+              send({ type: "CHANGE_LOCATION", location: map.key });
+            }}
         >
           {map.name}
         </button>
@@ -67,4 +72,4 @@ const TravelPanel = ({ send, currentLocation }: Props) => {
   );
 };
 
-export default TravelPanel;
+export default WorldPanelTravel;
