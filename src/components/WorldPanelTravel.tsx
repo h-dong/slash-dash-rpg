@@ -3,6 +3,7 @@ import styled from "styled-components";
 import FULL_MAPS, { MAPS } from "../database/maps";
 import CollapseChevron from "../atomic/CollapseChevron";
 import { ItemDropsInterface } from "./WorldPanel";
+import { MONSTERS } from "../database/monsters";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
@@ -31,9 +32,10 @@ type Props = {
   send: any;
   currentLocation: MAPS;
   setDrops: React.Dispatch<React.SetStateAction<ItemDropsInterface[]>>;
+  setMonsters: React.Dispatch<React.SetStateAction<MONSTERS[]>>;
 };
 
-const WorldPanelTravel = ({ send, currentLocation, setDrops }: Props) => {
+const WorldPanelTravel = ({ send, currentLocation, setDrops, setMonsters }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
 
   const renderButtons = () => {
@@ -45,6 +47,7 @@ const WorldPanelTravel = ({ send, currentLocation, setDrops }: Props) => {
           disabled={map.key === currentLocation}
           onClick={() => {
               setDrops([]);
+              setMonsters([]);
               send({ type: "CHANGE_LOCATION", location: map.key });
             }}
         >

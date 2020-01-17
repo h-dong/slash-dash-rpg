@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
 import {
@@ -59,15 +59,17 @@ interface WorldPanelActionsInterface {
   character: CharacterInterface;
   location: MAPS;
   setDrops: React.Dispatch<React.SetStateAction<ItemDropsInterface[]>>;
+  monsters: MONSTERS[];
+  setMonsters: React.Dispatch<React.SetStateAction<MONSTERS[]>>;
 }
 
 const WorldPanelActions = ({
   character,
   location,
-  setDrops
+  setDrops,
+  monsters,
+  setMonsters
 }: WorldPanelActionsInterface) => {
-  const [monsters, setMonsters] = useState<MONSTERS[]>([]);
-
   const generateMonsters = () => {
     const fullMap: MapInterface | null =
       FULL_MAPS.find(map => map.key === location) || null;

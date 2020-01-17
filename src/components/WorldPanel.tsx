@@ -8,6 +8,7 @@ import { ITEMS } from "../database/items";
 import styled from "styled-components";
 import CollapseChevron from "../atomic/CollapseChevron";
 import WorldPanelTravel from "./WorldPanelTravel";
+import { MONSTERS } from "../database/monsters";
 
 export interface ItemDropsInterface {
   itemKey: ITEMS;
@@ -26,6 +27,7 @@ type Props = {
 
 const WorldPanel = ({ send, state }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
+  const [monsters, setMonsters] = useState<MONSTERS[]>([]);
   const { character, location } = state;
   const [drops, setDrops] = useState<ItemDropsInterface[]>([]);
 
@@ -40,6 +42,8 @@ const WorldPanel = ({ send, state }: Props) => {
             character={character}
             location={location}
             setDrops={setDrops}
+            monsters={monsters}
+            setMonsters={setMonsters}
           />
           <WorldPanelDrops send={send} drops={drops} setDrops={setDrops} />
         </div>
@@ -62,8 +66,7 @@ const WorldPanel = ({ send, state }: Props) => {
           <div className="card-body">{renderActionsAndDrops()}</div>
         )}
       </div>
-      {drops}
-      <WorldPanelTravel send={send} currentLocation={location} setDrops={setDrops} />
+      <WorldPanelTravel send={send} currentLocation={location} setDrops={setDrops} setMonsters={setMonsters} />
     </React.Fragment>
   );
 };
