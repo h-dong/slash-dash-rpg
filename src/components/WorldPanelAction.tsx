@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
-import { getRandomNumByMinMax } from "../utils/random";
+import {
+  getRandomNumByMinMax,
+  getRandomBooleanByProbability
+} from "../utils/random";
 import FULL_MAPS, {
   MAPS,
   TreasureInterface,
@@ -11,7 +14,7 @@ import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
 import fight from "../utils/combat";
 
 import "react-tippy/dist/tippy.css";
-import { Character } from "../machines/GameMachine";
+import { CharacterInterface } from "../machines/GameMachine";
 import { ItemDropsInterface } from "./WorldPanel";
 import { send } from "xstate";
 
@@ -53,7 +56,7 @@ const Wrapper = styled.div`
 
 interface WorldPanelActionsInterface {
   send: any;
-  character: Character;
+  character: CharacterInterface;
   location: MAPS;
   setDrops: React.Dispatch<React.SetStateAction<ItemDropsInterface[]>>;
 }
@@ -84,8 +87,8 @@ const WorldPanelActions = ({
     if (treasure) {
       const tempDrops: ItemDropsInterface[] = [];
       treasure.forEach(elem => {
-        // const showDrop = getRandomBooleanByProbability(elem.rarity);
-        const showDrop = true;
+        const showDrop = getRandomBooleanByProbability(elem.rarity);
+        // const showDrop = true;
         if (showDrop) {
           const quantity = getRandomNumByMinMax(
             elem.quantity.min,

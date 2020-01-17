@@ -11,7 +11,18 @@ export function getLevel(
   defence: number
 ): number {
   // divide by 9 = 3 stats * 3 stat levels
-  return Math.floor((attack + strength + defence) / 3 / 3);
+  const level = Math.floor((attack + strength + defence) / 3 / 3);
+  if (level < 1) return 1;
+  if (level > 10) return 10;
+  return level;
+}
+
+export function getHealth(
+  attack: number,
+  strength: number,
+  defence: number
+): number {
+  return Math.floor(((attack + strength + defence) / 3) * 10);
 }
 
 export function generateStatsByLevel(level: number) {

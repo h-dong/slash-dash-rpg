@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { getLevel } from "../utils/levelHelper";
+import { getLevel, getHealth } from "../utils/levelHelper";
 import { MAX_LEVEL } from "../config";
-import { Character } from "../machines/GameMachine";
+import { CharacterInterface } from "../machines/GameMachine";
 
 const MaxLevelWrapper = styled.small`
   margin-left: 0.5rem;
@@ -35,10 +35,16 @@ const LevelWrapper = styled.div`
   }
 `;
 
-const LevelPanel = ({ character }: { character: Character }) => {
+const LevelPanel = ({ character }: { character: CharacterInterface }) => {
   if (!character) return null;
 
   const characterLevel = getLevel(
+    character.attack,
+    character.strength,
+    character.defence
+  );
+
+  const characterHealth = getHealth(
     character.attack,
     character.strength,
     character.defence
@@ -56,7 +62,7 @@ const LevelPanel = ({ character }: { character: Character }) => {
         <LevelWrapper>
           <ul>
             <li>HP</li>
-            <li>{character.hp}</li>
+            <li>{characterHealth}</li>
           </ul>
           <ul>
             <li>Attack</li>

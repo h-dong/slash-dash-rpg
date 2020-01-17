@@ -7,15 +7,14 @@ import { ItemDropsInterface } from "./WorldPanel";
 import "react-tippy/dist/tippy.css";
 
 const Wrapper = styled.div`
-  padding: 0.5rem;
+  padding-top: 0.5rem;
 
   .drops {
     display: flex;
     flex-wrap: wrap;
     box-sizing: border-box;
     border-top: 1px solid grey;
-    border-bottom: 1px solid grey;
-    padding: 0.25rem;
+    padding: 1rem 0 0 0;
 
     li {
       display: flex;

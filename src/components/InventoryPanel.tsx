@@ -15,11 +15,8 @@ import { InventoryItemInterface } from "../machines/GameMachine";
 
 const InventoryWrapper = styled.div`
   .empty {
-    width: 100%;
-    border: 1px solid grey;
-    border-top: 0;
-    padding: 1rem;
-    text-align: center;
+    display: flex;
+    justify-content: center;
   }
 
   .items {

@@ -1,7 +1,6 @@
 import { Machine } from "xstate";
-import { getData, setData, clearData } from "../services/data";
-import { Equipments, Character, InventoryItemInterface } from "./GameMachine";
-import { WEAR_POSITION, ITEMS } from "../database/items";
+import { getData, setData, clearData, DataInterface } from "../services/data";
+import { getHealth } from "../utils/levelHelper";
 
 export enum VIEW {
   DASHBOARD = "DASHBOARD",
@@ -9,51 +8,16 @@ export enum VIEW {
   WELCOME = "WELCOME"
 }
 
-// const newCharacterStats = {
-//   level: 1,
-//   hp: 20,
-//   attack: 1,
-//   strength: 1,
-//   defence: 1
-// };
-
-const testCharacterData = {
+const newCharacterStats: DataInterface = {
   character: {
-    name: "asd",
-    hp: 20,
-    attack: 3,
-    strength: 3,
-    defence: 3
-  } as Character,
-  equipments: {
-    [WEAR_POSITION.MAIN_HAND]: ITEMS.WOODEN_SWORD
-  } as Equipments,
-  inventory: [
-    {
-      itemKey: ITEMS.COIN,
-      quantity: 100000
-    },
-    {
-      itemKey: ITEMS.WOODEN_SHIELD,
-      quantity: 2
-    },
-    {
-      itemKey: ITEMS.BRONZE_SHIELD,
-      quantity: 1
-    },
-    {
-      itemKey: ITEMS.BRONZE_PLATE_LEGS,
-      quantity: 1
-    },
-    {
-      itemKey: ITEMS.WOODEN_PLATE_LEGS,
-      quantity: 1
-    },
-    {
-      itemKey: ITEMS.WOODEN_SPEAR,
-      quantity: 1
-    }
-  ] as InventoryItemInterface[]
+    health: getHealth(1, 1, 1),
+    name: "",
+    attack: 1,
+    strength: 1,
+    defence: 1
+  },
+  equipments: {},
+  inventory: []
 };
 
 const hasData = () =>
@@ -89,8 +53,8 @@ const ViewMachine = Machine<{}, ViewMachineEvents>({
         CREATE_CHARACTER: {
           target: "game",
           actions: (_, { name }) => {
-            testCharacterData.character.name = name;
-            setData(testCharacterData);
+            newCharacterStats.character.name = name;
+            setData(newCharacterStats);
           }
         }
       }

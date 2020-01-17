@@ -9,20 +9,20 @@ import { ITEMS } from "../database/items";
 import { generateLog } from "../utils/logs";
 import { setData } from "../services/data";
 
-export interface Character {
+export interface CharacterInterface {
+  health: number;
   name: string;
-  hp: number;
   attack: number;
   strength: number;
   defence: number;
 }
 
-export interface Equipments {
-  HEAD: ITEMS;
-  BODY: ITEMS;
-  LEGS: ITEMS;
-  MAIN_HAND: ITEMS;
-  OFF_HAND: ITEMS;
+export interface EquipmentsInterface {
+  HEAD?: ITEMS;
+  BODY?: ITEMS;
+  LEGS?: ITEMS;
+  MAIN_HAND?: ITEMS;
+  OFF_HAND?: ITEMS;
 }
 
 export interface InventoryItemInterface {
@@ -31,8 +31,8 @@ export interface InventoryItemInterface {
 }
 
 export interface GameMachineContextInterface {
-  character: Character;
-  equipments: Equipments;
+  character: CharacterInterface;
+  equipments: EquipmentsInterface;
   inventory: InventoryItemInterface[];
   logs: string;
   location: MAPS;

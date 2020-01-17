@@ -1,5 +1,8 @@
 import { WEAR_POSITION, ItemInterface, ITEMS } from "../database/items";
-import { Equipments, InventoryItemInterface } from "../machines/GameMachine";
+import {
+  EquipmentsInterface,
+  InventoryItemInterface
+} from "../machines/GameMachine";
 import { getItemByKey } from "./findItem";
 
 // export const ITEM_ACTIONS = {
@@ -52,10 +55,10 @@ export function getEquippedItemActions(
 }
 
 export function moveEquipmentItemToInventory(
-  equipments: Equipments,
+  equipments: EquipmentsInterface,
   inventory: InventoryItemInterface[],
   itemKey: ITEMS
-): { equipments: Equipments; inventory: InventoryItemInterface[] } {
+): { equipments: EquipmentsInterface; inventory: InventoryItemInterface[] } {
   return {
     equipments: removeItemFromEquipment({ ...equipments }, itemKey),
     inventory: addItemToInventory([...inventory], itemKey, 1)
@@ -63,7 +66,7 @@ export function moveEquipmentItemToInventory(
 }
 
 export function moveInventoryItemToEquipment(
-  equipments: Equipments,
+  equipments: EquipmentsInterface,
   inventory: InventoryItemInterface[],
   itemKey: ITEMS
 ) {
@@ -89,7 +92,7 @@ export function moveInventoryItemToEquipment(
   return { equipments: newEquipments, inventory: newInventory };
 }
 
-function addItemToEquipment(equipments: Equipments, itemKey: ITEMS) {
+function addItemToEquipment(equipments: EquipmentsInterface, itemKey: ITEMS) {
   const newEquipments = { ...equipments };
   const fullItem = getItemByKey(itemKey);
 
@@ -99,7 +102,10 @@ function addItemToEquipment(equipments: Equipments, itemKey: ITEMS) {
   return newEquipments;
 }
 
-function removeItemFromEquipment(equipments: Equipments, itemKey: ITEMS) {
+function removeItemFromEquipment(
+  equipments: EquipmentsInterface,
+  itemKey: ITEMS
+) {
   const newEquipments = { ...equipments };
   const fullItem = getItemByKey(itemKey);
 
@@ -145,7 +151,10 @@ function removeItemFromInventory(
   return newInventory;
 }
 
-function calcEquipToTakeOff(equipments: Equipments, itemKey: ITEMS): ITEMS[] {
+function calcEquipToTakeOff(
+  equipments: EquipmentsInterface,
+  itemKey: ITEMS
+): ITEMS[] {
   const fullItem = getItemByKey(itemKey);
 
   if (!fullItem?.equipment) return [];
@@ -155,7 +164,10 @@ function calcEquipToTakeOff(equipments: Equipments, itemKey: ITEMS): ITEMS[] {
     requirements: requirementsToEquip
   } = fullItem.equipment;
 
-  const itemInPosition = getItemByKey(equipments[positionToEquip]);
+  const equipmentInPositionToEquip = equipments[positionToEquip];
+  const itemInPosition = equipmentInPositionToEquip
+    ? getItemByKey(equipmentInPositionToEquip)
+    : null;
 
   // when equiping an off hand item, unequip current two handed weapon
   if (positionToEquip === WEAR_POSITION.OFF_HAND) {
