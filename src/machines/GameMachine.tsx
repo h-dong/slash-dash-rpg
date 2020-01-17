@@ -42,6 +42,8 @@ export type GameMachineEvents = {
   type:
     | "DIE"
     | "REVIVE"
+    | "START_BATTLE"
+    | "END_BATTLE"
     | "UNEQUIP_ITEM"
     | "EXAMINE_ITEM"
     | "EQUIP_ITEM"
@@ -57,11 +59,15 @@ export type GameMachineEvents = {
 const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
   {
     id: "game",
-    initial: "alive",
+    initial: "battle",
     states: {
-      alive: {
+      explore: {
         on: {
           DIE: "dead",
+          START_BATTLE: {
+            target: "battle",
+            actions: "addLog"
+          },
           UNEQUIP_ITEM: {
             actions: ["unequipItem", "persist"]
           },
@@ -79,9 +85,27 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           }
         }
       },
+      battle: {
+        on: {
+          DIE: "dead",
+          END_BATTLE: "explore",
+          UNEQUIP_ITEM: {
+            actions: ["unequipItem", "persist"]
+          },
+          EQUIP_ITEM: {
+            actions: ["equipItem", "persist"]
+          },
+          EXAMINE_ITEM: {
+            actions: "addLog"
+          },
+          PICK_UP_ITEM: {
+            actions: ["pickUpItem", "persist"]
+          },
+        }
+      },
       dead: {
         on: {
-          REVIVE: "alive"
+          REVIVE: "explore"
         }
       }
     }

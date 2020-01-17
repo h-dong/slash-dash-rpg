@@ -11,12 +11,9 @@ import FULL_MAPS, {
   MapInterface
 } from "../database/maps";
 import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
-import fight from "../utils/combat";
 
 import "react-tippy/dist/tippy.css";
-import { CharacterInterface } from "../machines/GameMachine";
 import { ItemDropsInterface } from "./WorldPanel";
-import { send } from "xstate";
 
 const Wrapper = styled.div`
   display: flex;
@@ -56,19 +53,20 @@ const Wrapper = styled.div`
 
 interface WorldPanelActionsInterface {
   send: any;
-  character: CharacterInterface;
   location: MAPS;
   setDrops: React.Dispatch<React.SetStateAction<ItemDropsInterface[]>>;
   monsters: MONSTERS[];
   setMonsters: React.Dispatch<React.SetStateAction<MONSTERS[]>>;
+  setOpponent: React.Dispatch<React.SetStateAction<MONSTERS | null>>;
 }
 
 const WorldPanelActions = ({
-  character,
+  send,
   location,
   setDrops,
   monsters,
-  setMonsters
+  setMonsters,
+  setOpponent
 }: WorldPanelActionsInterface) => {
   const generateMonsters = () => {
     const fullMap: MapInterface | null =
@@ -109,12 +107,8 @@ const WorldPanelActions = ({
   };
 
   const monsterClicked = (index: number) => {
-    // console.log("attack!");
-    // const monster = monsters[index];
-    // console.log(monster);
-    // const fightLog = fight(character, monster);
-    // console.log(fightLog);
-    send({ type: "ADD_LOG", log: "Prepare for battle!" });
+    setOpponent(monsters[index]);
+    send({ type: 'START_BATTLE', log: "Prepare for battle!" });
   };
 
   const renderMonsters = () => {

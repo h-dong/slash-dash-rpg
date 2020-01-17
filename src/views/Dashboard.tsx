@@ -58,7 +58,7 @@ const Dashboard = ({ sendToViewMachine }: any) => {
         </div>
         <div className="col-lg-8 col-12">
           <LogsPanel logs={state.context.logs} />
-          <WorldPanel send={send} state={state.context} />
+          <WorldPanel send={send} state={state} />
         </div>
       </div>
     </Wrapper>
