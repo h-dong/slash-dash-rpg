@@ -4,8 +4,6 @@ import { Tooltip } from "react-tippy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMinusSquare,
-  faChevronCircleUp,
-  faChevronCircleDown
 } from "@fortawesome/free-solid-svg-icons";
 import { WEAR_POSITION } from "../database/items";
 import {
