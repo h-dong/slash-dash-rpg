@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinusSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMinusSquare,
+  faChevronCircleUp,
+  faChevronCircleDown
+} from "@fortawesome/free-solid-svg-icons";
 import { WEAR_POSITION } from "../database/items";
 import {
   getEquippedItemActions,
   EquipmentItemActionInterface
 } from "../utils/itemActions";
 import { getItemByKey } from "../utils/findItem";
+import CollapseChevron from "../atomic/CollapseChevron";
+
+const CardHeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const EquipmentsWrapper = styled.div`
   .slot {
@@ -35,6 +45,8 @@ const EquipmentsWrapper = styled.div`
 `;
 
 const EquipmentsPanel = ({ send, equipments }: any) => {
+  const [collapse, setCollapse] = useState<boolean>(false);
+
   const equipmentSlots = [
     {
       name: "Head",
@@ -134,10 +146,17 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
 
   return (
     <div className="card border-secondary mb-3">
-      <div className="card-header">Equipments</div>
-      <div className="card-body">
-        <EquipmentsWrapper>{renderEquipments()}</EquipmentsWrapper>
+      <div className="card-header">
+        <CardHeaderWrapper>
+          <span>Equipments</span>
+          <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
+        </CardHeaderWrapper>
       </div>
+      {!collapse && (
+        <div className="card-body">
+          <EquipmentsWrapper>{renderEquipments()}</EquipmentsWrapper>
+        </div>
+      )}
     </div>
   );
 };

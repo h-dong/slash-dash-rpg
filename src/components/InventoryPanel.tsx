@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +12,12 @@ import {
 } from "../utils/itemActions";
 import { getItemByKey } from "../utils/findItem";
 import { InventoryItemInterface } from "../machines/GameMachine";
+import CollapseChevron from "../atomic/CollapseChevron";
+
+const CardHeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const InventoryWrapper = styled.div`
   .empty {
@@ -55,13 +61,14 @@ const InventoryWrapper = styled.div`
   }
 `;
 
-const InventoryPanel = ({
-  send,
-  inventory
-}: {
+type Props = {
   send: any;
   inventory: InventoryItemInterface[];
-}) => {
+};
+
+const InventoryPanel = ({ send, inventory }: Props) => {
+  const [collapse, setCollapse] = useState<boolean>(false);
+
   const getIcon = (send: any, action: InventoryItemActionInterface) => {
     switch (action.type) {
       case "EXAMINE_ITEM":
@@ -144,10 +151,17 @@ const InventoryPanel = ({
 
   return (
     <div className="card border-secondary mb-3">
-      <div className="card-header">Inventory</div>
-      <div className="card-body">
-        <InventoryWrapper>{renderInventory()}</InventoryWrapper>
+      <div className="card-header">
+        <CardHeaderWrapper>
+          <span>Inventory</span>
+          <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
+        </CardHeaderWrapper>
       </div>
+      {!collapse && (
+        <div className="card-body">
+          <InventoryWrapper>{renderInventory()}</InventoryWrapper>
+        </div>
+      )}
     </div>
   );
 };
