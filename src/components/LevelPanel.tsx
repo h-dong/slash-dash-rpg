@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getLevel, getHealth } from "../utils/levelHelper";
+import {
+  getLevel,
+  getHealth,
+  calcCharacterStatsWithItems
+} from "../utils/levelHelper";
 import { MAX_LEVEL } from "../config";
 import {
   CharacterInterface,
   EquipmentsInterface
 } from "../machines/GameMachine";
 import CollapseChevron from "../atomic/CollapseChevron";
-import { calcEquipmentsBonusStats } from "../utils/itemHelper";
 
 const MaxLevelWrapper = styled.small`
   margin-left: 0.5rem;
@@ -68,12 +71,12 @@ const LevelPanel = ({ character, equipments }: Props) => {
     character.defence
   );
 
-  const equipmentBonusStats = calcEquipmentsBonusStats(equipments);
-
-  const attack = character.attack + Number(equipmentBonusStats?.attack);
-  const strength = character.strength + Number(equipmentBonusStats?.strength);
-  const defence = character.defence + Number(equipmentBonusStats?.defence);
-  const movementSpeed = 0 + Number(equipmentBonusStats?.movementSpeed);
+  const {
+    attack,
+    strength,
+    defence,
+    movementSpeed
+  } = calcCharacterStatsWithItems(character, equipments);
 
   return (
     <div className="card border-secondary mb-3">
@@ -109,7 +112,7 @@ const LevelPanel = ({ character, equipments }: Props) => {
             </ul>
             <ul>
               <li>Movement Speed</li>
-              <li>{movementSpeed}</li>
+              <li>{movementSpeed}%</li>
             </ul>
           </LevelWrapper>
         </div>

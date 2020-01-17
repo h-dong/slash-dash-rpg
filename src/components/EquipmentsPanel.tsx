@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Tooltip } from "react-tippy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinusSquare } from "@fortawesome/free-solid-svg-icons";
-import { WEAR_POSITION, ItemCombatStatsInterface } from "../database/items";
+import { WEAR_POSITION } from "../database/items";
 import {
   getEquippedItemActions,
   EquipmentItemActionInterface

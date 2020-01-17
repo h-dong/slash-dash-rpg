@@ -56,34 +56,31 @@ interface CombatResultInterface {
   blocked: boolean;
 }
 
-function applyStatsBoosts(combatant: CombatantInterface): CombatantInterface {
-  const boostedCombatant = { ...combatant };
-
-  switch (combatant.combatantType) {
+export function getMultiplierByCombatant(
+  combatantType: COMBATANT_TYPE
+): number {
+  switch (combatantType) {
     case COMBATANT_TYPE.BOSS_MONSTER:
       // Ancient Instinct (boss) +100% of all level effect
-      boostedCombatant.attack = boostedCombatant.attack * 2;
-      boostedCombatant.defence = boostedCombatant.defence * 2;
-      boostedCombatant.attack = boostedCombatant.attack * 2;
-      break;
+      return 2;
     case COMBATANT_TYPE.ELITE_MONSTER:
       // Primal rage (elite) +50% of all level effect
-      boostedCombatant.attack = boostedCombatant.attack * 1.5;
-      boostedCombatant.defence = boostedCombatant.defence * 1.5;
-      boostedCombatant.attack = boostedCombatant.attack * 1.5;
-      break;
-
+      return 1.5;
     case COMBATANT_TYPE.PLAYER:
       // Protagonist blessing +20% of all level effect
-      boostedCombatant.attack = boostedCombatant.attack * 1.2;
-      boostedCombatant.defence = boostedCombatant.defence * 1.2;
-      boostedCombatant.attack = boostedCombatant.attack * 1.2;
-      break;
+      return 1.2;
     default:
       // +0%
-      break;
+      return 1;
   }
+}
 
+function applyStatsBoosts(combatant: CombatantInterface): CombatantInterface {
+  const boostedCombatant = { ...combatant };
+  const multiplier = getMultiplierByCombatant(combatant.combatantType);
+  boostedCombatant.attack = Math.floor(boostedCombatant.attack * multiplier);
+  boostedCombatant.defence = Math.floor(boostedCombatant.defence * multiplier);
+  boostedCombatant.attack = Math.floor(boostedCombatant.attack * multiplier);
   return boostedCombatant;
 }
 
@@ -93,10 +90,10 @@ function calcDamage(attackerStrength: number, defenderDefence: number): number {
   // then depending on attacker's strength and defender's defence, there could be more damage
   const attackDamage = Math.floor(attackerStrength * 2 - defenderDefence);
   const damage = baseDamage + attackDamage;
-  let critChance = Math.floor((2 + 10 * attackerStrength) / 100);
+  let critChance = Math.floor(2 + 10 * attackerStrength);
   // max crit 10%
   if (critChance > 10) critChance = 10;
-  let isCrit = getRandomBooleanByProbability(critChance);
+  let isCrit = getRandomBooleanByProbability(critChance / 100);
   return isCrit ? damage * 2 : damage;
 }
 
@@ -127,7 +124,7 @@ export default function fight(
   );
 
   const landAttack = getRandomBooleanByProbability(
-    Math.floor((attackingSideStrikeChance - defendingSideBlockChance) / 100)
+    Math.floor(attackingSideStrikeChance - defendingSideBlockChance) / 100
   );
 
   if (!landAttack) return { damage, blocked: true };

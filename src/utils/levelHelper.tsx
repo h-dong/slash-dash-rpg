@@ -1,4 +1,9 @@
 import { getRandomNumByMinMax } from "./random";
+import { calcEquipmentsBonusStats } from "./itemHelper";
+import {
+  CharacterInterface,
+  EquipmentsInterface
+} from "../machines/GameMachine";
 
 /*
 Monster stats = level * 2
@@ -33,6 +38,19 @@ export function generateStatsByLevel(level: number) {
     hp: getRandomNumByMinMax(minLevel, maxLevel) * 20,
     attack: getRandomNumByMinMax(minLevel, maxLevel),
     strength: getRandomNumByMinMax(minLevel, maxLevel),
-    defence: getRandomNumByMinMax(minLevel, maxLevel)
+    defence: getRandomNumByMinMax(minLevel, maxLevel),
+    movementSpeed: getRandomNumByMinMax(-50, 50)
   };
+}
+
+export function calcCharacterStatsWithItems(
+  character: CharacterInterface,
+  equipments: EquipmentsInterface
+) {
+  const equipmentBonusStats = calcEquipmentsBonusStats(equipments);
+  const attack = character.attack + Number(equipmentBonusStats?.attack);
+  const strength = character.strength + Number(equipmentBonusStats?.strength);
+  const defence = character.defence + Number(equipmentBonusStats?.defence);
+  const movementSpeed = 0 + Number(equipmentBonusStats?.movementSpeed);
+  return { attack, strength, defence, movementSpeed };
 }

@@ -29,7 +29,7 @@ const WorldPanel = ({ send, state }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
   const [monsters, setMonsters] = useState<MONSTERS[]>([]);
   const [opponent, setOpponent] = useState<MONSTERS | null>(null);
-  const { character, location } = state.context;
+  const { character, equipments, location } = state.context;
   const [drops, setDrops] = useState<ItemDropsInterface[]>([]);
 
   const renderActionsAndDrops = () => {
@@ -57,7 +57,13 @@ const WorldPanel = ({ send, state }: Props) => {
   function renderPanels() {
     // if (state.value === 'battle' && opponent) {
     if (state.value === "battle") {
-      return <WorldPanelCombat character={character} opponent={MONSTERS.COW} />;
+      return (
+        <WorldPanelCombat
+          character={character}
+          equipments={equipments}
+          opponent={MONSTERS.COW}
+        />
+      );
     } else {
       return (
         <React.Fragment>
