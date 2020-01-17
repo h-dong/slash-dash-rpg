@@ -5,19 +5,26 @@ import FULL_MAPS, { MAPS } from "../database/maps";
 import { GameMachineContextInterface } from "../machines/GameMachine";
 import WorldPanelActions from "./WorldPanelAction";
 import { ITEMS } from "../database/items";
+import styled from "styled-components";
+import CollapseChevron from "../atomic/CollapseChevron";
 
 export interface ItemDropsInterface {
   itemKey: ITEMS;
   quantity: number;
 }
 
-const WorldPanel = ({
-  send,
-  state
-}: {
+const CardHeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+type Props = {
   send: any;
   state: GameMachineContextInterface;
-}) => {
+};
+
+const WorldPanel = ({ send, state }: Props) => {
+  const [collapse, setCollapse] = useState<boolean>(false);
   const { character, location } = state;
   const [drops, setDrops] = useState<ItemDropsInterface[]>([]);
 
@@ -43,8 +50,13 @@ const WorldPanel = ({
 
   return (
     <div className="card border-secondary mb-3">
-      <div className="card-header">{`Current Location - ${locationName}`}</div>
-      <div className="card-body">{renderActionsAndDrops()}</div>
+      <div className="card-header">
+        <CardHeaderWrapper>
+          <span>{`Current Location - ${locationName}`}</span>
+          <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
+        </CardHeaderWrapper>
+      </div>
+      {!collapse && <div className="card-body">{renderActionsAndDrops()}</div>}
     </div>
   );
 };

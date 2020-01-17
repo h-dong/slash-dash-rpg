@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import FULL_MAPS, { MAPS } from "../database/maps";
+import CollapseChevron from "../atomic/CollapseChevron";
+
+const CardHeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const TravelWrapper = styled.ul`
   display: flex;
@@ -20,13 +26,14 @@ const TravelWrapper = styled.ul`
   }
 `;
 
-const TravelPanel = ({
-  send,
-  currentLocation
-}: {
+type Props = {
   send: any;
   currentLocation: MAPS;
-}) => {
+};
+
+const TravelPanel = ({ send, currentLocation }: Props) => {
+  const [collapse, setCollapse] = useState<boolean>(false);
+
   const renderButtons = () => {
     return FULL_MAPS.map(map => (
       <li key={map.name}>
@@ -45,10 +52,17 @@ const TravelPanel = ({
 
   return (
     <div className="card border-secondary mb-3">
-      <div className="card-header">Fast Travel</div>
-      <div className="card-body">
-        <TravelWrapper>{renderButtons()}</TravelWrapper>
+      <div className="card-header">
+        <CardHeaderWrapper>
+          <span>Fast Travel</span>
+          <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
+        </CardHeaderWrapper>
       </div>
+      {!collapse && (
+        <div className="card-body">
+          <TravelWrapper>{renderButtons()}</TravelWrapper>
+        </div>
+      )}
     </div>
   );
 };

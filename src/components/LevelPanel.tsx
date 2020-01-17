@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { getLevel, getHealth } from "../utils/levelHelper";
 import { MAX_LEVEL } from "../config";
 import { CharacterInterface } from "../machines/GameMachine";
+import CollapseChevron from "../atomic/CollapseChevron";
 
 const MaxLevelWrapper = styled.small`
   margin-left: 0.5rem;
+`;
+
+const CardHeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const LevelWrapper = styled.div`
@@ -36,6 +42,8 @@ const LevelWrapper = styled.div`
 `;
 
 const LevelPanel = ({ character }: { character: CharacterInterface }) => {
+  const [collapse, setCollapse] = useState<boolean>(false);
+
   if (!character) return null;
 
   const characterLevel = getLevel(
@@ -53,31 +61,38 @@ const LevelPanel = ({ character }: { character: CharacterInterface }) => {
   return (
     <div className="card border-secondary mb-3">
       <div className="card-header">
-        {`Level ${characterLevel}`}
-        <MaxLevelWrapper className="text-center">
-          (Max level {MAX_LEVEL})
-        </MaxLevelWrapper>
+        <CardHeaderWrapper>
+          <div>
+            {`Level ${characterLevel}`}
+            <MaxLevelWrapper className="text-center">
+              (Max level {MAX_LEVEL})
+            </MaxLevelWrapper>
+          </div>
+          <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
+        </CardHeaderWrapper>
       </div>
-      <div className="card-body">
-        <LevelWrapper>
-          <ul>
-            <li>HP</li>
-            <li>{characterHealth}</li>
-          </ul>
-          <ul>
-            <li>Attack</li>
-            <li>{character.attack}</li>
-          </ul>
-          <ul>
-            <li>Strength</li>
-            <li>{character.strength}</li>
-          </ul>
-          <ul>
-            <li>Defence</li>
-            <li>{character.defence}</li>
-          </ul>
-        </LevelWrapper>
-      </div>
+      {!collapse && (
+        <div className="card-body">
+          <LevelWrapper>
+            <ul>
+              <li>HP</li>
+              <li>{characterHealth}</li>
+            </ul>
+            <ul>
+              <li>Attack</li>
+              <li>{character.attack}</li>
+            </ul>
+            <ul>
+              <li>Strength</li>
+              <li>{character.strength}</li>
+            </ul>
+            <ul>
+              <li>Defence</li>
+              <li>{character.defence}</li>
+            </ul>
+          </LevelWrapper>
+        </div>
+      )}
     </div>
   );
 };
