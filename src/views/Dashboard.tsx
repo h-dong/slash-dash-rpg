@@ -52,7 +52,10 @@ const Dashboard = ({ sendToViewMachine }: any) => {
       </div>
       <div className="row">
         <div className="col-lg-4 col-12">
-          <LevelPanel character={state.context.character} />
+          <LevelPanel
+            character={state.context.character}
+            equipments={state.context.equipments}
+          />
           <EquipmentsPanel send={send} equipments={state.context.equipments} />
           <InventoryPanel send={send} inventory={state.context.inventory} />
         </div>

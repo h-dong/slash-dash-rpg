@@ -1,18 +1,39 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import CollapseChevron from "../atomic/CollapseChevron";
-import { MONSTERS } from "../database/monsters";
+import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
 import { CharacterInterface } from "../machines/GameMachine";
+import { getLevel, generateStatsByLevel } from "../utils/levelHelper";
+import ProgressBar from "../atomic/ProgressBar";
+import CombatLevels from "../atomic/CombatLevels";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
-const CombatWrapper = styled.div`
-  .section {
-    margin-bottom: 1rem;
+const CombatProfile = styled.div`
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+
+    img {
+      width: 3rem;
+      height: 3rem;
+      padding: 0.25rem;
+    }
+
+    h6 {
+      margin-left: 0.25rem;
+    }
   }
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin: 1.5rem 0;
 `;
 
 type Props = {
@@ -23,8 +44,62 @@ type Props = {
 const WorldPanelCombat = ({ character, opponent }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
 
+  function renderOpponent() {
+    const fullMonster = FULL_MONSTERS.find(monster => monster.key === opponent);
+    if (!fullMonster) return null;
+
+    const title = `${fullMonster.name} (Level ${fullMonster.level})`;
+    const monsterStats = generateStatsByLevel(fullMonster.level);
+
+    return (
+      <CombatProfile>
+        <div className="header">
+          <span className="border border-secondary">
+            <img alt={fullMonster.name} src={fullMonster.icon} />
+          </span>
+          <h6>{title}</h6>
+        </div>
+        <ProgressBar now={monsterStats.hp} max={monsterStats.hp} />
+        <CombatLevels
+          attack={monsterStats.attack}
+          strength={monsterStats.strength}
+          defence={monsterStats.defence}
+        />
+      </CombatProfile>
+    );
+  }
+
+  function renderActions() {
+    return (
+      <ButtonWrapper>
+        <button className="btn btn-primary">Attack</button>
+        <button className="btn btn-warning">Escape</button>
+      </ButtonWrapper>
+    );
+  }
+
+  function renderCharacter() {
+    const level = getLevel(
+      character.attack,
+      character.strength,
+      character.defence
+    );
+    const title = `${character.name} (Level ${level})`;
+    return (
+      <CombatProfile>
+        <h6>{title}</h6>
+        <ProgressBar now={character.health} max={character.health} />
+        <CombatLevels
+          attack={character.attack}
+          strength={character.strength}
+          defence={character.defence}
+        />
+      </CombatProfile>
+    );
+  }
+
   return (
-    <div className="card bg-light border-secondary mb-3">
+    <div className="card border-secondary mb-3">
       <div className="card-header">
         <CardHeaderWrapper>
           <span>Fight!</span>
@@ -33,42 +108,9 @@ const WorldPanelCombat = ({ character, opponent }: Props) => {
       </div>
       {!collapse && (
         <div className="card-body">
-          <CombatWrapper>
-            <div className="section">
-              <span>Opponent</span>
-              <div className="progress">
-                <div
-                  className="progress-bar progress-bar-striped bg-danger"
-                  role="progressbar"
-                  style={{ width: "100%" }}
-                  aria-valuenow={100}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                >
-                  100/100
-                </div>
-              </div>
-            </div>
-            <div className="section">
-              <button className="btn btn-primary">Attack</button>
-              <button className="btn btn-primary">Escape</button>
-            </div>
-            <div className="section">
-              <span>Character</span>
-              <div className="progress">
-                <div
-                  className="progress-bar progress-bar-striped bg-danger"
-                  role="progressbar"
-                  style={{ width: "100%" }}
-                  aria-valuenow={100}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                >
-                  100/100
-                </div>
-              </div>
-            </div>
-          </CombatWrapper>
+          {renderOpponent()}
+          {renderActions()}
+          {renderCharacter()}
         </div>
       )}
     </div>

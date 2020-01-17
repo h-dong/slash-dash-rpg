@@ -35,7 +35,12 @@ type Props = {
   setMonsters: React.Dispatch<React.SetStateAction<MONSTERS[]>>;
 };
 
-const WorldPanelTravel = ({ send, currentLocation, setDrops, setMonsters }: Props) => {
+const WorldPanelTravel = ({
+  send,
+  currentLocation,
+  setDrops,
+  setMonsters
+}: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
 
   const renderButtons = () => {
@@ -46,10 +51,10 @@ const WorldPanelTravel = ({ send, currentLocation, setDrops, setMonsters }: Prop
           className="btn btn-link btn-sm"
           disabled={map.key === currentLocation}
           onClick={() => {
-              setDrops([]);
-              setMonsters([]);
-              send({ type: "CHANGE_LOCATION", location: map.key });
-            }}
+            setDrops([]);
+            setMonsters([]);
+            send({ type: "CHANGE_LOCATION", location: map.key });
+          }}
         >
           {map.name}
         </button>

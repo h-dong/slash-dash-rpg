@@ -10,7 +10,7 @@ import {
   getInventoryItemActions,
   InventoryItemActionInterface
 } from "../utils/itemActions";
-import { getItemByKey } from "../utils/findItem";
+import { getItemByKey, getItemCombatStatsTextByKey } from "../utils/itemHelper";
 import { InventoryItemInterface } from "../machines/GameMachine";
 import CollapseChevron from "../atomic/CollapseChevron";
 
@@ -126,9 +126,14 @@ const InventoryPanel = ({ send, inventory }: Props) => {
       .sort((a, b) => a.order - b.order)
       .map(action => getIcon(send, action));
 
+    const itemCombatStatsText = getItemCombatStatsTextByKey(itemKey);
+    const tooltipText = itemCombatStatsText
+      ? `${fullItem.name} (${itemCombatStatsText})`
+      : fullItem.name;
+
     return (
       <div key={fullItem.id} className="item-row">
-        <Tooltip title={fullItem.name} position="right" trigger="mouseenter">
+        <Tooltip title={tooltipText} position="right" trigger="mouseenter">
           <div className="item">
             <img alt={fullItem.name} src={fullItem.icon} />
             <span className="label label-default">({quantity})</span>

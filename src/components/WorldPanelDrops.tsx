@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
-import { getItemByKey } from "../utils/findItem";
+import { getItemByKey } from "../utils/itemHelper";
 import { ItemDropsInterface } from "./WorldPanel";
 
 import "react-tippy/dist/tippy.css";

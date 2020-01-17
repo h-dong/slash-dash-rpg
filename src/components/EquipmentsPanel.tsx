@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMinusSquare,
-} from "@fortawesome/free-solid-svg-icons";
-import { WEAR_POSITION } from "../database/items";
+import { faMinusSquare } from "@fortawesome/free-solid-svg-icons";
+import { WEAR_POSITION, ItemCombatStatsInterface } from "../database/items";
 import {
   getEquippedItemActions,
   EquipmentItemActionInterface
 } from "../utils/itemActions";
-import { getItemByKey } from "../utils/findItem";
+import { getItemByKey, getItemCombatStatsText } from "../utils/itemHelper";
 import CollapseChevron from "../atomic/CollapseChevron";
 
 const CardHeaderWrapper = styled.div`
@@ -90,10 +88,10 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
 
     return actions.map(({ type, itemKey }: EquipmentItemActionInterface) => (
       <Tooltip
-        title="Examine"
+        title="Unequip"
         position="right"
         trigger="mouseenter"
-        key="examine"
+        key="unequip"
         className="item-action"
       >
         <FontAwesomeIcon
@@ -117,8 +115,11 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
         );
       }
 
-      // const { position } = fullItem.equipment;
       const actions = getEquippedItemActions(itemKey);
+
+      const combatBonus: string = getItemCombatStatsText({
+        ...fullItem.equipment.combat
+      });
 
       return (
         <div key={name} className="slot">
@@ -137,6 +138,7 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
             </Tooltip>
             <div>{renderItemActions(actions)}</div>
           </div>
+          <small>({combatBonus})</small>
         </div>
       );
     });

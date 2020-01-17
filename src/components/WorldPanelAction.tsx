@@ -88,7 +88,6 @@ const WorldPanelActions = ({
       const tempDrops: ItemDropsInterface[] = [];
       treasure.forEach(elem => {
         const showDrop = getRandomBooleanByProbability(elem.rarity);
-        // const showDrop = true;
         if (showDrop) {
           const quantity = getRandomNumByMinMax(
             elem.quantity.min,
@@ -108,7 +107,7 @@ const WorldPanelActions = ({
 
   const monsterClicked = (index: number) => {
     setOpponent(monsters[index]);
-    send({ type: 'START_BATTLE', log: "Prepare for battle!" });
+    send({ type: "START_BATTLE", log: "Prepare for battle!" });
   };
 
   const renderMonsters = () => {

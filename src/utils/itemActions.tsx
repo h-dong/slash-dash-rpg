@@ -3,7 +3,7 @@ import {
   EquipmentsInterface,
   InventoryItemInterface
 } from "../machines/GameMachine";
-import { getItemByKey } from "./findItem";
+import { getItemByKey } from "./itemHelper";
 
 // export const ITEM_ACTIONS = {
 //   EQUIP: "Equip",

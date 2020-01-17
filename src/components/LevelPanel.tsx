@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { getLevel, getHealth } from "../utils/levelHelper";
 import { MAX_LEVEL } from "../config";
-import { CharacterInterface } from "../machines/GameMachine";
+import {
+  CharacterInterface,
+  EquipmentsInterface
+} from "../machines/GameMachine";
 import CollapseChevron from "../atomic/CollapseChevron";
+import { calcEquipmentsBonusStats } from "../utils/itemHelper";
 
 const MaxLevelWrapper = styled.small`
   margin-left: 0.5rem;
@@ -42,7 +46,12 @@ const LevelWrapper = styled.div`
   }
 `;
 
-const LevelPanel = ({ character }: { character: CharacterInterface }) => {
+type Props = {
+  character: CharacterInterface;
+  equipments: EquipmentsInterface;
+};
+
+const LevelPanel = ({ character, equipments }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
 
   if (!character) return null;
@@ -58,6 +67,13 @@ const LevelPanel = ({ character }: { character: CharacterInterface }) => {
     character.strength,
     character.defence
   );
+
+  const equipmentBonusStats = calcEquipmentsBonusStats(equipments);
+
+  const attack = character.attack + Number(equipmentBonusStats?.attack);
+  const strength = character.strength + Number(equipmentBonusStats?.strength);
+  const defence = character.defence + Number(equipmentBonusStats?.defence);
+  const movementSpeed = 0 + Number(equipmentBonusStats?.movementSpeed);
 
   return (
     <div className="card border-secondary mb-3">
@@ -81,15 +97,19 @@ const LevelPanel = ({ character }: { character: CharacterInterface }) => {
             </ul>
             <ul>
               <li>Attack</li>
-              <li>{character.attack}</li>
+              <li>{attack}</li>
             </ul>
             <ul>
               <li>Strength</li>
-              <li>{character.strength}</li>
+              <li>{strength}</li>
             </ul>
             <ul>
               <li>Defence</li>
-              <li>{character.defence}</li>
+              <li>{defence}</li>
+            </ul>
+            <ul>
+              <li>Movement Speed</li>
+              <li>{movementSpeed}</li>
             </ul>
           </LevelWrapper>
         </div>

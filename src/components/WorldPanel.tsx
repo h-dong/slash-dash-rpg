@@ -56,8 +56,8 @@ const WorldPanel = ({ send, state }: Props) => {
 
   function renderPanels() {
     // if (state.value === 'battle' && opponent) {
-    if (state.value === 'battle') {
-      return <WorldPanelCombat character={character} opponent={opponent} />;
+    if (state.value === "battle") {
+      return <WorldPanelCombat character={character} opponent={MONSTERS.COW} />;
     } else {
       return (
         <React.Fragment>
@@ -65,14 +65,22 @@ const WorldPanel = ({ send, state }: Props) => {
             <div className="card-header">
               <CardHeaderWrapper>
                 <span>{`Current Location - ${locationName}`}</span>
-                <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
+                <CollapseChevron
+                  collapse={collapse}
+                  setCollapse={setCollapse}
+                />
               </CardHeaderWrapper>
             </div>
             {!collapse && (
               <div className="card-body">{renderActionsAndDrops()}</div>
             )}
           </div>
-          <WorldPanelTravel send={send} currentLocation={location} setDrops={setDrops} setMonsters={setMonsters} />
+          <WorldPanelTravel
+            send={send}
+            currentLocation={location}
+            setDrops={setDrops}
+            setMonsters={setMonsters}
+          />
         </React.Fragment>
       );
     }
