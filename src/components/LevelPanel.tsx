@@ -37,6 +37,7 @@ const LevelWrapper = styled.div`
 
     li {
       list-style-type: none;
+      font-size: 1rem;
     }
   }
 `;
