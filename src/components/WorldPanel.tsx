@@ -6,9 +6,7 @@ import WorldPanelActions from "./WorldPanelAction";
 import { ITEMS } from "../database/items";
 import styled from "styled-components";
 import CollapseChevron from "../atomic/CollapseChevron";
-import WorldPanelTravel from "./WorldPanelTravel";
-import { MONSTERS } from "../database/monsters";
-import WorldPanelCombatContainer from "./WorldPanelCombatContainer";
+import WorldPanelCombat from "./WorldPanelCombat";
 
 export interface ItemDropsInterface {
   itemKey: ITEMS;
@@ -27,72 +25,54 @@ type Props = {
 
 const WorldPanel = ({ send, state }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
-  const [monsters, setMonsters] = useState<MONSTERS[]>([]);
-  const [opponent, setOpponent] = useState<MONSTERS | null>(null);
-  const { character, equipments, location } = state.context;
-  const [drops, setDrops] = useState<ItemDropsInterface[]>([]);
+  const { character, equipments, world, battle } = state.context;
 
   const renderActionsAndDrops = () => {
-    if (location === MAPS.SHOP) {
+    if (world.location === MAPS.SHOP) {
       return <WorldPanelShop />;
     } else {
       return (
         <div>
           <WorldPanelActions
             send={send}
-            location={location}
-            setDrops={setDrops}
-            monsters={monsters}
-            setMonsters={setMonsters}
-            setOpponent={setOpponent}
+            location={world.location}
+            monsters={world.monsters}
           />
-          <WorldPanelDrops send={send} drops={drops} setDrops={setDrops} />
+          <WorldPanelDrops send={send} drops={world.drops} />
         </div>
       );
     }
   };
 
-  const locationName = FULL_MAPS.find(elem => elem.key === location)?.name;
+  const locationName = FULL_MAPS.find(elem => elem.key === world.location)
+    ?.name;
 
-  function renderPanels() {
-    if (state.value === "battle" && opponent) {
-      return (
-        <WorldPanelCombatContainer
-          send={send}
-          character={character}
-          equipments={equipments}
-          monsterKey={opponent}
-        />
-      );
-    } else {
-      return (
-        <React.Fragment>
-          <div className="card border-secondary mb-3">
-            <div className="card-header">
-              <CardHeaderWrapper>
-                <span>{`Current Location - ${locationName}`}</span>
-                <CollapseChevron
-                  collapse={collapse}
-                  setCollapse={setCollapse}
-                />
-              </CardHeaderWrapper>
-            </div>
-            {!collapse && (
-              <div className="card-body">{renderActionsAndDrops()}</div>
-            )}
+  if (state.value === "battle") {
+    return (
+      <WorldPanelCombat
+        send={send}
+        battle={battle}
+        character={character}
+        equipments={equipments}
+      />
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <div className="card border-secondary mb-3">
+          <div className="card-header">
+            <CardHeaderWrapper>
+              <span>{`Current Location - ${locationName}`}</span>
+              <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
+            </CardHeaderWrapper>
           </div>
-          <WorldPanelTravel
-            send={send}
-            currentLocation={location}
-            setDrops={setDrops}
-            setMonsters={setMonsters}
-          />
-        </React.Fragment>
-      );
-    }
+          {!collapse && (
+            <div className="card-body">{renderActionsAndDrops()}</div>
+          )}
+        </div>
+      </React.Fragment>
+    );
   }
-
-  return renderPanels();
 };
 
 export default WorldPanel;

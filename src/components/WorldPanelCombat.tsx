@@ -4,7 +4,8 @@ import CollapseChevron from "../atomic/CollapseChevron";
 import FULL_MONSTERS from "../database/monsters";
 import {
   CharacterInterface,
-  EquipmentsInterface
+  EquipmentsInterface,
+  BattleInterface
 } from "../machines/GameMachine";
 import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
 import ProgressBar from "../atomic/ProgressBar";
@@ -14,7 +15,6 @@ import {
   attackForOneRound,
   CombatResultsInterface
 } from "../utils/combat";
-import { MonsterCombatInterface } from "./WorldPanelCombatContainer";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
@@ -47,42 +47,31 @@ const ButtonWrapper = styled.div`
 
 type Props = {
   send: any;
+  battle: BattleInterface;
   character: CharacterInterface;
   equipments: EquipmentsInterface;
-  opponent: MonsterCombatInterface;
-  monsterHealth: number;
-  setMonsterHealth: React.Dispatch<React.SetStateAction<number>>;
-  characterHealth: number;
-  setCharacterHealth: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const WorldPanelCombat = ({
-  send,
-  character,
-  opponent,
-  equipments,
-  monsterHealth,
-  setMonsterHealth,
-  characterHealth,
-  setCharacterHealth
-}: Props) => {
+const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
+  const { player, monster } = battle;
+  const fullMonster = FULL_MONSTERS.find(
+    elem => elem.key === monster.monsterKey
+  );
   const characterStatsWithItems = calcCharacterStatsWithItems(
     character,
     equipments
   );
 
+  if (!fullMonster) return null;
+
   function attack() {
-    const characterBattleStats = {
-      ...characterStatsWithItems,
-      combatantType: COMBATANT_TYPE.PLAYER
-    };
     const results: CombatResultsInterface = attackForOneRound(
-      characterBattleStats,
-      opponent
+      { ...characterStatsWithItems, health: player.health },
+      { ...monster.stats, health: monster.health }
     );
-    const playerNewHealth = characterHealth - Number(results.damageRecieved);
-    const monsterNewHealth = monsterHealth - results.damageDelt;
+    const playerNewHealth = player.health - Number(results.damageRecieved);
+    const monsterNewHealth = monster.health - results.damageDelt;
     if (playerNewHealth <= 0) {
       defeated();
       return;
@@ -91,8 +80,11 @@ const WorldPanelCombat = ({
       won();
       return;
     }
-    setMonsterHealth(monsterNewHealth);
-    setCharacterHealth(playerNewHealth);
+    send({
+      tyep: "UPDATE_BATTLE",
+      playerHealth: playerNewHealth,
+      monsterHealth: monsterNewHealth
+    });
   }
 
   function won() {
@@ -103,9 +95,6 @@ const WorldPanelCombat = ({
   }
 
   function defeated() {
-    const fullMonster = FULL_MONSTERS.find(
-      monster => monster.key === opponent.monsterKey
-    );
     send({
       type: "LOST_BATTLE",
       log: `You have been defeated by ${fullMonster?.name} (level ${fullMonster?.level})`
@@ -120,38 +109,32 @@ const WorldPanelCombat = ({
   }
 
   function renderOpponent() {
-    const fullMonster = FULL_MONSTERS.find(
-      monster => monster.key === opponent.monsterKey
-    );
-
-    if (!fullMonster) return null;
-
     let monsterTypeText = "";
     let borderColour = "border-secondary";
-    if (opponent.combatantType === COMBATANT_TYPE.ELITE_MONSTER) {
+    if (monster.combatantType === COMBATANT_TYPE.ELITE_MONSTER) {
       borderColour = "border-warning";
       monsterTypeText = "Elite ";
     }
-    if (opponent.combatantType === COMBATANT_TYPE.BOSS_MONSTER) {
+    if (monster.combatantType === COMBATANT_TYPE.BOSS_MONSTER) {
       borderColour = "border-danger";
       monsterTypeText = "Boss ";
     }
-    const title = `${monsterTypeText}${fullMonster.name} (Level ${fullMonster.level})`;
+    const title = `${monsterTypeText}${fullMonster?.name} (Level ${fullMonster?.level})`;
 
     return (
       <CombatProfile>
         <div className="header">
           <span className={`border ${borderColour}`}>
-            <img alt={fullMonster.name} src={fullMonster.icon} />
+            <img alt={fullMonster?.name} src={fullMonster?.icon} />
           </span>
           <h6>{title}</h6>
         </div>
-        <ProgressBar now={monsterHealth} max={opponent.health} />
+        <ProgressBar now={monster.health} max={monster.stats.health} />
         <CombatLevels
-          attack={opponent.attack}
-          strength={opponent.strength}
-          defence={opponent.defence}
-          movementSpeed={opponent.movementSpeed}
+          attack={monster.stats.attack}
+          strength={monster.stats.strength}
+          defence={monster.stats.defence}
+          movementSpeed={monster.stats.movementSpeed}
         />
       </CombatProfile>
     );
@@ -180,7 +163,7 @@ const WorldPanelCombat = ({
     return (
       <CombatProfile>
         <h6>{title}</h6>
-        <ProgressBar now={characterHealth} max={character.health} />
+        <ProgressBar now={player.health} max={character.health} />
         <CombatLevels
           attack={characterStatsWithItems.attack}
           strength={characterStatsWithItems.strength}

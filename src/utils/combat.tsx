@@ -1,4 +1,11 @@
-import { getRandomNumByMinMax, getRandomBooleanByProbability } from "./random";
+import {
+  getRandomNumByMinMax,
+  getRandomBooleanByProbability,
+  getRandomMonsterType
+} from "./random";
+import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
+import { BattleMonsterInterface } from "../machines/GameMachine";
+import { generateStatsByLevel } from "./levelHelper";
 
 /*
 defence xp:
@@ -20,12 +27,12 @@ export enum COMBATANT_TYPE {
   BOSS_MONSTER = "BOSS_MONSTER"
 }
 
-interface CombatantInterface {
+export interface CombatStatsInterface {
+  health: number;
   attack: number;
   strength: number;
   defence: number;
   movementSpeed: number;
-  combatantType: COMBATANT_TYPE;
 }
 
 export interface CombatResultInterface {
@@ -58,13 +65,34 @@ export function getMultiplierByCombatant(
   }
 }
 
-function applyStatsBoosts(combatant: CombatantInterface): CombatantInterface {
-  const boostedCombatant = { ...combatant };
-  const multiplier = getMultiplierByCombatant(combatant.combatantType);
-  boostedCombatant.attack = Math.floor(boostedCombatant.attack * multiplier);
-  boostedCombatant.defence = Math.floor(boostedCombatant.defence * multiplier);
-  boostedCombatant.attack = Math.floor(boostedCombatant.attack * multiplier);
-  return boostedCombatant;
+export function getStatsByMonsterKey(
+  monsterKey: MONSTERS
+): BattleMonsterInterface | null {
+  const fullMonster = FULL_MONSTERS.find(monster => monster.key === monsterKey);
+  if (!fullMonster) return null;
+
+  const monsterType: COMBATANT_TYPE = getRandomMonsterType();
+  const stats = generateStatsByLevel(fullMonster.level);
+  const newStats = applyStatsBoosts(monsterType, stats);
+
+  return {
+    stats: newStats,
+    combatantType: monsterType,
+    monsterKey,
+    health: newStats.health
+  };
+}
+
+function applyStatsBoosts(
+  combatantType: COMBATANT_TYPE,
+  combatant: CombatStatsInterface
+): CombatStatsInterface {
+  const boosted = { ...combatant };
+  const multiplier = getMultiplierByCombatant(combatantType);
+  boosted.attack = Math.floor(boosted.attack * multiplier);
+  boosted.defence = Math.floor(boosted.defence * multiplier);
+  boosted.attack = Math.floor(boosted.attack * multiplier);
+  return boosted;
 }
 
 function calcDamage(attackerStrength: number, defenderDefence: number): number {
@@ -81,8 +109,8 @@ function calcDamage(attackerStrength: number, defenderDefence: number): number {
 }
 
 export function attackForOneRound(
-  player: CombatantInterface,
-  monster: CombatantInterface
+  player: CombatStatsInterface,
+  monster: CombatStatsInterface
 ): CombatResultsInterface {
   let damageDelt = 0;
   let blocked = false;
@@ -105,30 +133,22 @@ export function attackForOneRound(
 }
 
 export default function fight(
-  attackSide: CombatantInterface,
-  defendSide: CombatantInterface
+  attackSide: CombatStatsInterface,
+  defendSide: CombatStatsInterface
 ): CombatResultInterface {
-  const boostedAttackSide = applyStatsBoosts(attackSide);
-  const boostedDefendSide = applyStatsBoosts(defendSide);
-
   // block %: 5% + (10% * own defence) + item boosts (max 20%) (no dmg taken)
   const defendingSideBlockChance = Math.floor(
-    (5 + 10 * boostedDefendSide.defence) * 100
+    (5 + 10 * defendSide.defence) * 100
   );
 
   let attackingSideStrikeChance = Math.floor(
-    50 +
-      Math.log(boostedAttackSide.attack * 2) -
-      (100 - attackSide.movementSpeed)
+    50 + Math.log(attackSide.attack * 2) - (100 - attackSide.movementSpeed)
   );
 
   // Max strike chance is 85%
   if (attackingSideStrikeChance > 85) attackingSideStrikeChance = 85;
 
-  const damage = calcDamage(
-    boostedAttackSide.strength,
-    boostedDefendSide.strength
-  );
+  const damage = calcDamage(attackSide.strength, defendSide.strength);
 
   const landAttack = getRandomBooleanByProbability(
     Math.floor(attackingSideStrikeChance - defendingSideBlockChance) / 100

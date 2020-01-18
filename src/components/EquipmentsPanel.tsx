@@ -25,6 +25,12 @@ const EquipmentsWrapper = styled.div`
       justify-content: space-between;
       align-items: center;
 
+      .item {
+        small {
+          margin-left: 0.5rem;
+        }
+      }
+
       .item-name {
         margin: 0.25rem;
       }
@@ -134,11 +140,11 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
             >
               <div className="item">
                 <img alt={fullItem.name} src={fullItem.icon} />
+                <small>({combatBonus})</small>
               </div>
             </Tooltip>
             <div>{renderItemActions(actions)}</div>
           </div>
-          <small>({combatBonus})</small>
         </div>
       );
     });

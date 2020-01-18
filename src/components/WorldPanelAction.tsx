@@ -54,29 +54,23 @@ const Wrapper = styled.div`
 interface WorldPanelActionsInterface {
   send: any;
   location: MAPS;
-  setDrops: React.Dispatch<React.SetStateAction<ItemDropsInterface[]>>;
   monsters: MONSTERS[];
-  setMonsters: React.Dispatch<React.SetStateAction<MONSTERS[]>>;
-  setOpponent: React.Dispatch<React.SetStateAction<MONSTERS | null>>;
 }
 
 const WorldPanelActions = ({
   send,
   location,
-  setDrops,
-  monsters,
-  setMonsters,
-  setOpponent
+  monsters
 }: WorldPanelActionsInterface) => {
   const generateMonsters = () => {
     const fullMap: MapInterface | null =
       FULL_MAPS.find(map => map.key === location) || null;
     const monstersOnMap = fullMap?.monsters;
     if (monstersOnMap) {
-      const tempMonsters: MONSTERS[] = monstersOnMap.map(
+      const monstersAppeared: MONSTERS[] = monstersOnMap.map(
         elem => elem.monsterKey
       );
-      setMonsters(tempMonsters);
+      send({ type: "SET_MONSTERS", monsters: monstersAppeared });
     }
   };
 
@@ -85,7 +79,7 @@ const WorldPanelActions = ({
       FULL_MAPS.find(map => map.key === location)?.treasure || null;
 
     if (treasure) {
-      const tempDrops: ItemDropsInterface[] = [];
+      const drops: ItemDropsInterface[] = [];
       treasure.forEach(elem => {
         const showDrop = getRandomBooleanByProbability(elem.rarity);
         if (showDrop) {
@@ -93,10 +87,10 @@ const WorldPanelActions = ({
             elem.quantity.min,
             elem.quantity.max
           );
-          tempDrops.push({ itemKey: elem.itemKey, quantity });
+          drops.push({ itemKey: elem.itemKey, quantity });
         }
       });
-      setDrops(tempDrops);
+      send({ type: "SET_DROPS", drops });
     }
   };
 
@@ -106,8 +100,10 @@ const WorldPanelActions = ({
   };
 
   const monsterClicked = (index: number) => {
-    setOpponent(monsters[index]);
-    send({ type: "START_BATTLE", log: "Prepare for battle!" });
+    send({
+      type: "START_BATTLE",
+      monsterKey: monsters[index]
+    });
   };
 
   const renderMonsters = () => {

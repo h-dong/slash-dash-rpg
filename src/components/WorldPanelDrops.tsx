@@ -38,14 +38,9 @@ const Wrapper = styled.div`
 interface WorldPanelDropsInterface {
   send: any;
   drops: ItemDropsInterface[];
-  setDrops: React.Dispatch<React.SetStateAction<ItemDropsInterface[]>>;
 }
 
-const WorldPanelDrops = ({
-  send,
-  drops,
-  setDrops
-}: WorldPanelDropsInterface) => {
+const WorldPanelDrops = ({ send, drops }: WorldPanelDropsInterface) => {
   function itemClick(index: number) {
     const tempDrops: ItemDropsInterface[] = [...drops];
     const itemSelected: ItemDropsInterface = tempDrops[index];
@@ -55,7 +50,7 @@ const WorldPanelDrops = ({
       itemQuantity: itemSelected.quantity
     });
     tempDrops.splice(index, 1);
-    setDrops(tempDrops);
+    send({ type: "SET_DROPS", drops: tempDrops });
   }
 
   const renderItems = () => {
