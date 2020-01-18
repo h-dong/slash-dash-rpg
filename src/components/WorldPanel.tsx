@@ -8,7 +8,7 @@ import styled from "styled-components";
 import CollapseChevron from "../atomic/CollapseChevron";
 import WorldPanelTravel from "./WorldPanelTravel";
 import { MONSTERS } from "../database/monsters";
-import WorldPanelCombat from "./WorldPanelCombat";
+import WorldPanelCombatContainer from "./WorldPanelCombatContainer";
 
 export interface ItemDropsInterface {
   itemKey: ITEMS;
@@ -55,13 +55,13 @@ const WorldPanel = ({ send, state }: Props) => {
   const locationName = FULL_MAPS.find(elem => elem.key === location)?.name;
 
   function renderPanels() {
-    // if (state.value === 'battle' && opponent) {
-    if (state.value === "battle") {
+    if (state.value === "battle" && opponent) {
       return (
-        <WorldPanelCombat
+        <WorldPanelCombatContainer
+          send={send}
           character={character}
           equipments={equipments}
-          opponent={MONSTERS.COW}
+          monsterKey={opponent}
         />
       );
     } else {

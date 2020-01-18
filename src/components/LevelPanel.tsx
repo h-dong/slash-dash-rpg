@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import {
   getLevel,
-  getHealth,
-  calcCharacterStatsWithItems
+  calcCharacterStatsWithItems,
+  getHealthByLevel
 } from "../utils/levelHelper";
 import { MAX_LEVEL } from "../config";
 import {
@@ -65,11 +65,7 @@ const LevelPanel = ({ character, equipments }: Props) => {
     character.defence
   );
 
-  const characterHealth = getHealth(
-    character.attack,
-    character.strength,
-    character.defence
-  );
+  const characterHealth = getHealthByLevel(characterLevel);
 
   const {
     attack,

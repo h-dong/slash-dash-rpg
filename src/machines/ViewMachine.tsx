@@ -1,6 +1,6 @@
 import { Machine } from "xstate";
 import { getData, setData, clearData, DataInterface } from "../services/data";
-import { getHealth } from "../utils/levelHelper";
+import { getHealthByLevel } from "../utils/levelHelper";
 
 export enum VIEW {
   DASHBOARD = "DASHBOARD",
@@ -10,7 +10,7 @@ export enum VIEW {
 
 const newCharacterStats: DataInterface = {
   character: {
-    health: getHealth(1, 1, 1),
+    health: getHealthByLevel(1),
     name: "",
     attack: 1,
     strength: 1,

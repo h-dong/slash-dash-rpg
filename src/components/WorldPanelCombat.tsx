@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import CollapseChevron from "../atomic/CollapseChevron";
-import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
+import FULL_MONSTERS from "../database/monsters";
 import {
   CharacterInterface,
   EquipmentsInterface
 } from "../machines/GameMachine";
-import {
-  getLevel,
-  generateStatsByLevel,
-  calcCharacterStatsWithItems
-} from "../utils/levelHelper";
+import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
 import ProgressBar from "../atomic/ProgressBar";
 import CombatLevels from "../atomic/CombatLevels";
-import { getRandomMonsterType } from "../utils/random";
-import { getMultiplierByCombatant, COMBATANT_TYPE } from "../utils/combat";
+import {
+  COMBATANT_TYPE,
+  attackForOneRound,
+  CombatResultsInterface
+} from "../utils/combat";
+import { MonsterCombatInterface } from "./WorldPanelCombatContainer";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
@@ -46,32 +46,93 @@ const ButtonWrapper = styled.div`
 `;
 
 type Props = {
+  send: any;
   character: CharacterInterface;
   equipments: EquipmentsInterface;
-  opponent: MONSTERS | null;
+  opponent: MonsterCombatInterface;
+  monsterHealth: number;
+  setMonsterHealth: React.Dispatch<React.SetStateAction<number>>;
+  characterHealth: number;
+  setCharacterHealth: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const WorldPanelCombat = ({ character, opponent, equipments }: Props) => {
+const WorldPanelCombat = ({
+  send,
+  character,
+  opponent,
+  equipments,
+  monsterHealth,
+  setMonsterHealth,
+  characterHealth,
+  setCharacterHealth
+}: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
+  const characterStatsWithItems = calcCharacterStatsWithItems(
+    character,
+    equipments
+  );
+
+  function attack() {
+    const characterBattleStats = {
+      ...characterStatsWithItems,
+      combatantType: COMBATANT_TYPE.PLAYER
+    };
+    const results: CombatResultsInterface = attackForOneRound(
+      characterBattleStats,
+      opponent
+    );
+    const playerNewHealth = characterHealth - Number(results.damageRecieved);
+    const monsterNewHealth = monsterHealth - results.damageDelt;
+    if (playerNewHealth <= 0) {
+      defeated();
+      return;
+    }
+    if (monsterNewHealth <= 0) {
+      won();
+      return;
+    }
+    setMonsterHealth(monsterNewHealth);
+    setCharacterHealth(playerNewHealth);
+  }
+
+  function won() {
+    send({
+      type: "WON_BATTLE",
+      log: "You have won the battle! All hail the champion!"
+    });
+  }
+
+  function defeated() {
+    const fullMonster = FULL_MONSTERS.find(
+      monster => monster.key === opponent.monsterKey
+    );
+    send({
+      type: "LOST_BATTLE",
+      log: `You have been defeated by ${fullMonster?.name} (level ${fullMonster?.level})`
+    });
+  }
+
+  function escapeFromBattle() {
+    send({
+      type: "ESCAPE_BATTLE",
+      log: "You ran away from battle like a coward..."
+    });
+  }
 
   function renderOpponent() {
-    const fullMonster = FULL_MONSTERS.find(monster => monster.key === opponent);
+    const fullMonster = FULL_MONSTERS.find(
+      monster => monster.key === opponent.monsterKey
+    );
 
     if (!fullMonster) return null;
 
-    const monsterStats = generateStatsByLevel(fullMonster.level);
-    const monsterType: COMBATANT_TYPE = getRandomMonsterType();
-    const monsterMultiplier = getMultiplierByCombatant(monsterType);
-    const attack = Math.floor(monsterStats.attack * monsterMultiplier);
-    const strength = Math.floor(monsterStats.strength * monsterMultiplier);
-    const defence = Math.floor(monsterStats.defence * monsterMultiplier);
     let monsterTypeText = "";
     let borderColour = "border-secondary";
-    if (monsterType === COMBATANT_TYPE.ELITE_MONSTER) {
+    if (opponent.combatantType === COMBATANT_TYPE.ELITE_MONSTER) {
       borderColour = "border-warning";
       monsterTypeText = "Elite ";
     }
-    if (monsterType === COMBATANT_TYPE.BOSS_MONSTER) {
+    if (opponent.combatantType === COMBATANT_TYPE.BOSS_MONSTER) {
       borderColour = "border-danger";
       monsterTypeText = "Boss ";
     }
@@ -85,12 +146,12 @@ const WorldPanelCombat = ({ character, opponent, equipments }: Props) => {
           </span>
           <h6>{title}</h6>
         </div>
-        <ProgressBar now={monsterStats.hp} max={monsterStats.hp} />
+        <ProgressBar now={monsterHealth} max={opponent.health} />
         <CombatLevels
-          attack={attack}
-          strength={strength}
-          defence={defence}
-          movementSpeed={monsterStats.movementSpeed}
+          attack={opponent.attack}
+          strength={opponent.strength}
+          defence={opponent.defence}
+          movementSpeed={opponent.movementSpeed}
         />
       </CombatProfile>
     );
@@ -99,8 +160,12 @@ const WorldPanelCombat = ({ character, opponent, equipments }: Props) => {
   function renderActions() {
     return (
       <ButtonWrapper>
-        <button className="btn btn-primary">Attack</button>
-        <button className="btn btn-warning">Escape</button>
+        <button className="btn btn-primary" onClick={() => attack()}>
+          Attack
+        </button>
+        <button className="btn btn-warning" onClick={() => escapeFromBattle()}>
+          Escape
+        </button>
       </ButtonWrapper>
     );
   }
@@ -112,21 +177,15 @@ const WorldPanelCombat = ({ character, opponent, equipments }: Props) => {
       character.defence
     );
     const title = `${character.name} (Level ${level})`;
-    const {
-      attack,
-      strength,
-      defence,
-      movementSpeed
-    } = calcCharacterStatsWithItems(character, equipments);
     return (
       <CombatProfile>
         <h6>{title}</h6>
-        <ProgressBar now={character.health} max={character.health} />
+        <ProgressBar now={characterHealth} max={character.health} />
         <CombatLevels
-          attack={attack}
-          strength={strength}
-          defence={defence}
-          movementSpeed={movementSpeed}
+          attack={characterStatsWithItems.attack}
+          strength={characterStatsWithItems.strength}
+          defence={characterStatsWithItems.defence}
+          movementSpeed={characterStatsWithItems.movementSpeed}
         />
       </CombatProfile>
     );

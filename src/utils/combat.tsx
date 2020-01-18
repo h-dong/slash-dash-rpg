@@ -1,19 +1,6 @@
 import { getRandomNumByMinMax, getRandomBooleanByProbability } from "./random";
 
 /*
-Protagonist blessing +20% of all level effect
-(normal) +0% of all level effect
-Primal rage (elite) +30% of one level effect, +50% of two level effect, +100% of one level effect, 
-Ancient Instinct (boss) +100% of all level effect
-
-Attack speed: 100% + item boosts
-
-Strike: 50% + log(attack * 2) (max 85%)
-Damage: (own strength * 2) + own item boosts - opponent defence - opponent item block boosts
-Crit %: 5% + (10% * own strength) + item boosts (max 50%) (dmg * 2)
-block %: 5% + (10% * own defence) + item boosts (max 20%) (no dmg taken)
-Damage Taken: (opponent strength * 5) + item boosts - own defence
-
 defence xp:
 * block (2x dmg would have taken) or dmg taken (1x dmg)
 
@@ -25,16 +12,6 @@ attack xp:
 * land attack (attack level) + (50% * dmg delt)
 
 */
-
-// function exchangeAttacks() {}
-
-// function fight(characterA, characterB) {
-//   while (characterA.hp > 0 && characterB.hp > 0) {
-//     exchangeAttacks();
-//   }
-// }
-
-// export default fight;
 
 export enum COMBATANT_TYPE {
   PLAYER = "PLAYER",
@@ -51,9 +28,15 @@ interface CombatantInterface {
   combatantType: COMBATANT_TYPE;
 }
 
-interface CombatResultInterface {
+export interface CombatResultInterface {
   damage: number;
   blocked: boolean;
+}
+
+export interface CombatResultsInterface {
+  damageDelt: number;
+  blocked: boolean;
+  damageRecieved: Number;
 }
 
 export function getMultiplierByCombatant(
@@ -95,6 +78,30 @@ function calcDamage(attackerStrength: number, defenderDefence: number): number {
   if (critChance > 10) critChance = 10;
   let isCrit = getRandomBooleanByProbability(critChance / 100);
   return isCrit ? damage * 2 : damage;
+}
+
+export function attackForOneRound(
+  player: CombatantInterface,
+  monster: CombatantInterface
+): CombatResultsInterface {
+  let damageDelt = 0;
+  let blocked = false;
+  let damageRecieved = 0;
+
+  if (player.movementSpeed < monster.movementSpeed) {
+    const monsterAttack: CombatResultInterface = fight(monster, player);
+    const playerAttack: CombatResultInterface = fight(player, monster);
+    damageDelt = playerAttack.damage;
+    blocked = playerAttack.blocked;
+    damageRecieved = monsterAttack.damage;
+  } else {
+    const playerAttack: CombatResultInterface = fight(player, monster);
+    const monsterAttack: CombatResultInterface = fight(monster, player);
+    damageDelt = playerAttack.damage;
+    blocked = playerAttack.blocked;
+    damageRecieved = monsterAttack.damage;
+  }
+  return { damageDelt, blocked, damageRecieved };
 }
 
 export default function fight(

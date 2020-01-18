@@ -22,12 +22,8 @@ export function getLevel(
   return level;
 }
 
-export function getHealth(
-  attack: number,
-  strength: number,
-  defence: number
-): number {
-  return Math.floor(((attack + strength + defence) / 3) * 10);
+export function getHealthByLevel(level: number): number {
+  return level * 20;
 }
 
 export function generateStatsByLevel(level: number) {
@@ -35,7 +31,7 @@ export function generateStatsByLevel(level: number) {
   let maxLevel = level + 1;
 
   return {
-    hp: getRandomNumByMinMax(minLevel, maxLevel) * 20,
+    health: getRandomNumByMinMax(minLevel, maxLevel) * 20,
     attack: getRandomNumByMinMax(minLevel, maxLevel),
     strength: getRandomNumByMinMax(minLevel, maxLevel),
     defence: getRandomNumByMinMax(minLevel, maxLevel),
