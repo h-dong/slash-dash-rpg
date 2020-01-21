@@ -208,7 +208,6 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
         return { world: { ...context.world, monsters: newMonsters } };
       }),
       addDrops: assign((context, { drops }) => {
-        console.log('drops', drops)
         const newDrops = addItemToDrops(context.world.drops, drops[0]);
         return {
           world: { ...context.world, drops: newDrops }
