@@ -1,9 +1,10 @@
 import { WEAR_POSITION, ItemInterface, ITEMS } from "../database/items";
 import {
   EquipmentsInterface,
-  InventoryItemInterface
+  InventoryItemInterface,
+  WorldDropsInterface
 } from "../machines/GameMachine";
-import { getItemByKey } from "./findItem";
+import { getItemByKey } from "./itemHelper";
 
 // export const ITEM_ACTIONS = {
 //   EQUIP: "Equip",
@@ -199,4 +200,18 @@ function calcEquipToTakeOff(
 
   // if nothing is equipped return [], else return array with key
   return !itemInPosition ? [] : [itemInPosition.key];
+}
+
+export function addItemToDrops(
+  drops: WorldDropsInterface[],
+  dropToAdd: WorldDropsInterface
+): WorldDropsInterface[] {
+  const newDrops = [...drops];
+  const index = newDrops.findIndex(elem => elem.itemKey === dropToAdd.itemKey);
+  if (index !== -1) {
+    newDrops[index].quantity += 1;
+  } else {
+    newDrops.push(dropToAdd);
+  }
+  return newDrops;
 }

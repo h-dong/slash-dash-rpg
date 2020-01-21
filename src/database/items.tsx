@@ -17,13 +17,13 @@ export enum WEAR_POSITION {
 
 export enum RARITY {
   ALWAYS = 1, // 100%
-  COMMON = 10, // 10%
-  RARE = 100, // 1%
-  EPIC = 1000, // 0.1%
-  LEGENDARY = 10000 // 0.001%
+  COMMON = 0.1, // 10%
+  RARE = 0.01, // 1%
+  EPIC = 0.001, // 0.1%
+  LEGENDARY = 0.00001 // 0.001%
 }
 
-interface FoodSchema {
+interface FoodInterface {
   consumable: boolean;
   heal?: {
     min?: number;
@@ -35,19 +35,21 @@ interface FoodSchema {
   };
 }
 
-interface EquipmentSchema {
+export interface ItemCombatStatsInterface {
+  attack?: number;
+  strength?: number;
+  defence?: number;
+  movementSpeed?: number;
+}
+
+interface EquipmentInterface {
   wearable: boolean;
   position: WEAR_POSITION;
   requirements?: {
     twoHanded?: boolean;
     level?: 1;
   };
-  combat?: {
-    attack?: number;
-    strength?: number;
-    defence?: number;
-    movementSpeed?: number;
-  };
+  combat?: ItemCombatStatsInterface;
   effect?: {
     inventory?: number;
   };
@@ -82,8 +84,8 @@ export interface ItemInterface {
   name: string;
   icon: string;
   description?: string;
-  food?: FoodSchema;
-  equipment?: EquipmentSchema;
+  food?: FoodInterface;
+  equipment?: EquipmentInterface;
 }
 
 const rawData: ItemInterface[] = [
@@ -189,7 +191,7 @@ const rawData: ItemInterface[] = [
   //     effect: {
   //       inventory: 5
   //     }
-  //   } as EquipmentSchema
+  //   } as EquipmentInterface
   // },
   // {
   //   name: "Backpack",
@@ -205,7 +207,7 @@ const rawData: ItemInterface[] = [
   //     effect: {
   //       inventory: 10
   //     }
-  //   } as EquipmentSchema
+  //   } as EquipmentInterface
   // },
   // {
   //   name: "Rucksack",
@@ -221,7 +223,7 @@ const rawData: ItemInterface[] = [
   //     effect: {
   //       inventory: 20
   //     }
-  //   } as EquipmentSchema
+  //   } as EquipmentInterface
   // },
   {
     id: 8,

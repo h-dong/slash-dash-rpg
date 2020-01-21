@@ -7,12 +7,12 @@ import InventoryPanel from "../components/InventoryPanel";
 import EquipmentsPanel from "../components/EquipmentsPanel";
 import LogsPanel from "../components/LogsPanel";
 import { getData } from "../services/data";
-import TravelPanel from "../components/TravelPanel";
 import { MAPS } from "../database/maps";
 import WorldPanel from "../components/WorldPanel";
 
 import "react-tippy/dist/tippy.css";
 import { generateLog } from "../utils/logs";
+import WorldPanelTravel from "../components/WorldPanelTravel";
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -30,11 +30,18 @@ const Dashboard = ({ sendToViewMachine }: any) => {
   const MachineWithContext = GameMachine.withContext({
     ...getData(),
     logs: generateLog("", "Welcome back, traveller!"),
-    location: MAPS.TRAINING_GROUND
+    battle: null,
+    world: {
+      location: MAPS.TRAINING_GROUND,
+      monsters: [],
+      drops: []
+    }
   });
   const [state, send] = useMachine(MachineWithContext);
 
   if (!state.context) return null;
+
+  const { character, equipments, inventory, world, logs } = state.context;
 
   return (
     <Wrapper className="container">
@@ -53,14 +60,16 @@ const Dashboard = ({ sendToViewMachine }: any) => {
       </div>
       <div className="row">
         <div className="col-lg-4 col-12">
-          <LevelPanel character={state.context.character} />
-          <EquipmentsPanel send={send} equipments={state.context.equipments} />
-          <InventoryPanel send={send} inventory={state.context.inventory} />
+          <LevelPanel character={character} equipments={equipments} />
+          <EquipmentsPanel send={send} equipments={equipments} />
+          <InventoryPanel send={send} inventory={inventory} />
         </div>
         <div className="col-lg-8 col-12">
-          <LogsPanel logs={state.context.logs} />
-          <WorldPanel send={send} state={state.context} />
-          <TravelPanel send={send} currentLocation={state.context.location} />
+          <LogsPanel logs={logs} />
+          <WorldPanel send={send} state={state} />
+          {state.value === "explore" && (
+            <WorldPanelTravel send={send} currentLocation={world.location} />
+          )}
         </div>
       </div>
     </Wrapper>

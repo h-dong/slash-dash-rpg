@@ -2,17 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMinusSquare,
-  faChevronCircleUp,
-  faChevronCircleDown
-} from "@fortawesome/free-solid-svg-icons";
+import { faMinusSquare } from "@fortawesome/free-solid-svg-icons";
 import { WEAR_POSITION } from "../database/items";
 import {
   getEquippedItemActions,
   EquipmentItemActionInterface
 } from "../utils/itemActions";
-import { getItemByKey } from "../utils/findItem";
+import { getItemByKey, getItemCombatStatsText } from "../utils/itemHelper";
 import CollapseChevron from "../atomic/CollapseChevron";
 
 const CardHeaderWrapper = styled.div`
@@ -28,6 +24,12 @@ const EquipmentsWrapper = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
+
+      .item {
+        small {
+          margin-left: 0.5rem;
+        }
+      }
 
       .item-name {
         margin: 0.25rem;
@@ -92,10 +94,10 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
 
     return actions.map(({ type, itemKey }: EquipmentItemActionInterface) => (
       <Tooltip
-        title="Examine"
+        title="Unequip"
         position="right"
         trigger="mouseenter"
-        key="examine"
+        key="unequip"
         className="item-action"
       >
         <FontAwesomeIcon
@@ -119,8 +121,11 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
         );
       }
 
-      // const { position } = fullItem.equipment;
       const actions = getEquippedItemActions(itemKey);
+
+      const combatBonus: string = getItemCombatStatsText({
+        ...fullItem.equipment.combat
+      });
 
       return (
         <div key={name} className="slot">
@@ -135,6 +140,7 @@ const EquipmentsPanel = ({ send, equipments }: any) => {
             >
               <div className="item">
                 <img alt={fullItem.name} src={fullItem.icon} />
+                <small>({combatBonus})</small>
               </div>
             </Tooltip>
             <div>{renderItemActions(actions)}</div>

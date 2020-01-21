@@ -24,6 +24,24 @@ import { RARITY, ITEMS } from "./items";
 // Troll L18
 // Unicorn L20
 
+export interface MonsterDropInterface {
+  itemKey: ITEMS;
+  rarity: RARITY;
+  quantity: {
+    min: number;
+    max: number;
+  };
+}
+
+export interface FullMonsterInterface {
+  key: MONSTERS;
+  name: string;
+  icon: string;
+  description: string;
+  level: number;
+  drops: MonsterDropInterface[];
+}
+
 export enum MONSTERS {
   CHICKEN = "CHICKEN",
   DUCK = "DUCK",
@@ -32,7 +50,7 @@ export enum MONSTERS {
   FARMER = "FARMER"
 }
 
-const FULL_MONSTERS = [
+const FULL_MONSTERS: FullMonsterInterface[] = [
   {
     key: MONSTERS.CHICKEN,
     name: "Chicken",
@@ -40,7 +58,13 @@ const FULL_MONSTERS = [
       "https://vignette.wikia.nocookie.net/2007scape/images/a/a3/Chicken.png/revision/latest?cb=20161207181258",
     description: "Yep. Definitely a chicken.",
     level: 1,
-    drops: [{ itemKey: ITEMS.LOW_QUALITY_MEAT, rarity: RARITY.ALWAYS }]
+    drops: [
+      {
+        itemKey: ITEMS.LOW_QUALITY_MEAT,
+        rarity: RARITY.ALWAYS,
+        quantity: { min: 1, max: 1 }
+      }
+    ]
   },
   {
     key: MONSTERS.DUCK,
@@ -49,7 +73,13 @@ const FULL_MONSTERS = [
       "https://vignette.wikia.nocookie.net/2007scape/images/3/38/Duck.png/revision/latest?cb=20150905042847",
     description: "Waddle waddle waddle quack.",
     level: 1,
-    drops: [{ itemKey: ITEMS.LOW_QUALITY_MEAT, rarity: RARITY.ALWAYS }]
+    drops: [
+      {
+        itemKey: ITEMS.LOW_QUALITY_MEAT,
+        rarity: RARITY.ALWAYS,
+        quantity: { min: 1, max: 1 }
+      }
+    ]
   },
   {
     key: MONSTERS.PIG,
@@ -58,7 +88,13 @@ const FULL_MONSTERS = [
       "https://vignette.wikia.nocookie.net/2007scape/images/3/30/Pig.png/revision/latest/scale-to-width-down/700?cb=20180303064642",
     description: "Swine",
     level: 2,
-    drops: [{ itemKey: ITEMS.HIGH_QUALITY_MEAT, rarity: RARITY.ALWAYS }]
+    drops: [
+      {
+        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        rarity: RARITY.ALWAYS,
+        quantity: { min: 1, max: 1 }
+      }
+    ]
   },
   {
     key: MONSTERS.COW,
@@ -67,7 +103,13 @@ const FULL_MONSTERS = [
       "https://vignette.wikia.nocookie.net/2007scape/images/8/84/Cow.png/revision/latest/scale-to-width-down/700?cb=20160613020452",
     description: "Converts grass to beef",
     level: 2,
-    drops: [{ itemKey: ITEMS.HIGH_QUALITY_MEAT, rarity: RARITY.ALWAYS }]
+    drops: [
+      {
+        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        rarity: RARITY.ALWAYS,
+        quantity: { min: 1, max: 1 }
+      }
+    ]
   },
   {
     key: MONSTERS.FARMER,
@@ -80,12 +122,17 @@ const FULL_MONSTERS = [
       {
         itemKey: ITEMS.COIN,
         rarity: RARITY.ALWAYS,
-        quatity: { min: 1, max: 50 }
+        quantity: { min: 1, max: 50 }
       },
       {
         itemKey: ITEMS.SMALL_HEALTH_POTIONS,
         rarity: RARITY.RARE,
-        quatity: { min: 1, max: 2 }
+        quantity: { min: 1, max: 2 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_SWORD,
+        rarity: RARITY.EPIC,
+        quantity: { min: 1, max: 1 }
       }
     ]
   }

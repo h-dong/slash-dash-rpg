@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-// import generateLevelStats from "../utils/generateLevelStats";
-// import { StateContext, StateContextProvider } from "../StateContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,21 +20,6 @@ const Wrapper = styled.div`
     margin: 0 auto;
   }
 `;
-
-// function create(name, updateCharacter) {
-// const levelStats = generateLevelStats({
-//   level: 1,
-//   hp: 20,
-//   attack: 1,
-//   strength: 1,
-//   defence: 1
-// });
-// const character = {
-//   name: name,
-//   ...levelStats
-// };
-// updateCharacter(character);
-// }
 
 interface WelcomeProps {
   send: any;

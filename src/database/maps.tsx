@@ -17,7 +17,7 @@ export interface TreasureInterface {
   };
 }
 
-interface MapMonsterInterface {
+export interface MapMonsterInterface {
   monsterKey: MONSTERS;
   chanceOfAppear: number;
 }

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "react-tippy";
-import { getItemByKey } from "../utils/findItem";
-import { ItemDropsInterface } from "./WorldPanel";
+import { getItemByKey } from "../utils/itemHelper";
+import { WorldDropsInterface } from "../machines/GameMachine";
 
 import "react-tippy/dist/tippy.css";
 
@@ -37,29 +37,24 @@ const Wrapper = styled.div`
 
 interface WorldPanelDropsInterface {
   send: any;
-  drops: ItemDropsInterface[];
-  setDrops: React.Dispatch<React.SetStateAction<ItemDropsInterface[]>>;
+  drops: WorldDropsInterface[];
 }
 
-const WorldPanelDrops = ({
-  send,
-  drops,
-  setDrops
-}: WorldPanelDropsInterface) => {
+const WorldPanelDrops = ({ send, drops }: WorldPanelDropsInterface) => {
   function itemClick(index: number) {
-    const tempDrops: ItemDropsInterface[] = [...drops];
-    const itemSelected: ItemDropsInterface = tempDrops[index];
+    const tempDrops: WorldDropsInterface[] = [...drops];
+    const itemSelected: WorldDropsInterface = tempDrops[index];
     send({
       type: "PICK_UP_ITEM",
       itemKey: itemSelected.itemKey,
       itemQuantity: itemSelected.quantity
     });
     tempDrops.splice(index, 1);
-    setDrops(tempDrops);
+    send({ type: "SET_DROPS", drops: tempDrops });
   }
 
   const renderItems = () => {
-    return drops.map(({ itemKey, quantity }: ItemDropsInterface, index) => {
+    return drops.map(({ itemKey, quantity }: WorldDropsInterface, index) => {
       const fullItem = getItemByKey(itemKey);
 
       if (!fullItem) return null;

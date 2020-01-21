@@ -31,7 +31,7 @@ type Props = {
   currentLocation: MAPS;
 };
 
-const TravelPanel = ({ send, currentLocation }: Props) => {
+const WorldPanelTravel = ({ send, currentLocation }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
 
   const renderButtons = () => {
@@ -67,4 +67,4 @@ const TravelPanel = ({ send, currentLocation }: Props) => {
   );
 };
 
-export default TravelPanel;
+export default WorldPanelTravel;

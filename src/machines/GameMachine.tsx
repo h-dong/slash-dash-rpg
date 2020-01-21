@@ -2,12 +2,20 @@ import { Machine, assign } from "xstate";
 import {
   moveEquipmentItemToInventory,
   moveInventoryItemToEquipment,
-  addItemToInventory
+  addItemToInventory,
+  addItemToDrops
 } from "../utils/itemActions";
 import FULL_MAPS, { MAPS } from "../database/maps";
 import { ITEMS } from "../database/items";
 import { generateLog } from "../utils/logs";
 import { setData } from "../services/data";
+import { MONSTERS } from "../database/monsters";
+import {
+  COMBATANT_TYPE,
+  getStatsByMonsterKey,
+  CombatStatsInterface
+} from "../utils/combat";
+import { getMonsterNameWithCombatantType } from "../utils/monster";
 
 export interface CharacterInterface {
   health: number;
@@ -30,38 +38,86 @@ export interface InventoryItemInterface {
   quantity: number;
 }
 
+export interface BattleMonsterInterface {
+  monsterKey: MONSTERS;
+  combatantType: COMBATANT_TYPE;
+  health: number;
+  stats: CombatStatsInterface;
+}
+
+export interface BattleInterface {
+  monster: BattleMonsterInterface;
+  player: {
+    health: number;
+  };
+}
+
+export interface WorldDropsInterface {
+  itemKey: ITEMS;
+  quantity: number;
+}
+
+export interface WorldInterface {
+  location: MAPS;
+  monsters: MONSTERS[];
+  drops: WorldDropsInterface[];
+}
+
 export interface GameMachineContextInterface {
   character: CharacterInterface;
   equipments: EquipmentsInterface;
   inventory: InventoryItemInterface[];
   logs: string;
-  location: MAPS;
+  world: WorldInterface;
+  battle: BattleInterface | null;
 }
 
 export type GameMachineEvents = {
   type:
-    | "DIE"
+    | "DIED"
     | "REVIVE"
+    | "START_BATTLE"
+    | "UPDATE_BATTLE"
+    | "WON_BATTLE"
+    | "LOST_BATTLE"
+    | "ESCAPE_BATTLE"
     | "UNEQUIP_ITEM"
     | "EXAMINE_ITEM"
     | "EQUIP_ITEM"
     | "PICK_UP_ITEM"
+    | "SET_MONSTERS"
+    | "SET_DROPS"
     | "ADD_LOG"
     | "CHANGE_LOCATION";
   itemKey: ITEMS;
   itemQuantity: number;
   log: string;
   location: MAPS;
+  monsters: MONSTERS[];
+  monsterKey: MONSTERS;
+  drops: WorldDropsInterface[];
+  monsterHealth: number;
+  playerHealth: number;
 };
 
 const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
   {
     id: "game",
-    initial: "alive",
+    initial: "explore",
     states: {
-      alive: {
+      explore: {
         on: {
-          DIE: "dead",
+          DIED: "dead",
+          START_BATTLE: {
+            target: "battle",
+            actions: "setBattle"
+          },
+          SET_MONSTERS: {
+            actions: "setMonsters"
+          },
+          SET_DROPS: {
+            actions: "setDrops"
+          },
           UNEQUIP_ITEM: {
             actions: ["unequipItem", "persist"]
           },
@@ -79,9 +135,43 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           }
         }
       },
+      battle: {
+        on: {
+          UPDATE_BATTLE: {
+            actions: ["updateBattle", "addLog"]
+          },
+          LOST_BATTLE: {
+            target: "dead",
+            actions: "addLog"
+          },
+          ESCAPE_BATTLE: {
+            target: "explore",
+            actions: "addLog"
+          },
+          WON_BATTLE: {
+            target: "explore",
+            actions: ["addLog", "removeMonster", "addDrops"]
+          },
+          UNEQUIP_ITEM: {
+            actions: ["unequipItem", "persist"]
+          },
+          EQUIP_ITEM: {
+            actions: ["equipItem", "persist"]
+          },
+          EXAMINE_ITEM: {
+            actions: "addLog"
+          },
+          PICK_UP_ITEM: {
+            actions: ["pickUpItem", "persist"]
+          }
+        }
+      },
       dead: {
         on: {
-          REVIVE: "alive"
+          REVIVE: {
+            target: "explore",
+            actions: "emptyInventory"
+          }
         }
       }
     }
@@ -102,16 +192,77 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           itemKey
         )
       ),
+      emptyInventory: assign(_ => ({
+        inventory: []
+      })),
+      resetWorld: assign((context, _) => ({
+        world: { ...context.world, drops: [], monsters: [] }
+      })),
+      setMonsters: assign((context, { monsters }) => ({
+        world: { ...context.world, monsters }
+      })),
+      removeMonster: assign((context, { monsterKey }) => {
+        const newMonsters: MONSTERS[] = context.world.monsters.filter(
+          key => key !== monsterKey
+        );
+        return { world: { ...context.world, monsters: newMonsters } };
+      }),
+      addDrops: assign((context, { drops }) => {
+        const newDrops = addItemToDrops(context.world.drops, drops[0]);
+        return {
+          world: { ...context.world, drops: newDrops }
+        };
+      }),
+      setDrops: assign((context, { drops }) => ({
+        world: { ...context.world, drops }
+      })),
       pickUpItem: assign((context, { itemKey, itemQuantity }) => ({
         inventory: addItemToInventory(context.inventory, itemKey, itemQuantity)
       })),
+      setBattle: assign((context, { monsterKey }) => {
+        let battle = null;
+        const monsterObj = getStatsByMonsterKey(monsterKey);
+        const combatantType = monsterObj
+          ? monsterObj.combatantType
+          : COMBATANT_TYPE.NORMAL_MONSTER;
+        const fullMonsterName = getMonsterNameWithCombatantType(
+          monsterKey,
+          combatantType
+        );
+        if (monsterObj) {
+          battle = {
+            monster: monsterObj,
+            player: {
+              health: context.character.health
+            }
+          };
+        }
+        return { battle, log: `Prepare for battle with ${fullMonsterName}!` };
+      }),
+      updateBattle: assign((context, { monsterHealth, playerHealth }) => {
+        if (!context.battle) return { battle: null };
+        const player = {
+          ...context.battle.player,
+          health: playerHealth
+        };
+        const monster = {
+          ...context.battle.monster,
+          health: monsterHealth
+        };
+        return {
+          battle: {
+            player,
+            monster
+          }
+        };
+      }),
       addLog: assign((context, { log }): any => ({
         logs: generateLog(context.logs, log)
       })),
       changeLoction: assign((context, { location }) => {
         const mapName = FULL_MAPS.find(map => map.key === location)?.name;
         return {
-          location,
+          world: { location, drops: [], monsters: [] },
           logs: generateLog(context.logs, `Fast travelled to ${mapName}`)
         };
       }),
