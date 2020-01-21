@@ -2,7 +2,8 @@ import { Machine, assign } from "xstate";
 import {
   moveEquipmentItemToInventory,
   moveInventoryItemToEquipment,
-  addItemToInventory
+  addItemToInventory,
+  addItemToDrops
 } from "../utils/itemActions";
 import FULL_MAPS, { MAPS } from "../database/maps";
 import { ITEMS } from "../database/items";
@@ -206,9 +207,13 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
         );
         return { world: { ...context.world, monsters: newMonsters } };
       }),
-      addDrops: assign((context, { drops }) => ({
-        world: { ...context.world, drops: [...context.world.drops, ...drops] }
-      })),
+      addDrops: assign((context, { drops }) => {
+        console.log('drops', drops)
+        const newDrops = addItemToDrops(context.world.drops, drops[0]);
+        return {
+          world: { ...context.world, drops: newDrops }
+        };
+      }),
       setDrops: assign((context, { drops }) => ({
         world: { ...context.world, drops }
       })),
