@@ -12,7 +12,8 @@ import WorldPanel from "../components/WorldPanel";
 
 import "react-tippy/dist/tippy.css";
 import { generateLog } from "../utils/logs";
-import WorldPanelTravel from "../components/WorldPanelTravel";
+import TravelPanel from "../components/TravelPanel";
+import RevivePanel from "../components/RevivePanel";
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -61,15 +62,20 @@ const Dashboard = ({ sendToViewMachine }: any) => {
       <div className="row">
         <div className="col-lg-4 col-12">
           <LevelPanel character={character} equipments={equipments} />
-          <EquipmentsPanel send={send} equipments={equipments} />
-          <InventoryPanel send={send} inventory={inventory} />
+          {state.value !== "dead" && (
+            <React.Fragment>
+              <EquipmentsPanel send={send} equipments={equipments} />
+              <InventoryPanel send={send} inventory={inventory} />
+            </React.Fragment>
+          )}
         </div>
         <div className="col-lg-8 col-12">
           <LogsPanel logs={logs} />
-          <WorldPanel send={send} state={state} />
+          {state.value !== "dead" && <WorldPanel send={send} state={state} />}
           {state.value === "explore" && (
-            <WorldPanelTravel send={send} currentLocation={world.location} />
+            <TravelPanel send={send} location={world.location} />
           )}
+          {state.value === "dead" && <RevivePanel send={send} />}
         </div>
       </div>
     </Wrapper>

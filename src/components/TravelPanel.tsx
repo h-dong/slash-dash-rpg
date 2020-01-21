@@ -28,10 +28,10 @@ const TravelWrapper = styled.ul`
 
 type Props = {
   send: any;
-  currentLocation: MAPS;
+  location: MAPS;
 };
 
-const WorldPanelTravel = ({ send, currentLocation }: Props) => {
+const TravelPanel = ({ send, location }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
 
   const renderButtons = () => {
@@ -40,7 +40,7 @@ const WorldPanelTravel = ({ send, currentLocation }: Props) => {
         <button
           type="button"
           className="btn btn-link btn-sm"
-          disabled={map.key === currentLocation}
+          disabled={map.key === location}
           onClick={() => send({ type: "CHANGE_LOCATION", location: map.key })}
         >
           {map.name}
@@ -67,4 +67,4 @@ const WorldPanelTravel = ({ send, currentLocation }: Props) => {
   );
 };
 
-export default WorldPanelTravel;
+export default TravelPanel;
