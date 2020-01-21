@@ -23,13 +23,17 @@ export default function RevivePanel({ send }: Props) {
         </CardHeaderWrapper>
       </div>
       {!collapse && (
-        <div className="card-body">
+        <div className="card-body text-center">
+          <p>
+            You opened your eyes and seems to be robbed and thrown out in the
+            wild.
+          </p>
           <button
             type="button"
             className="btn btn-success btn-sm"
             onClick={() => send({ type: "REVIVE" })}
           >
-            Revive Me
+            Find a way out
           </button>
         </div>
       )}
