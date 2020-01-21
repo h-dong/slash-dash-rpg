@@ -5,8 +5,7 @@ export function getRandomNumByMinMax(min: number, max: number) {
 }
 
 export function getRandomBooleanByProbability(probability: number) {
-  const randomNum = getRandomNumByMinMax(1, probability);
-  return 1 === randomNum;
+  return Math.random() <= probability;
 }
 
 export function getRandomMonsterType(): COMBATANT_TYPE {
@@ -18,4 +17,9 @@ export function getRandomMonsterType(): COMBATANT_TYPE {
   if (isBoss) return COMBATANT_TYPE.BOSS_MONSTER;
   if (isElite) return COMBATANT_TYPE.ELITE_MONSTER;
   return COMBATANT_TYPE.NORMAL_MONSTER;
+}
+
+export function getRandomFlux(value: number): number {
+  const min = Math.floor(value * 0.75);
+  return getRandomNumByMinMax(min, value);
 }

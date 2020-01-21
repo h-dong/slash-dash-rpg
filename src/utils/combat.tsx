@@ -1,7 +1,8 @@
 import {
   getRandomNumByMinMax,
   getRandomBooleanByProbability,
-  getRandomMonsterType
+  getRandomMonsterType,
+  getRandomFlux
 } from "./random";
 import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
 import { BattleMonsterInterface } from "../machines/GameMachine";
@@ -129,7 +130,7 @@ export function attackForOneRound(
     blocked = playerAttack.blocked;
     damageRecieved = monsterAttack.damage;
   }
-  return { damageDelt, blocked, damageRecieved };
+  return { damageDelt: getRandomFlux(damageDelt), blocked, damageRecieved: getRandomFlux(damageRecieved) };
 }
 
 export default function fight(

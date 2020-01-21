@@ -15,6 +15,11 @@ import {
   attackForOneRound,
   CombatResultsInterface
 } from "../utils/combat";
+import { getMonsterNameWithCombatantType } from "../utils/monster";
+import {
+  getRandomNumByMinMax,
+  getRandomBooleanByProbability
+} from "../utils/random";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
@@ -81,23 +86,43 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
       return;
     }
     send({
-      tyep: "UPDATE_BATTLE",
+      type: "UPDATE_BATTLE",
       playerHealth: playerNewHealth,
-      monsterHealth: monsterNewHealth
+      monsterHealth: monsterNewHealth,
+      log: `You have dealt ${results.damageDelt} damage, and recieved ${results.damageRecieved} damage.`
     });
-  }
-
-  function won() {
     send({
-      type: "WON_BATTLE",
+      type: "ADD_LOG",
       log: "You have won the battle! All hail the champion!"
     });
   }
 
+  function won() {
+    const drops = fullMonster?.drops
+      .filter(drop => getRandomBooleanByProbability(drop.rarity))
+      .map(drop => {
+        return {
+          itemKey: drop.itemKey,
+          quantity: getRandomNumByMinMax(drop.quantity.min, drop.quantity.max)
+        };
+      });
+    
+    send({
+      type: "WON_BATTLE",
+      log: "You have won the battle! All hail the champion!",
+      monsterKey: monster.monsterKey,
+      drops
+    });
+  }
+
   function defeated() {
+    const title = getMonsterNameWithCombatantType(
+      monster.monsterKey,
+      monster.combatantType
+    );
     send({
       type: "LOST_BATTLE",
-      log: `You have been defeated by ${fullMonster?.name} (level ${fullMonster?.level})`
+      log: `You have been defeated by ${title} (level ${fullMonster?.level})`
     });
   }
 

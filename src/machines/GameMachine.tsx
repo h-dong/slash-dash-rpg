@@ -14,6 +14,7 @@ import {
   getStatsByMonsterKey,
   CombatStatsInterface
 } from "../utils/combat";
+import { getMonsterNameWithCombatantType } from "../utils/monster";
 
 export interface CharacterInterface {
   health: number;
@@ -50,10 +51,15 @@ export interface BattleInterface {
   };
 }
 
+export interface WorldDropsInterface {
+  itemKey: ITEMS;
+  quantity: number;
+}
+
 export interface WorldInterface {
   location: MAPS;
   monsters: MONSTERS[];
-  drops: ITEMS[];
+  drops: WorldDropsInterface[];
 }
 
 export interface GameMachineContextInterface {
@@ -88,7 +94,7 @@ export type GameMachineEvents = {
   location: MAPS;
   monsters: MONSTERS[];
   monsterKey: MONSTERS;
-  drops: ITEMS[];
+  drops: WorldDropsInterface[];
   monsterHealth: number;
   playerHealth: number;
 };
@@ -131,7 +137,7 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
       battle: {
         on: {
           UPDATE_BATTLE: {
-            actions: "updateBattle"
+            actions: ["updateBattle", "addLog"]
           },
           LOST_BATTLE: {
             target: "dead",
@@ -143,7 +149,7 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           },
           WON_BATTLE: {
             target: "explore",
-            actions: "addLog"
+            actions: ["addLog", "removeMonster", "addDrops"]
           },
           UNEQUIP_ITEM: {
             actions: ["unequipItem", "persist"]
@@ -194,6 +200,15 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
       setMonsters: assign((context, { monsters }) => ({
         world: { ...context.world, monsters }
       })),
+      removeMonster: assign((context, { monsterKey }) => {
+        const newMonsters: MONSTERS[] = context.world.monsters.filter(
+          key => key !== monsterKey
+        );
+        return { world: { ...context.world, monsters: newMonsters } };
+      }),
+      addDrops: assign((context, { drops }) => ({
+        world: { ...context.world, drops: [...context.world.drops, ...drops] }
+      })),
       setDrops: assign((context, { drops }) => ({
         world: { ...context.world, drops }
       })),
@@ -203,6 +218,13 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
       setBattle: assign((context, { monsterKey }) => {
         let battle = null;
         const monsterObj = getStatsByMonsterKey(monsterKey);
+        const combatantType = monsterObj
+          ? monsterObj.combatantType
+          : COMBATANT_TYPE.NORMAL_MONSTER;
+        const fullMonsterName = getMonsterNameWithCombatantType(
+          monsterKey,
+          combatantType
+        );
         if (monsterObj) {
           battle = {
             monster: monsterObj,
@@ -211,7 +233,7 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
             }
           };
         }
-        return { battle, log: "Prepare for battle!" };
+        return { battle, log: `Prepare for battle with ${fullMonsterName}!` };
       }),
       updateBattle: assign((context, { monsterHealth, playerHealth }) => {
         if (!context.battle) return { battle: null };

@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import {
   getLevel,
-  calcCharacterStatsWithItems,
-  getHealthByLevel
+  calcCharacterStatsWithItems
 } from "../utils/levelHelper";
 import { MAX_LEVEL } from "../config";
 import {
@@ -65,8 +64,6 @@ const LevelPanel = ({ character, equipments }: Props) => {
     character.defence
   );
 
-  const characterHealth = getHealthByLevel(characterLevel);
-
   const {
     attack,
     strength,
@@ -92,7 +89,7 @@ const LevelPanel = ({ character, equipments }: Props) => {
           <LevelWrapper>
             <ul>
               <li>HP</li>
-              <li>{characterHealth}</li>
+              <li>{character.health}</li>
             </ul>
             <ul>
               <li>Attack</li>

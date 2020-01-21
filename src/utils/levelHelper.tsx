@@ -31,7 +31,7 @@ export function generateStatsByLevel(level: number) {
   let maxLevel = level + 1;
 
   return {
-    health: getRandomNumByMinMax(minLevel, maxLevel) * 20,
+    health: level * 20,
     attack: getRandomNumByMinMax(minLevel, maxLevel),
     strength: getRandomNumByMinMax(minLevel, maxLevel),
     defence: getRandomNumByMinMax(minLevel, maxLevel),

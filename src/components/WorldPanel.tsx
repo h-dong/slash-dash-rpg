@@ -3,15 +3,9 @@ import WorldPanelShop from "./WorldPanelShop";
 import WorldPanelDrops from "./WorldPanelDrops";
 import FULL_MAPS, { MAPS } from "../database/maps";
 import WorldPanelActions from "./WorldPanelAction";
-import { ITEMS } from "../database/items";
 import styled from "styled-components";
 import CollapseChevron from "../atomic/CollapseChevron";
 import WorldPanelCombat from "./WorldPanelCombat";
-
-export interface ItemDropsInterface {
-  itemKey: ITEMS;
-  quantity: number;
-}
 
 const CardHeaderWrapper = styled.div`
   display: flex;

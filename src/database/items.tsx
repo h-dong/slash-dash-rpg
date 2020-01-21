@@ -17,10 +17,10 @@ export enum WEAR_POSITION {
 
 export enum RARITY {
   ALWAYS = 1, // 100%
-  COMMON = 10, // 10%
-  RARE = 100, // 1%
-  EPIC = 1000, // 0.1%
-  LEGENDARY = 10000 // 0.001%
+  COMMON = 0.1, // 10%
+  RARE = 0.01, // 1%
+  EPIC = 0.001, // 0.1%
+  LEGENDARY = 0.00001 // 0.001%
 }
 
 interface FoodInterface {

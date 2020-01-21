@@ -8,12 +8,12 @@ import {
 import FULL_MAPS, {
   MAPS,
   TreasureInterface,
-  MapInterface
+  MapMonsterInterface
 } from "../database/maps";
 import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
+import { WorldDropsInterface } from "../machines/GameMachine";
 
 import "react-tippy/dist/tippy.css";
-import { ItemDropsInterface } from "./WorldPanel";
 
 const Wrapper = styled.div`
   display: flex;
@@ -63,13 +63,17 @@ const WorldPanelActions = ({
   monsters
 }: WorldPanelActionsInterface) => {
   const generateMonsters = () => {
-    const fullMap: MapInterface | null =
-      FULL_MAPS.find(map => map.key === location) || null;
-    const monstersOnMap = fullMap?.monsters;
+    const monstersOnMap: MapMonsterInterface[] | null =
+      FULL_MAPS.find(map => map.key === location)?.monsters || null;
+
     if (monstersOnMap) {
-      const monstersAppeared: MONSTERS[] = monstersOnMap.map(
-        elem => elem.monsterKey
-      );
+      const monstersAppeared: MONSTERS[] = [];
+      monstersOnMap.forEach(elem => {
+        const showMonster = getRandomBooleanByProbability(elem.chanceOfAppear);
+        if (showMonster) {
+          monstersAppeared.push(elem.monsterKey);
+        }
+      });
       send({ type: "SET_MONSTERS", monsters: monstersAppeared });
     }
   };
@@ -79,11 +83,11 @@ const WorldPanelActions = ({
       FULL_MAPS.find(map => map.key === location)?.treasure || null;
 
     if (treasure) {
-      const drops: ItemDropsInterface[] = [];
+      const drops: WorldDropsInterface[] = [];
       treasure.forEach(elem => {
         const showDrop = getRandomBooleanByProbability(elem.rarity);
         if (showDrop) {
-          const quantity = getRandomNumByMinMax(
+          const quantity: number = getRandomNumByMinMax(
             elem.quantity.min,
             elem.quantity.max
           );
