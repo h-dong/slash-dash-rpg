@@ -4,19 +4,18 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
+  margin-top: 10rem;
 
-  label {
+  span {
     text-align: center;
   }
 
   input {
-    width: 15rem;
+    width: 20rem;
     margin: 1rem auto;
   }
 
   button {
-    width: 5rem;
     margin: 0 auto;
   }
 `;
@@ -31,12 +30,21 @@ const Welcome = ({ send, view }: WelcomeProps) => {
 
   return (
     <Wrapper>
-      <label>
+      <span>
         Hello traveler, looks like you are new here! What is your name?
-      </label>
-      <input type="text" onChange={e => setName(e.target.value)} />
-      <button onClick={() => send({ type: "CREATE_CHARACTER", view, name })}>
-        Create
+      </span>
+      <input
+        className="form-control"
+        type="text"
+        placeholder="Enter name..."
+        onChange={e => setName(e.target.value)}
+      ></input>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={() => send({ type: "CREATE_CHARACTER", view, name })}
+      >
+        Enter World
       </button>
     </Wrapper>
   );
