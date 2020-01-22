@@ -12,7 +12,7 @@ import FULL_MAPS, { MAP } from "../database/maps";
 import { ITEM } from "../database/items";
 import { generateLog } from "../utils/logs";
 import { setData } from "../services/data";
-import { MONSTERS } from "../database/monsters";
+import { MONSTER } from "../database/monsters";
 import {
   COMBATANT_TYPE,
   getStatsByMonsterKey,
@@ -47,7 +47,7 @@ export interface InventoryItemInterface {
 }
 
 export interface BattleInterface {
-  monsterKey: MONSTERS;
+  monsterKey: MONSTER;
   combatantType: COMBATANT_TYPE;
   health: number;
   stats: CombatStatsInterface;
@@ -60,7 +60,7 @@ export interface WorldDropsInterface {
 
 export interface WorldInterface {
   location: MAP;
-  monsters: MONSTERS[];
+  monsters: MONSTER[];
   drops: WorldDropsInterface[];
 }
 
@@ -96,8 +96,8 @@ export type GameMachineEvents = {
   itemQuantity: number;
   log: string;
   location: MAP;
-  monsters: MONSTERS[];
-  monsterKey: MONSTERS;
+  monsters: MONSTER[];
+  monsterKey: MONSTER;
   drops: WorldDropsInterface[];
   monsterHealth: number;
   playerHealth: number;
@@ -214,7 +214,7 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
         world: { ...context.world, monsters }
       })),
       removeMonster: assign((context, { monsterKey }) => {
-        const newMonsters: MONSTERS[] = context.world.monsters.filter(
+        const newMonsters: MONSTER[] = context.world.monsters.filter(
           key => key !== monsterKey
         );
         return { world: { ...context.world, monsters: newMonsters } };

@@ -1,8 +1,8 @@
-import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
+import FULL_MONSTERS, { MONSTER } from "../database/monsters";
 import { COMBATANT_TYPE } from "./combat";
 
 export function getMonsterNameWithCombatantType(
-  monsterKey: MONSTERS,
+  monsterKey: MONSTER,
   combatantType: COMBATANT_TYPE
 ): string {
   const fullMonster = FULL_MONSTERS.find(elem => elem.key === monsterKey);

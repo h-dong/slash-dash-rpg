@@ -1,4 +1,4 @@
-import { MONSTERS } from "./monsters";
+import { MONSTER } from "./monsters";
 import { RARITY, ITEM } from "./items";
 
 export enum MAP {
@@ -18,7 +18,7 @@ export interface TreasureInterface {
 }
 
 export interface MapMonsterInterface {
-  monsterKey: MONSTERS;
+  monsterKey: MONSTER;
   chanceOfAppear: number;
 }
 
@@ -40,11 +40,11 @@ const FULL_MAPS: MapInterface[] = [
     key: MAP.FARM,
     levelGuide: "(level 1-3)",
     monsters: [
-      { monsterKey: MONSTERS.CHICKEN, chanceOfAppear: 0.5 },
-      { monsterKey: MONSTERS.DUCK, chanceOfAppear: 0.5 },
-      { monsterKey: MONSTERS.PIG, chanceOfAppear: 0.3 },
-      { monsterKey: MONSTERS.COW, chanceOfAppear: 0.3 },
-      { monsterKey: MONSTERS.FARMER, chanceOfAppear: 0.2 }
+      { monsterKey: MONSTER.CHICKEN, chanceOfAppear: 0.5 },
+      { monsterKey: MONSTER.DUCK, chanceOfAppear: 0.5 },
+      { monsterKey: MONSTER.PIG, chanceOfAppear: 0.3 },
+      { monsterKey: MONSTER.COW, chanceOfAppear: 0.3 },
+      { monsterKey: MONSTER.FARMER, chanceOfAppear: 0.2 }
     ],
     treasure: [
       {
@@ -99,9 +99,9 @@ const FULL_MAPS: MapInterface[] = [
     key: MAP.GOBLIN_WOODS,
     levelGuide: "(level 3-6)",
     monsters: [
-      { monsterKey: MONSTERS.GOBLIN, chanceOfAppear: 0.8 },
-      { monsterKey: MONSTERS.GOBLIN_GUARD, chanceOfAppear: 0.6 },
-      { monsterKey: MONSTERS.GOBLIN_SOLDIER, chanceOfAppear: 0.4 }
+      { monsterKey: MONSTER.GOBLIN, chanceOfAppear: 0.8 },
+      { monsterKey: MONSTER.GOBLIN_GUARD, chanceOfAppear: 0.6 },
+      { monsterKey: MONSTER.GOBLIN_SOLDIER, chanceOfAppear: 0.4 }
     ],
     treasure: [
       {

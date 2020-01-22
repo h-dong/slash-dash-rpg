@@ -28,7 +28,7 @@ export interface MonsterDropInterface {
 }
 
 export interface FullMonsterInterface {
-  key: MONSTERS;
+  key: MONSTER;
   name: string;
   icon: string;
   description: string;
@@ -36,7 +36,7 @@ export interface FullMonsterInterface {
   drops: MonsterDropInterface[];
 }
 
-export enum MONSTERS {
+export enum MONSTER {
   CHICKEN = "CHICKEN",
   DUCK = "DUCK",
   PIG = "PIG",
@@ -49,7 +49,7 @@ export enum MONSTERS {
 
 const FULL_MONSTERS: FullMonsterInterface[] = [
   {
-    key: MONSTERS.CHICKEN,
+    key: MONSTER.CHICKEN,
     name: "Chicken",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/a/a3/Chicken.png/revision/latest?cb=20161207181258",
@@ -64,7 +64,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     ]
   },
   {
-    key: MONSTERS.DUCK,
+    key: MONSTER.DUCK,
     name: "Duck",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/38/Duck.png/revision/latest?cb=20150905042847",
@@ -79,7 +79,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     ]
   },
   {
-    key: MONSTERS.PIG,
+    key: MONSTER.PIG,
     name: "Pig",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/30/Pig.png/revision/latest/scale-to-width-down/700?cb=20180303064642",
@@ -94,7 +94,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     ]
   },
   {
-    key: MONSTERS.COW,
+    key: MONSTER.COW,
     name: "Cow",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/8/84/Cow.png/revision/latest/scale-to-width-down/700?cb=20160613020452",
@@ -109,7 +109,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     ]
   },
   {
-    key: MONSTERS.FARMER,
+    key: MONSTER.FARMER,
     name: "Farmer",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/3d/Farmer.png/revision/latest?cb=20170225131827",
@@ -164,7 +164,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     ]
   },
   {
-    key: MONSTERS.GOBLIN,
+    key: MONSTER.GOBLIN,
     name: "Goblin",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/d/d2/Goblin.png/revision/latest?cb=20170212092103",
@@ -249,7 +249,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     ]
   },
   {
-    key: MONSTERS.GOBLIN_GUARD,
+    key: MONSTER.GOBLIN_GUARD,
     name: "Goblin Guard",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/0/05/Goblin_guard.png/revision/latest?cb=20150829134401",
@@ -299,7 +299,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     ]
   },
   {
-    key: MONSTERS.GOBLIN_SOLDIER,
+    key: MONSTER.GOBLIN_SOLDIER,
     name: "Goblin Soldier",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/5/5c/Goblin_Recruiter.png/revision/latest?cb=20141021185712",

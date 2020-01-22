@@ -10,7 +10,7 @@ import FULL_MAPS, {
   TreasureInterface,
   MapMonsterInterface
 } from "../database/maps";
-import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
+import FULL_MONSTERS, { MONSTER } from "../database/monsters";
 import { WorldDropsInterface } from "../machines/GameMachine";
 
 import "react-tippy/dist/tippy.css";
@@ -54,7 +54,7 @@ const Wrapper = styled.div`
 interface WorldPanelActionsInterface {
   send: any;
   location: MAP;
-  monsters: MONSTERS[];
+  monsters: MONSTER[];
 }
 
 const WorldPanelActions = ({
@@ -67,7 +67,7 @@ const WorldPanelActions = ({
       FULL_MAPS.find(map => map.key === location)?.monsters || null;
 
     if (monstersOnMap) {
-      const monstersAppeared: MONSTERS[] = [];
+      const monstersAppeared: MONSTER[] = [];
       monstersOnMap.forEach(elem => {
         const showMonster = getRandomBooleanByProbability(elem.chanceOfAppear);
         if (showMonster) {

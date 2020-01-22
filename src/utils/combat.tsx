@@ -4,7 +4,7 @@ import {
   getRandomMonsterType,
   getRandomFlux
 } from "./random";
-import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
+import FULL_MONSTERS, { MONSTER } from "../database/monsters";
 import { generateStatsByLevel } from "./levelHelper";
 import { BattleInterface } from "../machines/GameMachine";
 
@@ -67,7 +67,7 @@ export function getMultiplierByCombatant(
 }
 
 export function getStatsByMonsterKey(
-  monsterKey: MONSTERS
+  monsterKey: MONSTER
 ): BattleInterface | null {
   const fullMonster = FULL_MONSTERS.find(monster => monster.key === monsterKey);
   if (!fullMonster) return null;
