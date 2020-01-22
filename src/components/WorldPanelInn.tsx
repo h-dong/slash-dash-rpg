@@ -36,7 +36,11 @@ const InnActionWrapper = styled.div`
   }
 `;
 
-const WorldPanelInn = () => {
+type Props = {
+  send: any,
+};
+
+const WorldPanelInn = ({ send }: Props) => {
   const itemsForSale = FULL_ITEMS.filter(elem => elem.key !== ITEMS.COIN).map(
     elem => (
       <Tooltip
@@ -64,7 +68,7 @@ const WorldPanelInn = () => {
           <button type="button" className="btn btn-primary" disabled>
             Quests
           </button>
-          <button type="button" className="btn btn-success">
+          <button type="button" className="btn btn-success" onClick={() => send({ type: 'HEAL_TO_FULL' })}>
             Heal
           </button>
         </div>

@@ -23,7 +23,7 @@ const WorldPanel = ({ send, state }: Props) => {
 
   const renderActionsAndDrops = () => {
     if (world.location === MAPS.INN) {
-      return <WorldPanelInn />;
+      return <WorldPanelInn send={send} />;
     } else {
       return (
         <div>

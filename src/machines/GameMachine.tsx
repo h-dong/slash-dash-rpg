@@ -87,6 +87,7 @@ export type GameMachineEvents = {
     | "EQUIP_ITEM"
     | "PICK_UP_ITEM"
     | "CONSUME_FOOD"
+    | "HEAL_TO_FULL"
     | "SET_MONSTERS"
     | "SET_DROPS"
     | "ADD_LOG"
@@ -134,6 +135,9 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           },
           CONSUME_FOOD: {
             actions: "consumeFood"
+          },
+          HEAL_TO_FULL: {
+            actions: "healToFull"
           },
           CHANGE_LOCATION: {
             actions: "changeLoction"
@@ -247,6 +251,16 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           inventory: newInventory
         };
       }),
+      healToFull: assign((context, _) => ({
+        character: {
+          ...context.character,
+          health: {
+            ...context.character.health,
+            current: context.character.health.max
+          }
+        },
+        log: "You have been fully healed!"
+      })),
       setBattle: assign((_, { monsterKey }) => {
         let battle = null;
         const monsterObj = getStatsByMonsterKey(monsterKey);
