@@ -1,5 +1,5 @@
 import FULL_ITEMS, {
-  ITEMS,
+  ITEM,
   ItemInterface,
   ItemCombatStatsInterface
 } from "../database/items";
@@ -10,13 +10,13 @@ export function getItemById(id: number) {
 }
 
 export function getItemByKey(
-  key: ITEMS | undefined
+  key: ITEM | undefined
 ): ItemInterface | undefined | null {
   if (!key) return null;
   return FULL_ITEMS.find(item => item.key === key);
 }
 
-export function getItemCombatStatsTextByKey(itemKey: ITEMS): string {
+export function getItemCombatStatsTextByKey(itemKey: ITEM): string {
   const fullItem = getItemByKey(itemKey);
   if (fullItem?.equipment?.combat) {
     return getItemCombatStatsText(fullItem.equipment.combat);

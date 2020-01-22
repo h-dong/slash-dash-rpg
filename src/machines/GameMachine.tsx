@@ -9,7 +9,7 @@ import {
   loseRandomInventoryOnDeath
 } from "../utils/itemActions";
 import FULL_MAPS, { MAPS } from "../database/maps";
-import { ITEMS } from "../database/items";
+import { ITEM } from "../database/items";
 import { generateLog } from "../utils/logs";
 import { setData } from "../services/data";
 import { MONSTERS } from "../database/monsters";
@@ -34,15 +34,15 @@ export interface CharacterInterface {
 }
 
 export interface EquipmentsInterface {
-  HEAD?: ITEMS;
-  BODY?: ITEMS;
-  LEGS?: ITEMS;
-  MAIN_HAND?: ITEMS;
-  OFF_HAND?: ITEMS;
+  HEAD?: ITEM;
+  BODY?: ITEM;
+  LEGS?: ITEM;
+  MAIN_HAND?: ITEM;
+  OFF_HAND?: ITEM;
 }
 
 export interface InventoryItemInterface {
-  itemKey: ITEMS;
+  itemKey: ITEM;
   quantity: number;
 }
 
@@ -54,7 +54,7 @@ export interface BattleInterface {
 }
 
 export interface WorldDropsInterface {
-  itemKey: ITEMS;
+  itemKey: ITEM;
   quantity: number;
 }
 
@@ -92,7 +92,7 @@ export type GameMachineEvents = {
     | "SET_DROPS"
     | "ADD_LOG"
     | "CHANGE_LOCATION";
-  itemKey: ITEMS;
+  itemKey: ITEM;
   itemQuantity: number;
   log: string;
   location: MAPS;

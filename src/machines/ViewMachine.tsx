@@ -1,7 +1,7 @@
 import { Machine } from "xstate";
 import { getData, setData, clearData, DataInterface } from "../services/data";
 import { getHealthByLevel } from "../utils/levelHelper";
-import { ITEMS } from "../database/items";
+import { ITEM } from "../database/items";
 
 export enum VIEW {
   DASHBOARD = "DASHBOARD",
@@ -23,7 +23,7 @@ const newCharacterStats: DataInterface = {
   equipments: {},
   inventory: [
     {
-      itemKey: ITEMS.WOODEN_SWORD,
+      itemKey: ITEM.WOODEN_SWORD,
       quantity: 1
     }
   ]

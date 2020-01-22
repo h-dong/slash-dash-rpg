@@ -1,5 +1,5 @@
 import { MONSTERS } from "./monsters";
-import { RARITY, ITEMS } from "./items";
+import { RARITY, ITEM } from "./items";
 
 export enum MAPS {
   INN = "INN",
@@ -9,7 +9,7 @@ export enum MAPS {
 }
 
 export interface TreasureInterface {
-  itemKey: ITEMS;
+  itemKey: ITEM;
   rarity: RARITY;
   quantity: {
     min: number;
@@ -48,47 +48,47 @@ const FULL_MAPS: MapInterface[] = [
     ],
     treasure: [
       {
-        itemKey: ITEMS.COIN,
+        itemKey: ITEM.COIN,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 20 }
       },
       {
-        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
+        itemKey: ITEM.SMALL_HEALTH_POTIONS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 2 }
       },
       {
-        itemKey: ITEMS.MEDIUM_HEALTH_POTIONS,
+        itemKey: ITEM.MEDIUM_HEALTH_POTIONS,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 2 }
       },
       {
-        itemKey: ITEMS.WOODEN_SWORD,
+        itemKey: ITEM.WOODEN_SWORD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_HELMET,
+        itemKey: ITEM.WOODEN_HELMET,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_PLATE_BODY,
+        itemKey: ITEM.WOODEN_PLATE_BODY,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_PLATE_LEGS,
+        itemKey: ITEM.WOODEN_PLATE_LEGS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SPEAR,
+        itemKey: ITEM.WOODEN_SPEAR,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SHIELD,
+        itemKey: ITEM.WOODEN_SHIELD,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 1 }
       }
@@ -105,87 +105,87 @@ const FULL_MAPS: MapInterface[] = [
     ],
     treasure: [
       {
-        itemKey: ITEMS.COIN,
+        itemKey: ITEM.COIN,
         rarity: RARITY.COMMON,
         quantity: { min: 10, max: 50 }
       },
       {
-        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
+        itemKey: ITEM.SMALL_HEALTH_POTIONS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 3 }
       },
       {
-        itemKey: ITEMS.MEDIUM_HEALTH_POTIONS,
+        itemKey: ITEM.MEDIUM_HEALTH_POTIONS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.LARGE_HEALTH_POTIONS,
+        itemKey: ITEM.LARGE_HEALTH_POTIONS,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SWORD,
+        itemKey: ITEM.WOODEN_SWORD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_HELMET,
+        itemKey: ITEM.WOODEN_HELMET,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_PLATE_BODY,
+        itemKey: ITEM.WOODEN_PLATE_BODY,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_PLATE_LEGS,
+        itemKey: ITEM.WOODEN_PLATE_LEGS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SPEAR,
+        itemKey: ITEM.WOODEN_SPEAR,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SHIELD,
+        itemKey: ITEM.WOODEN_SHIELD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SPEAR,
+        itemKey: ITEM.BRONZE_SPEAR,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_PLATE_BODY,
+        itemKey: ITEM.BRONZE_PLATE_BODY,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SWORD,
+        itemKey: ITEM.BRONZE_SWORD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_PLATE_LEGS,
+        itemKey: ITEM.BRONZE_PLATE_LEGS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_BATTLE_AXE,
+        itemKey: ITEM.BRONZE_BATTLE_AXE,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SHIELD,
+        itemKey: ITEM.BRONZE_SHIELD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_HELMET,
+        itemKey: ITEM.BRONZE_HELMET,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       }

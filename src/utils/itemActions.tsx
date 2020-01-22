@@ -1,7 +1,7 @@
 import FULL_ITEMS, {
   WEAR_POSITION,
   ItemInterface,
-  ITEMS
+  ITEM
 } from "../database/items";
 import {
   EquipmentsInterface,
@@ -11,21 +11,15 @@ import {
 import { getItemByKey } from "./itemHelper";
 import { getRandomNumByMinMax } from "./random";
 
-// export const ITEM_ACTIONS = {
-//   EQUIP: "Equip",
-//   UNEQUIP: "Unequip",
-//   EXAMINE: "Examine"
-// };
-
 export interface EquipmentItemActionInterface {
   type: string;
-  itemKey: ITEMS;
+  itemKey: ITEM;
 }
 
 export interface InventoryItemActionInterface {
   type: string;
   order: number;
-  itemKey: ITEMS;
+  itemKey: ITEM;
 }
 
 export function getInventoryItemActions(
@@ -57,7 +51,7 @@ export function getInventoryItemActions(
 }
 
 export function getEquippedItemActions(
-  itemKey: ITEMS
+  itemKey: ITEM
 ): EquipmentItemActionInterface[] {
   return [
     {
@@ -70,7 +64,7 @@ export function getEquippedItemActions(
 export function moveEquipmentItemToInventory(
   equipments: EquipmentsInterface,
   inventory: InventoryItemInterface[],
-  itemKey: ITEMS
+  itemKey: ITEM
 ): { equipments: EquipmentsInterface; inventory: InventoryItemInterface[] } {
   return {
     equipments: removeItemFromEquipment({ ...equipments }, itemKey),
@@ -81,14 +75,14 @@ export function moveEquipmentItemToInventory(
 export function moveInventoryItemToEquipment(
   equipments: EquipmentsInterface,
   inventory: InventoryItemInterface[],
-  itemKey: ITEMS
+  itemKey: ITEM
 ) {
   const fullItem = getItemByKey(itemKey);
   let newEquipments = { ...equipments };
   let newInventory = [...inventory];
 
   if (fullItem?.equipment) {
-    const itemKeyToUnequip: ITEMS[] = calcEquipToTakeOff(
+    const itemKeyToUnequip: ITEM[] = calcEquipToTakeOff(
       newEquipments,
       itemKey
     );
@@ -105,7 +99,7 @@ export function moveInventoryItemToEquipment(
   return { equipments: newEquipments, inventory: newInventory };
 }
 
-function addItemToEquipment(equipments: EquipmentsInterface, itemKey: ITEMS) {
+function addItemToEquipment(equipments: EquipmentsInterface, itemKey: ITEM) {
   const newEquipments = { ...equipments };
   const fullItem = getItemByKey(itemKey);
 
@@ -117,7 +111,7 @@ function addItemToEquipment(equipments: EquipmentsInterface, itemKey: ITEMS) {
 
 function removeItemFromEquipment(
   equipments: EquipmentsInterface,
-  itemKey: ITEMS
+  itemKey: ITEM
 ) {
   const newEquipments = { ...equipments };
   const fullItem = getItemByKey(itemKey);
@@ -130,7 +124,7 @@ function removeItemFromEquipment(
 
 export function addItemToInventory(
   inventory: InventoryItemInterface[],
-  itemKey: ITEMS,
+  itemKey: ITEM,
   itemQuantity: number
 ) {
   const newInventory = [...inventory];
@@ -145,7 +139,7 @@ export function addItemToInventory(
 
 function removeItemFromInventory(
   inventory: InventoryItemInterface[],
-  itemKey: ITEMS
+  itemKey: ITEM
 ) {
   const newInventory = [...inventory];
   const inventoryItem = newInventory.find(item => item.itemKey === itemKey);
@@ -166,8 +160,8 @@ function removeItemFromInventory(
 
 function calcEquipToTakeOff(
   equipments: EquipmentsInterface,
-  itemKey: ITEMS
-): ITEMS[] {
+  itemKey: ITEM
+): ITEM[] {
   const fullItem = getItemByKey(itemKey);
 
   if (!fullItem?.equipment) return [];
@@ -200,7 +194,7 @@ function calcEquipToTakeOff(
         getItemByKey(equipments[WEAR_POSITION.MAIN_HAND]) || null;
       const currentOffHand: ItemInterface | null =
         getItemByKey(equipments[WEAR_POSITION.OFF_HAND]) || null;
-      const itemsToUnequip: ITEMS[] = [];
+      const itemsToUnequip: ITEM[] = [];
       [currentMainHand, currentOffHand].forEach(elem => {
         if (elem?.key) {
           itemsToUnequip.push(elem.key);
@@ -230,7 +224,7 @@ export function addItemToDrops(
 
 export function consumeInventoryFood(
   inventory: InventoryItemInterface[],
-  itemKey: ITEMS
+  itemKey: ITEM
 ): InventoryItemInterface[] {
   let newInventory = [...inventory];
   const index = newInventory.findIndex(elem => elem.itemKey === itemKey);
@@ -245,7 +239,7 @@ export function consumeInventoryFood(
 
 export function getHealAmountByItemKey(
   maxHealth: number,
-  itemKey: ITEMS
+  itemKey: ITEM
 ): number {
   const healStats = FULL_ITEMS.find(elem => elem.key === itemKey)?.food?.heal;
 

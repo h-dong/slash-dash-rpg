@@ -57,7 +57,7 @@ interface EquipmentInterface {
   };
 }
 
-export enum ITEMS {
+export enum ITEM {
   COIN = "COIN",
   LOW_QUALITY_MEAT = "LOW_QUALITY_MEAT",
   HIGH_QUALITY_MEAT = "HIGH_QUALITY_MEAT",
@@ -89,7 +89,7 @@ export enum ITEMS {
 
 export interface ItemInterface {
   id: number;
-  key: ITEMS;
+  key: ITEM;
   name: string;
   icon: string;
   description?: string;
@@ -100,7 +100,7 @@ export interface ItemInterface {
 const rawData: ItemInterface[] = [
   {
     id: 1,
-    key: ITEMS.COIN,
+    key: ITEM.COIN,
     name: "Coins",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/b/b6/Coins_100.png/revision/latest?cb=20130321223939",
@@ -108,7 +108,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 2,
-    key: ITEMS.LOW_QUALITY_MEAT,
+    key: ITEM.LOW_QUALITY_MEAT,
     name: "Low Quality Meat",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/c/c2/Cooked_chicken.png/revision/latest?cb=20130303155955",
@@ -122,7 +122,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 3,
-    key: ITEMS.HIGH_QUALITY_MEAT,
+    key: ITEM.HIGH_QUALITY_MEAT,
     name: "High Quality Meat",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/8/89/Cooked_meat.png/revision/latest?cb=20130303160059",
@@ -136,7 +136,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 4,
-    key: ITEMS.SMALL_HEALTH_POTIONS,
+    key: ITEM.SMALL_HEALTH_POTIONS,
     name: "Health Potion (small)",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/8/8e/Restore_potion%281%29.png/revision/latest?cb=20140201184155",
@@ -149,7 +149,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 5,
-    key: ITEMS.MEDIUM_HEALTH_POTIONS,
+    key: ITEM.MEDIUM_HEALTH_POTIONS,
     name: "Health Potion (medium)",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/1/1b/Restore_potion%282%29.png/revision/latest?cb=20140201184205",
@@ -162,7 +162,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 6,
-    key: ITEMS.LARGE_HEALTH_POTIONS,
+    key: ITEM.LARGE_HEALTH_POTIONS,
     name: "Health Potion (large)",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/0/03/Restore_potion%283%29.png/revision/latest?cb=20140201184214",
@@ -175,7 +175,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 7,
-    key: ITEMS.GREAT_HEALTH_POTIONS,
+    key: ITEM.GREAT_HEALTH_POTIONS,
     name: "GREAT Health Potion",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/f/f6/Restore_potion%284%29.png/revision/latest?cb=20140201184224",
@@ -236,7 +236,7 @@ const rawData: ItemInterface[] = [
   // },
   {
     id: 8,
-    key: ITEMS.WOODEN_HELMET,
+    key: ITEM.WOODEN_HELMET,
     name: "Wooden Helmet",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/31/Splitbark_helm.png/revision/latest?cb=20140726051922",
@@ -251,7 +251,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 9,
-    key: ITEMS.WOODEN_PLATE_BODY,
+    key: ITEM.WOODEN_PLATE_BODY,
     name: "Wooden Plate Body",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/6/60/Splitbark_body.png/revision/latest?cb=20140726051921",
@@ -266,7 +266,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 10,
-    key: ITEMS.WOODEN_PLATE_LEGS,
+    key: ITEM.WOODEN_PLATE_LEGS,
     name: "Wooden Plate Legs",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/8/80/Splitbark_legs.png/revision/latest?cb=20140726051923",
@@ -281,7 +281,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 11,
-    key: ITEMS.WOODEN_SHIELD,
+    key: ITEM.WOODEN_SHIELD,
     name: "Wooden Shield",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/d/db/Wooden_shield.png/revision/latest?cb=20140323033102",
@@ -296,7 +296,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 12,
-    key: ITEMS.WOODEN_SWORD,
+    key: ITEM.WOODEN_SWORD,
     name: "Wooden Sword",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/f/fd/Wooden_sword.png/revision/latest?cb=20140218221209",
@@ -310,7 +310,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 13,
-    key: ITEMS.WOODEN_SPEAR,
+    key: ITEM.WOODEN_SPEAR,
     name: "Wooden Spear",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/2/23/Gilded_spear.png/revision/latest?cb=20160706155543",
@@ -328,7 +328,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 14,
-    key: ITEMS.BRONZE_HELMET,
+    key: ITEM.BRONZE_HELMET,
     name: "Bronze Helmet",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/e/ef/Bronze_full_helm.png/revision/latest?cb=20131218080719",
@@ -343,7 +343,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 15,
-    key: ITEMS.BRONZE_PLATE_BODY,
+    key: ITEM.BRONZE_PLATE_BODY,
     name: "Bronze Plate Body",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/c/cd/Bronze_platebody.png/revision/latest?cb=20131218074731",
@@ -358,7 +358,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 16,
-    key: ITEMS.BRONZE_PLATE_LEGS,
+    key: ITEM.BRONZE_PLATE_LEGS,
     name: "Bronze Plate Legs",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/2/24/Bronze_platelegs.png/revision/latest?cb=20170603011603",
@@ -373,7 +373,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 17,
-    key: ITEMS.BRONZE_SHIELD,
+    key: ITEM.BRONZE_SHIELD,
     name: "Bronze Shield",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/6/68/Bronze_kiteshield.png/revision/latest?cb=20131215210817",
@@ -388,7 +388,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 18,
-    key: ITEMS.BRONZE_SWORD,
+    key: ITEM.BRONZE_SWORD,
     name: "Bronze Sword",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/b/b8/Bronze_sword.png/revision/latest?cb=20140510170952",
@@ -402,7 +402,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 19,
-    key: ITEMS.BRONZE_BATTLE_AXE,
+    key: ITEM.BRONZE_BATTLE_AXE,
     name: "Bronze Battle Axe",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/0/0f/Bronze_battleaxe.png/revision/latest?cb=20130920174444",
@@ -417,7 +417,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 20,
-    key: ITEMS.BRONZE_SPEAR,
+    key: ITEM.BRONZE_SPEAR,
     name: "Bronze Spear",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/4/41/Bronze_spear.png/revision/latest?cb=20130928222524",
@@ -435,7 +435,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 21,
-    key: ITEMS.IRON_HELMET,
+    key: ITEM.IRON_HELMET,
     name: "Iron Helmet",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/0/00/Iron_full_helm.png/revision/latest?cb=20140309033528",
@@ -450,7 +450,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 22,
-    key: ITEMS.IRON_PLATE_BODY,
+    key: ITEM.IRON_PLATE_BODY,
     name: "Iron Plate Body",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/c/cd/Iron_platebody.png/revision/latest?cb=20140124010347",
@@ -465,7 +465,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 23,
-    key: ITEMS.IRON_PLATE_LEGS,
+    key: ITEM.IRON_PLATE_LEGS,
     name: "Iron Plate Legs",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/8/80/Iron_platelegs.png/revision/latest?cb=20130929002310",
@@ -480,7 +480,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 24,
-    key: ITEMS.IRON_SHIELD,
+    key: ITEM.IRON_SHIELD,
     name: "Iron Shield",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/b/b6/Iron_kiteshield.png/revision/latest?cb=20131215211939",
@@ -495,7 +495,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 25,
-    key: ITEMS.IRON_SWORD,
+    key: ITEM.IRON_SWORD,
     name: "Iron Sword",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/3c/Iron_sword.png/revision/latest?cb=20140308075152",
@@ -509,7 +509,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 26,
-    key: ITEMS.IRON_BATTLE_AXE,
+    key: ITEM.IRON_BATTLE_AXE,
     name: "Iron Battle Axe",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/6/63/Iron_battleaxe.png/revision/latest?cb=20140309044124",
@@ -524,7 +524,7 @@ const rawData: ItemInterface[] = [
   },
   {
     id: 27,
-    key: ITEMS.IRON_SPEAR,
+    key: ITEM.IRON_SPEAR,
     name: "Iron Spear",
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/c/cb/Iron_spear.png/revision/latest?cb=20130928222524",

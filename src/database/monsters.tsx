@@ -1,4 +1,4 @@
-import { RARITY, ITEMS } from "./items";
+import { RARITY, ITEM } from "./items";
 
 // https://oldschoolrunescape.fandom.com/wiki/Goblin_Champion
 // dark forest 1 - 20
@@ -19,7 +19,7 @@ import { RARITY, ITEMS } from "./items";
 // Unicorn L20
 
 export interface MonsterDropInterface {
-  itemKey: ITEMS;
+  itemKey: ITEM;
   rarity: RARITY;
   quantity: {
     min: number;
@@ -57,7 +57,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     level: 1,
     drops: [
       {
-        itemKey: ITEMS.LOW_QUALITY_MEAT,
+        itemKey: ITEM.LOW_QUALITY_MEAT,
         rarity: RARITY.ALWAYS,
         quantity: { min: 1, max: 1 }
       }
@@ -72,7 +72,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     level: 1,
     drops: [
       {
-        itemKey: ITEMS.LOW_QUALITY_MEAT,
+        itemKey: ITEM.LOW_QUALITY_MEAT,
         rarity: RARITY.ALWAYS,
         quantity: { min: 1, max: 1 }
       }
@@ -87,7 +87,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     level: 2,
     drops: [
       {
-        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        itemKey: ITEM.HIGH_QUALITY_MEAT,
         rarity: RARITY.ALWAYS,
         quantity: { min: 1, max: 1 }
       }
@@ -102,7 +102,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     level: 2,
     drops: [
       {
-        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        itemKey: ITEM.HIGH_QUALITY_MEAT,
         rarity: RARITY.ALWAYS,
         quantity: { min: 1, max: 1 }
       }
@@ -117,47 +117,47 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     level: 3,
     drops: [
       {
-        itemKey: ITEMS.COIN,
+        itemKey: ITEM.COIN,
         rarity: RARITY.ALWAYS,
         quantity: { min: 10, max: 50 }
       },
       {
-        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
+        itemKey: ITEM.SMALL_HEALTH_POTIONS,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 2 }
       },
       {
-        itemKey: ITEMS.WOODEN_HELMET,
+        itemKey: ITEM.WOODEN_HELMET,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_PLATE_BODY,
+        itemKey: ITEM.WOODEN_PLATE_BODY,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_PLATE_LEGS,
+        itemKey: ITEM.WOODEN_PLATE_LEGS,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SWORD,
+        itemKey: ITEM.WOODEN_SWORD,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SHIELD,
+        itemKey: ITEM.WOODEN_SHIELD,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SPEAR,
+        itemKey: ITEM.WOODEN_SPEAR,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SWORD,
+        itemKey: ITEM.BRONZE_SWORD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       }
@@ -172,77 +172,77 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     level: 3,
     drops: [
       {
-        itemKey: ITEMS.COIN,
+        itemKey: ITEM.COIN,
         rarity: RARITY.ALWAYS,
         quantity: { min: 20, max: 60 }
       },
       {
-        itemKey: ITEMS.LOW_QUALITY_MEAT,
+        itemKey: ITEM.LOW_QUALITY_MEAT,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 3 }
       },
       {
-        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        itemKey: ITEM.HIGH_QUALITY_MEAT,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
+        itemKey: ITEM.SMALL_HEALTH_POTIONS,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 3 }
       },
       {
-        itemKey: ITEMS.MEDIUM_HEALTH_POTIONS,
+        itemKey: ITEM.MEDIUM_HEALTH_POTIONS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.LARGE_HEALTH_POTIONS,
+        itemKey: ITEM.LARGE_HEALTH_POTIONS,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_HELMET,
+        itemKey: ITEM.WOODEN_HELMET,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_PLATE_BODY,
+        itemKey: ITEM.WOODEN_PLATE_BODY,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_PLATE_LEGS,
+        itemKey: ITEM.WOODEN_PLATE_LEGS,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SWORD,
+        itemKey: ITEM.WOODEN_SWORD,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SHIELD,
+        itemKey: ITEM.WOODEN_SHIELD,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.WOODEN_SPEAR,
+        itemKey: ITEM.WOODEN_SPEAR,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SPEAR,
+        itemKey: ITEM.BRONZE_SPEAR,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_PLATE_BODY,
+        itemKey: ITEM.BRONZE_PLATE_BODY,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SWORD,
+        itemKey: ITEM.BRONZE_SWORD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       }
@@ -257,42 +257,42 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     level: 5,
     drops: [
       {
-        itemKey: ITEMS.COIN,
+        itemKey: ITEM.COIN,
         rarity: RARITY.ALWAYS,
         quantity: { min: 30, max: 80 }
       },
       {
-        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        itemKey: ITEM.HIGH_QUALITY_MEAT,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 5 }
       },
       {
-        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
+        itemKey: ITEM.SMALL_HEALTH_POTIONS,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 3 }
       },
       {
-        itemKey: ITEMS.MEDIUM_HEALTH_POTIONS,
+        itemKey: ITEM.MEDIUM_HEALTH_POTIONS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.LARGE_HEALTH_POTIONS,
+        itemKey: ITEM.LARGE_HEALTH_POTIONS,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SPEAR,
+        itemKey: ITEM.BRONZE_SPEAR,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_PLATE_BODY,
+        itemKey: ITEM.BRONZE_PLATE_BODY,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SWORD,
+        itemKey: ITEM.BRONZE_SWORD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       }
@@ -307,62 +307,62 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     level: 6,
     drops: [
       {
-        itemKey: ITEMS.COIN,
+        itemKey: ITEM.COIN,
         rarity: RARITY.ALWAYS,
         quantity: { min: 50, max: 100 }
       },
       {
-        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        itemKey: ITEM.HIGH_QUALITY_MEAT,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 5 }
       },
       {
-        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
+        itemKey: ITEM.SMALL_HEALTH_POTIONS,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 3 }
       },
       {
-        itemKey: ITEMS.MEDIUM_HEALTH_POTIONS,
+        itemKey: ITEM.MEDIUM_HEALTH_POTIONS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.LARGE_HEALTH_POTIONS,
+        itemKey: ITEM.LARGE_HEALTH_POTIONS,
         rarity: RARITY.EPIC,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SPEAR,
+        itemKey: ITEM.BRONZE_SPEAR,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_PLATE_BODY,
+        itemKey: ITEM.BRONZE_PLATE_BODY,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SWORD,
+        itemKey: ITEM.BRONZE_SWORD,
         rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_PLATE_LEGS,
+        itemKey: ITEM.BRONZE_PLATE_LEGS,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_BATTLE_AXE,
+        itemKey: ITEM.BRONZE_BATTLE_AXE,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_SHIELD,
+        itemKey: ITEM.BRONZE_SHIELD,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       },
       {
-        itemKey: ITEMS.BRONZE_HELMET,
+        itemKey: ITEM.BRONZE_HELMET,
         rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       }

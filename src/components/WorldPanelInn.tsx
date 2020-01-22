@@ -1,5 +1,5 @@
 import React from "react";
-import FULL_ITEMS, { ITEMS } from "../database/items";
+import FULL_ITEMS, { ITEM } from "../database/items";
 import { Tooltip } from "react-tippy";
 import styled from "styled-components";
 
@@ -41,7 +41,7 @@ type Props = {
 };
 
 const WorldPanelInn = ({ send }: Props) => {
-  const itemsForSale = FULL_ITEMS.filter(elem => elem.key !== ITEMS.COIN).map(
+  const itemsForSale = FULL_ITEMS.filter(elem => elem.key !== ITEM.COIN).map(
     elem => (
       <Tooltip
         title={`${elem.name} - ${elem.description}`}
