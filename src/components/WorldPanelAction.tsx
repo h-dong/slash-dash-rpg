@@ -6,7 +6,7 @@ import {
   getRandomBooleanByProbability
 } from "../utils/random";
 import FULL_MAPS, {
-  MAPS,
+  MAP,
   TreasureInterface,
   MapMonsterInterface
 } from "../database/maps";
@@ -53,7 +53,7 @@ const Wrapper = styled.div`
 
 interface WorldPanelActionsInterface {
   send: any;
-  location: MAPS;
+  location: MAP;
   monsters: MONSTERS[];
 }
 

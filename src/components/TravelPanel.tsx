@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import FULL_MAPS, { MAPS } from "../database/maps";
+import FULL_MAPS, { MAP } from "../database/maps";
 import CollapseChevron from "../atomic/CollapseChevron";
 
 const CardHeaderWrapper = styled.div`
@@ -28,7 +28,7 @@ const TravelWrapper = styled.ul`
 
 type Props = {
   send: any;
-  location: MAPS;
+  location: MAP;
 };
 
 const TravelPanel = ({ send, location }: Props) => {
@@ -40,7 +40,7 @@ const TravelPanel = ({ send, location }: Props) => {
         <button
           type="button"
           className="btn btn-link btn-sm"
-          disabled={map.key === location || map.key === MAPS.DARK_FOREST}
+          disabled={map.key === location || map.key === MAP.DARK_FOREST}
           onClick={() => send({ type: "CHANGE_LOCATION", location: map.key })}
         >
           {map.name}

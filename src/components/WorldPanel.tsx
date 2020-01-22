@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import WorldPanelInn from "./WorldPanelInn";
 import WorldPanelDrops from "./WorldPanelDrops";
-import FULL_MAPS, { MAPS } from "../database/maps";
+import FULL_MAPS, { MAP } from "../database/maps";
 import WorldPanelActions from "./WorldPanelAction";
 import styled from "styled-components";
 import CollapseChevron from "../atomic/CollapseChevron";
@@ -22,7 +22,7 @@ const WorldPanel = ({ send, state }: Props) => {
   const { character, equipments, world, battle } = state.context;
 
   const renderActionsAndDrops = () => {
-    if (world.location === MAPS.INN) {
+    if (world.location === MAP.INN) {
       return <WorldPanelInn send={send} />;
     } else {
       return (

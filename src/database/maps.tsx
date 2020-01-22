@@ -1,7 +1,7 @@
 import { MONSTERS } from "./monsters";
 import { RARITY, ITEM } from "./items";
 
-export enum MAPS {
+export enum MAP {
   INN = "INN",
   FARM = "FARM",
   GOBLIN_WOODS = "GOBLIN_WOODS",
@@ -24,7 +24,7 @@ export interface MapMonsterInterface {
 
 export interface MapInterface {
   name: string;
-  key: MAPS;
+  key: MAP;
   levelGuide?: string;
   monsters?: MapMonsterInterface[];
   treasure?: TreasureInterface[];
@@ -33,11 +33,11 @@ export interface MapInterface {
 const FULL_MAPS: MapInterface[] = [
   {
     name: "Lion's Pride Inn",
-    key: MAPS.INN
+    key: MAP.INN
   },
   {
     name: "Farm",
-    key: MAPS.FARM,
+    key: MAP.FARM,
     levelGuide: "(level 1-3)",
     monsters: [
       { monsterKey: MONSTERS.CHICKEN, chanceOfAppear: 0.5 },
@@ -96,7 +96,7 @@ const FULL_MAPS: MapInterface[] = [
   },
   {
     name: "Goblin Woods",
-    key: MAPS.GOBLIN_WOODS,
+    key: MAP.GOBLIN_WOODS,
     levelGuide: "(level 3-6)",
     monsters: [
       { monsterKey: MONSTERS.GOBLIN, chanceOfAppear: 0.8 },
@@ -193,7 +193,7 @@ const FULL_MAPS: MapInterface[] = [
   },
   {
     name: "Dark Forest",
-    key: MAPS.DARK_FOREST,
+    key: MAP.DARK_FOREST,
     levelGuide: "(level 6-10)",
     monsters: []
   }

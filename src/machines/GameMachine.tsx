@@ -8,7 +8,7 @@ import {
   getHealAmountByItemKey,
   loseRandomInventoryOnDeath
 } from "../utils/itemActions";
-import FULL_MAPS, { MAPS } from "../database/maps";
+import FULL_MAPS, { MAP } from "../database/maps";
 import { ITEM } from "../database/items";
 import { generateLog } from "../utils/logs";
 import { setData } from "../services/data";
@@ -59,7 +59,7 @@ export interface WorldDropsInterface {
 }
 
 export interface WorldInterface {
-  location: MAPS;
+  location: MAP;
   monsters: MONSTERS[];
   drops: WorldDropsInterface[];
 }
@@ -95,7 +95,7 @@ export type GameMachineEvents = {
   itemKey: ITEM;
   itemQuantity: number;
   log: string;
-  location: MAPS;
+  location: MAP;
   monsters: MONSTERS[];
   monsterKey: MONSTERS;
   drops: WorldDropsInterface[];

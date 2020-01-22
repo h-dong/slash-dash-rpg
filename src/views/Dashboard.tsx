@@ -7,7 +7,7 @@ import InventoryPanel from "../components/InventoryPanel";
 import EquipmentsPanel from "../components/EquipmentsPanel";
 import LogsPanel from "../components/LogsPanel";
 import { getData } from "../services/data";
-import { MAPS } from "../database/maps";
+import { MAP } from "../database/maps";
 import WorldPanel from "../components/WorldPanel";
 
 import "react-tippy/dist/tippy.css";
@@ -33,7 +33,7 @@ const Dashboard = ({ sendToViewMachine }: any) => {
     logs: generateLog("", "Welcome back, traveller!"),
     battle: null,
     world: {
-      location: MAPS.FARM,
+      location: MAP.FARM,
       monsters: [],
       drops: []
     }
