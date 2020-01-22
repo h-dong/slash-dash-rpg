@@ -134,10 +134,10 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
             actions: ["pickUpItem", "persist"]
           },
           CONSUME_FOOD: {
-            actions: "consumeFood"
+            actions: ["consumeFood", "persist"]
           },
           HEAL_TO_FULL: {
-            actions: "healToFull"
+            actions: ["healToFull", "persist"]
           },
           CHANGE_LOCATION: {
             actions: "changeLoction"
