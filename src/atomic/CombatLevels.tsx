@@ -22,21 +22,21 @@ export default function CombatLevels({
   movementSpeed
 }: Props) {
   return (
-    <Wrapper className="list-group list-group-horizontal-sm">
+    <Wrapper className="list-group list-group-horizontal">
       <li className="list-group-item">
-        <span>Attack</span>&nbsp;
+        <span>Att: </span>
         <strong>{attack}</strong>
       </li>
       <li className="list-group-item">
-        <span>Strength</span>&nbsp;
+        <span>Str: </span>
         <strong>{strength}</strong>
       </li>
       <li className="list-group-item">
-        <span>Defence</span>&nbsp;
+        <span>Def: </span>
         <strong>{defence}</strong>
       </li>
       <li className="list-group-item">
-        <span>Movement Speed</span>&nbsp;
+        <span>Mv Speed: </span>
         <strong>{movementSpeed}</strong>
       </li>
     </Wrapper>
