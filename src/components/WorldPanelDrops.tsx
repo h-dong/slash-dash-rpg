@@ -54,6 +54,7 @@ const WorldPanelDrops = ({ send, drops }: WorldPanelDropsInterface) => {
   }
 
   const renderItems = () => {
+    if (drops.length === 0) return null;
     return drops.map(({ itemKey, quantity }: WorldDropsInterface, index) => {
       const fullItem = getItemByKey(itemKey);
 

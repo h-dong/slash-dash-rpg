@@ -33,7 +33,7 @@ const Dashboard = ({ sendToViewMachine }: any) => {
     logs: generateLog("", "Welcome back, traveller!"),
     battle: null,
     world: {
-      location: MAPS.TRAINING_GROUND,
+      location: MAPS.FARM,
       monsters: [],
       drops: []
     }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import CollapseChevron from "../atomic/CollapseChevron";
-import FULL_MONSTERS from "../database/monsters";
+import FULL_MONSTERS, { MonsterDropInterface } from "../database/monsters";
 import {
   CharacterInterface,
   EquipmentsInterface,
@@ -10,12 +10,11 @@ import {
 import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
 import ProgressBar from "../atomic/ProgressBar";
 import CombatLevels from "../atomic/CombatLevels";
+import { attackForOneRound, CombatResultsInterface } from "../utils/combat";
 import {
-  COMBATANT_TYPE,
-  attackForOneRound,
-  CombatResultsInterface
-} from "../utils/combat";
-import { getMonsterNameWithCombatantType } from "../utils/monster";
+  getMonsterNameWithCombatantType,
+  getMonsterBorderColour
+} from "../utils/monster";
 import {
   getRandomNumByMinMax,
   getRandomBooleanByProbability
@@ -59,9 +58,9 @@ type Props = {
 
 const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
-  const { player, monster } = battle;
+  const monster = battle;
   const fullMonster = FULL_MONSTERS.find(
-    elem => elem.key === monster.monsterKey
+    elem => elem.key === battle.monsterKey
   );
   const characterStatsWithItems = calcCharacterStatsWithItems(
     character,
@@ -72,10 +71,11 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
 
   function attack() {
     const results: CombatResultsInterface = attackForOneRound(
-      { ...characterStatsWithItems, health: player.health },
+      { ...characterStatsWithItems, health: character.health.current },
       { ...monster.stats, health: monster.health }
     );
-    const playerNewHealth = player.health - Number(results.damageRecieved);
+    const playerNewHealth =
+      character.health.current - Number(results.damageRecieved);
     const monsterNewHealth = monster.health - results.damageDelt;
     if (playerNewHealth <= 0) {
       defeated();
@@ -100,13 +100,13 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
   function won() {
     const drops = fullMonster?.drops
       .filter(drop => getRandomBooleanByProbability(drop.rarity))
-      .map(drop => {
+      .map((drop: MonsterDropInterface) => {
         return {
           itemKey: drop.itemKey,
           quantity: getRandomNumByMinMax(drop.quantity.min, drop.quantity.max)
         };
       });
-    
+
     send({
       type: "WON_BATTLE",
       log: "You have won the battle! All hail the champion!",
@@ -134,17 +134,11 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
   }
 
   function renderOpponent() {
-    let monsterTypeText = "";
-    let borderColour = "border-secondary";
-    if (monster.combatantType === COMBATANT_TYPE.ELITE_MONSTER) {
-      borderColour = "border-warning";
-      monsterTypeText = "Elite ";
-    }
-    if (monster.combatantType === COMBATANT_TYPE.BOSS_MONSTER) {
-      borderColour = "border-danger";
-      monsterTypeText = "Boss ";
-    }
-    const title = `${monsterTypeText}${fullMonster?.name} (Level ${fullMonster?.level})`;
+    const borderColour = getMonsterBorderColour(monster.combatantType);
+    const name = getMonsterNameWithCombatantType(
+      monster.monsterKey,
+      monster.combatantType
+    );
 
     return (
       <CombatProfile>
@@ -152,7 +146,7 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
           <span className={`border ${borderColour}`}>
             <img alt={fullMonster?.name} src={fullMonster?.icon} />
           </span>
-          <h6>{title}</h6>
+          <h6>{`${name} (Level ${fullMonster?.level})`}</h6>
         </div>
         <ProgressBar now={monster.health} max={monster.stats.health} />
         <CombatLevels
@@ -188,7 +182,10 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
     return (
       <CombatProfile>
         <h6>{title}</h6>
-        <ProgressBar now={player.health} max={character.health} />
+        <ProgressBar
+          now={character.health.current}
+          max={character.health.max}
+        />
         <CombatLevels
           attack={characterStatsWithItems.attack}
           strength={characterStatsWithItems.strength}

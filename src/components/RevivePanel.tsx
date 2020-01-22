@@ -25,15 +25,15 @@ export default function RevivePanel({ send }: Props) {
       {!collapse && (
         <div className="card-body text-center">
           <p>
-            You opened your eyes and seems to be robbed and thrown out in the
-            wild.
+            You just managed to ran away before a killing blow, but you may have
+            lost some of your items during the process.
           </p>
           <button
             type="button"
             className="btn btn-success btn-sm"
             onClick={() => send({ type: "REVIVE" })}
           >
-            Find a way out
+            Recover
           </button>
         </div>
       )}

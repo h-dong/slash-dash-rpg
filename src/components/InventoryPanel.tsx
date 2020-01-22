@@ -4,7 +4,8 @@ import { Tooltip } from "react-tippy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faQuestionCircle,
-  faPlusSquare
+  faPlusSquare,
+  faUtensils
 } from "@fortawesome/free-solid-svg-icons";
 import {
   getInventoryItemActions,
@@ -101,6 +102,23 @@ const InventoryPanel = ({ send, inventory }: Props) => {
           >
             <FontAwesomeIcon
               icon={faPlusSquare}
+              onClick={() =>
+                send({ type: action.type, itemKey: action.itemKey })
+              }
+            />
+          </Tooltip>
+        );
+      case "CONSUME_FOOD":
+        return (
+          <Tooltip
+            title="Consume"
+            position="right"
+            trigger="mouseenter"
+            key="consume"
+            className="item-action"
+          >
+            <FontAwesomeIcon
+              icon={faUtensils}
               onClick={() =>
                 send({ type: action.type, itemKey: action.itemKey })
               }

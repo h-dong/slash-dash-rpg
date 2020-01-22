@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  getLevel,
-  calcCharacterStatsWithItems
-} from "../utils/levelHelper";
+import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
 import { MAX_LEVEL } from "../config";
 import {
   CharacterInterface,
@@ -76,7 +73,7 @@ const LevelPanel = ({ character, equipments }: Props) => {
       <div className="card-header">
         <CardHeaderWrapper>
           <div>
-            {`Level ${characterLevel}`}
+            {`${character.name} - Level ${characterLevel}`}
             <MaxLevelWrapper className="text-center">
               (Max level {MAX_LEVEL})
             </MaxLevelWrapper>
@@ -89,7 +86,7 @@ const LevelPanel = ({ character, equipments }: Props) => {
           <LevelWrapper>
             <ul>
               <li>HP</li>
-              <li>{character.health}</li>
+              <li>{character.health.current}</li>
             </ul>
             <ul>
               <li>Attack</li>

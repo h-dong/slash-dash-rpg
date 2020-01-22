@@ -40,7 +40,7 @@ const TravelPanel = ({ send, location }: Props) => {
         <button
           type="button"
           className="btn btn-link btn-sm"
-          disabled={map.key === location}
+          disabled={map.key === location || map.key === MAPS.DARK_FOREST}
           onClick={() => send({ type: "CHANGE_LOCATION", location: map.key })}
         >
           {map.name}

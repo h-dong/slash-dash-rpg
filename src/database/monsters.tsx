@@ -1,13 +1,7 @@
 import { RARITY, ITEMS } from "./items";
 
-// goblin woods 3 - 6
-// Rabbit L1
-// Giant Rat L2
-// goblin villager L3
-// goblin guard L5
-// goblin soldier L6
-
-// dark forest 6 - 10
+// https://oldschoolrunescape.fandom.com/wiki/Goblin_Champion
+// dark forest 1 - 20
 // Rabbit L1
 // Monkey L1
 // Snake L2
@@ -16,7 +10,7 @@ import { RARITY, ITEMS } from "./items";
 // human hunter L10
 // Bear L8
 // Giant spider L9
-// goblin captain L10
+// goblin captain L10 // https://vignette.wikia.nocookie.net/2007scape/images/0/04/Goblin_Champion.png/revision/latest?cb=20160603225208
 // Skeleton L10
 // Skeleton Warrior L15
 // Skeleton Mage L15
@@ -47,7 +41,10 @@ export enum MONSTERS {
   DUCK = "DUCK",
   PIG = "PIG",
   COW = "COW",
-  FARMER = "FARMER"
+  FARMER = "FARMER",
+  GOBLIN = "GOBLIN",
+  GOBLIN_GUARD = "GOBLIN_GUARD",
+  GOBLIN_SOLDIER = "GOBLIN_SOLDIER"
 }
 
 const FULL_MONSTERS: FullMonsterInterface[] = [
@@ -122,16 +119,251 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
       {
         itemKey: ITEMS.COIN,
         rarity: RARITY.ALWAYS,
-        quantity: { min: 1, max: 50 }
+        quantity: { min: 10, max: 50 }
       },
       {
         itemKey: ITEMS.SMALL_HEALTH_POTIONS,
-        rarity: RARITY.RARE,
+        rarity: RARITY.COMMON,
         quantity: { min: 1, max: 2 }
       },
       {
+        itemKey: ITEMS.WOODEN_HELMET,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_PLATE_BODY,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_PLATE_LEGS,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_SWORD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_SHIELD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_SPEAR,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
         itemKey: ITEMS.BRONZE_SWORD,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      }
+    ]
+  },
+  {
+    key: MONSTERS.GOBLIN,
+    name: "Goblin",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/d/d2/Goblin.png/revision/latest?cb=20170212092103",
+    description: "An ugly green creature.",
+    level: 3,
+    drops: [
+      {
+        itemKey: ITEMS.COIN,
+        rarity: RARITY.ALWAYS,
+        quantity: { min: 20, max: 60 }
+      },
+      {
+        itemKey: ITEMS.LOW_QUALITY_MEAT,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 3 }
+      },
+      {
+        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 3 }
+      },
+      {
+        itemKey: ITEMS.MEDIUM_HEALTH_POTIONS,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.LARGE_HEALTH_POTIONS,
         rarity: RARITY.EPIC,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_HELMET,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_PLATE_BODY,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_PLATE_LEGS,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_SWORD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_SHIELD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.WOODEN_SPEAR,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_SPEAR,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_PLATE_BODY,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_SWORD,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      }
+    ]
+  },
+  {
+    key: MONSTERS.GOBLIN_GUARD,
+    name: "Goblin Guard",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/0/05/Goblin_guard.png/revision/latest?cb=20150829134401",
+    description: "He doesn't look like he'd trust his own mother.",
+    level: 5,
+    drops: [
+      {
+        itemKey: ITEMS.COIN,
+        rarity: RARITY.ALWAYS,
+        quantity: { min: 30, max: 80 }
+      },
+      {
+        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 5 }
+      },
+      {
+        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 3 }
+      },
+      {
+        itemKey: ITEMS.MEDIUM_HEALTH_POTIONS,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.LARGE_HEALTH_POTIONS,
+        rarity: RARITY.EPIC,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_SPEAR,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_PLATE_BODY,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_SWORD,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      }
+    ]
+  },
+  {
+    key: MONSTERS.GOBLIN_SOLDIER,
+    name: "Goblin Soldier",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/5/5c/Goblin_Recruiter.png/revision/latest?cb=20141021185712",
+    description: "Looks somewhat important, not sure how you can tell though.",
+    level: 6,
+    drops: [
+      {
+        itemKey: ITEMS.COIN,
+        rarity: RARITY.ALWAYS,
+        quantity: { min: 50, max: 100 }
+      },
+      {
+        itemKey: ITEMS.HIGH_QUALITY_MEAT,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 5 }
+      },
+      {
+        itemKey: ITEMS.SMALL_HEALTH_POTIONS,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 3 }
+      },
+      {
+        itemKey: ITEMS.MEDIUM_HEALTH_POTIONS,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.LARGE_HEALTH_POTIONS,
+        rarity: RARITY.EPIC,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_SPEAR,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_PLATE_BODY,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_SWORD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_PLATE_LEGS,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_BATTLE_AXE,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_SHIELD,
+        rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEMS.BRONZE_HELMET,
+        rarity: RARITY.RARE,
         quantity: { min: 1, max: 1 }
       }
     ]

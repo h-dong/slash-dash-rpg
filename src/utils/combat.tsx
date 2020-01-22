@@ -5,8 +5,8 @@ import {
   getRandomFlux
 } from "./random";
 import FULL_MONSTERS, { MONSTERS } from "../database/monsters";
-import { BattleMonsterInterface } from "../machines/GameMachine";
 import { generateStatsByLevel } from "./levelHelper";
+import { BattleInterface } from "../machines/GameMachine";
 
 /*
 defence xp:
@@ -68,7 +68,7 @@ export function getMultiplierByCombatant(
 
 export function getStatsByMonsterKey(
   monsterKey: MONSTERS
-): BattleMonsterInterface | null {
+): BattleInterface | null {
   const fullMonster = FULL_MONSTERS.find(monster => monster.key === monsterKey);
   if (!fullMonster) return null;
 
@@ -130,7 +130,15 @@ export function attackForOneRound(
     blocked = playerAttack.blocked;
     damageRecieved = monsterAttack.damage;
   }
-  return { damageDelt: getRandomFlux(damageDelt), blocked, damageRecieved: getRandomFlux(damageRecieved) };
+  damageDelt = getRandomFlux(damageDelt);
+  damageRecieved = getRandomFlux(damageRecieved);
+  if (damageDelt < 0) damageDelt = 0;
+  if (damageRecieved < 0) damageRecieved = 0;
+  return {
+    damageDelt,
+    blocked,
+    damageRecieved
+  };
 }
 
 export default function fight(

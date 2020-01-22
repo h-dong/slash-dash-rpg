@@ -1,6 +1,7 @@
 import { Machine } from "xstate";
 import { getData, setData, clearData, DataInterface } from "../services/data";
 import { getHealthByLevel } from "../utils/levelHelper";
+import { ITEMS } from "../database/items";
 
 export enum VIEW {
   DASHBOARD = "DASHBOARD",
@@ -10,14 +11,22 @@ export enum VIEW {
 
 const newCharacterStats: DataInterface = {
   character: {
-    health: getHealthByLevel(1),
+    health: {
+      current: getHealthByLevel(1),
+      max: getHealthByLevel(1)
+    },
     name: "",
     attack: 1,
     strength: 1,
     defence: 1
   },
   equipments: {},
-  inventory: []
+  inventory: [
+    {
+      itemKey: ITEMS.WOODEN_SWORD,
+      quantity: 1
+    }
+  ]
 };
 
 const hasData = () =>

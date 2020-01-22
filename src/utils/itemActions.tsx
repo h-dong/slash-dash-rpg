@@ -1,10 +1,15 @@
-import { WEAR_POSITION, ItemInterface, ITEMS } from "../database/items";
+import FULL_ITEMS, {
+  WEAR_POSITION,
+  ItemInterface,
+  ITEMS
+} from "../database/items";
 import {
   EquipmentsInterface,
   InventoryItemInterface,
   WorldDropsInterface
 } from "../machines/GameMachine";
 import { getItemByKey } from "./itemHelper";
+import { getRandomNumByMinMax } from "./random";
 
 // export const ITEM_ACTIONS = {
 //   EQUIP: "Equip",
@@ -36,6 +41,13 @@ export function getInventoryItemActions(
     if (fullItem.equipment) {
       actions.push({
         type: "EQUIP_ITEM",
+        order: 1,
+        itemKey: fullItem.key
+      });
+    }
+    if (fullItem.food) {
+      actions.push({
+        type: "CONSUME_FOOD",
         order: 1,
         itemKey: fullItem.key
       });
@@ -214,4 +226,50 @@ export function addItemToDrops(
     newDrops.push(dropToAdd);
   }
   return newDrops;
+}
+
+export function consumeInventoryFood(
+  inventory: InventoryItemInterface[],
+  itemKey: ITEMS
+): InventoryItemInterface[] {
+  let newInventory = [...inventory];
+  const index = newInventory.findIndex(elem => elem.itemKey === itemKey);
+
+  if (newInventory[index].quantity > 1) {
+    newInventory[index].quantity -= 1;
+  } else {
+    newInventory = newInventory.filter(elem => elem.itemKey !== itemKey);
+  }
+  return newInventory;
+}
+
+export function getHealAmountByItemKey(
+  maxHealth: number,
+  itemKey: ITEMS
+): number {
+  const healStats = FULL_ITEMS.find(elem => elem.key === itemKey)?.food?.heal;
+
+  if (healStats?.percentage) {
+    return Math.floor(maxHealth * healStats.percentage);
+  } else if (healStats?.min && healStats?.max) {
+    return getRandomNumByMinMax(healStats.min, healStats.max);
+  }
+
+  return 0;
+}
+
+export function loseRandomInventoryOnDeath(
+  inventory: InventoryItemInterface[]
+): InventoryItemInterface[] {
+  const newInventory: InventoryItemInterface[] = [];
+  inventory.forEach(elem => {
+    const itemsLeft = getRandomNumByMinMax(0, elem.quantity);
+    if (itemsLeft > 0) {
+      newInventory.push({
+        itemKey: elem.itemKey,
+        quantity: itemsLeft
+      });
+    }
+  });
+  return newInventory;
 }

@@ -23,13 +23,15 @@ export enum RARITY {
   LEGENDARY = 0.00001 // 0.001%
 }
 
+export interface FoodHealInterface {
+  min?: number;
+  max?: number;
+  percentage?: number;
+}
+
 interface FoodInterface {
   consumable: boolean;
-  heal?: {
-    min?: number;
-    max?: number;
-    percentage?: number;
-  };
+  heal?: FoodHealInterface;
   requirements?: {
     notInCombat?: boolean;
   };
@@ -75,7 +77,14 @@ export enum ITEMS {
   BRONZE_SHIELD = "BRONZE_SHIELD",
   BRONZE_SWORD = "BRONZE_SWORD",
   BRONZE_BATTLE_AXE = "BRONZE_BATTLE_AXE",
-  BRONZE_SPEAR = "BRONZE_SPEAR"
+  BRONZE_SPEAR = "BRONZE_SPEAR",
+  IRON_HELMET = "IRON_HELMET",
+  IRON_PLATE_BODY = "IRON_PLATE_BODY",
+  IRON_PLATE_LEGS = "IRON_PLATE_LEGS",
+  IRON_SHIELD = "IRON_SHIELD",
+  IRON_SWORD = "IRON_SWORD",
+  IRON_BATTLE_AXE = "IRON_BATTLE_AXE",
+  IRON_SPEAR = "IRON_SPEAR"
 }
 
 export interface ItemInterface {
@@ -423,14 +432,114 @@ const rawData: ItemInterface[] = [
         movementSpeed: -3
       }
     }
+  },
+  {
+    id: 21,
+    key: ITEMS.IRON_HELMET,
+    name: "Iron Helmet",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/0/00/Iron_full_helm.png/revision/latest?cb=20140309033528",
+    equipment: {
+      wearable: true,
+      position: WEAR_POSITION.HEAD,
+      combat: {
+        defence: 4,
+        movementSpeed: -2
+      }
+    }
+  },
+  {
+    id: 22,
+    key: ITEMS.IRON_PLATE_BODY,
+    name: "Iron Plate Body",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/c/cd/Iron_platebody.png/revision/latest?cb=20140124010347",
+    equipment: {
+      wearable: true,
+      position: WEAR_POSITION.BODY,
+      combat: {
+        defence: 8,
+        movementSpeed: -5
+      }
+    }
+  },
+  {
+    id: 23,
+    key: ITEMS.IRON_PLATE_LEGS,
+    name: "Iron Plate Legs",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/8/80/Iron_platelegs.png/revision/latest?cb=20130929002310",
+    equipment: {
+      wearable: true,
+      position: WEAR_POSITION.LEGS,
+      combat: {
+        defence: 8,
+        movementSpeed: -5
+      }
+    }
+  },
+  {
+    id: 24,
+    key: ITEMS.IRON_SHIELD,
+    name: "Iron Shield",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/b/b6/Iron_kiteshield.png/revision/latest?cb=20131215211939",
+    equipment: {
+      wearable: true,
+      position: WEAR_POSITION.OFF_HAND,
+      combat: {
+        defence: 8,
+        movementSpeed: -3
+      }
+    }
+  },
+  {
+    id: 25,
+    key: ITEMS.IRON_SWORD,
+    name: "Iron Sword",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/3/3c/Iron_sword.png/revision/latest?cb=20140308075152",
+    equipment: {
+      wearable: true,
+      position: WEAR_POSITION.MAIN_HAND,
+      combat: {
+        strength: 4
+      }
+    }
+  },
+  {
+    id: 26,
+    key: ITEMS.IRON_BATTLE_AXE,
+    name: "Iron Battle Axe",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/6/63/Iron_battleaxe.png/revision/latest?cb=20140309044124",
+    equipment: {
+      wearable: true,
+      position: WEAR_POSITION.MAIN_HAND,
+      combat: {
+        strength: 6,
+        movementSpeed: -2
+      }
+    }
+  },
+  {
+    id: 27,
+    key: ITEMS.IRON_SPEAR,
+    name: "Iron Spear",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/c/cb/Iron_spear.png/revision/latest?cb=20130928222524",
+    equipment: {
+      wearable: true,
+      position: WEAR_POSITION.MAIN_HAND,
+      requirements: {
+        twoHanded: true
+      },
+      combat: {
+        strength: 12,
+        movementSpeed: -3
+      }
+    }
   }
-  // IRON_HELMET: {},
-  // IRON_PLATE_BODY: {},
-  // IRON_PLATE_LEGS: {},
-  // IRON_SHIELD: {},
-  // IRON_SWORD: {},
-  // IRON_AXE: {},
-  // IRON_SPEAR: {},
   // STEEL_HELMET: {},
   // STEEL_PLATE_BODY: {},
   // STEEL_PLATE_LEGS: {},

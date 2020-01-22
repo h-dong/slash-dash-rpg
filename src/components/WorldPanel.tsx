@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import WorldPanelShop from "./WorldPanelShop";
+import WorldPanelInn from "./WorldPanelInn";
 import WorldPanelDrops from "./WorldPanelDrops";
 import FULL_MAPS, { MAPS } from "../database/maps";
 import WorldPanelActions from "./WorldPanelAction";
@@ -22,8 +22,8 @@ const WorldPanel = ({ send, state }: Props) => {
   const { character, equipments, world, battle } = state.context;
 
   const renderActionsAndDrops = () => {
-    if (world.location === MAPS.SHOP) {
-      return <WorldPanelShop />;
+    if (world.location === MAPS.INN) {
+      return <WorldPanelInn />;
     } else {
       return (
         <div>

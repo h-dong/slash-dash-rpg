@@ -3,7 +3,10 @@ import {
   moveEquipmentItemToInventory,
   moveInventoryItemToEquipment,
   addItemToInventory,
-  addItemToDrops
+  addItemToDrops,
+  consumeInventoryFood,
+  getHealAmountByItemKey,
+  loseRandomInventoryOnDeath
 } from "../utils/itemActions";
 import FULL_MAPS, { MAPS } from "../database/maps";
 import { ITEMS } from "../database/items";
@@ -17,8 +20,13 @@ import {
 } from "../utils/combat";
 import { getMonsterNameWithCombatantType } from "../utils/monster";
 
+export interface CharacterHealthInterface {
+  current: number;
+  max: number;
+}
+
 export interface CharacterInterface {
-  health: number;
+  health: CharacterHealthInterface;
   name: string;
   attack: number;
   strength: number;
@@ -38,18 +46,11 @@ export interface InventoryItemInterface {
   quantity: number;
 }
 
-export interface BattleMonsterInterface {
+export interface BattleInterface {
   monsterKey: MONSTERS;
   combatantType: COMBATANT_TYPE;
   health: number;
   stats: CombatStatsInterface;
-}
-
-export interface BattleInterface {
-  monster: BattleMonsterInterface;
-  player: {
-    health: number;
-  };
 }
 
 export interface WorldDropsInterface {
@@ -85,6 +86,7 @@ export type GameMachineEvents = {
     | "EXAMINE_ITEM"
     | "EQUIP_ITEM"
     | "PICK_UP_ITEM"
+    | "CONSUME_FOOD"
     | "SET_MONSTERS"
     | "SET_DROPS"
     | "ADD_LOG"
@@ -130,6 +132,9 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           PICK_UP_ITEM: {
             actions: ["pickUpItem", "persist"]
           },
+          CONSUME_FOOD: {
+            actions: "consumeFood"
+          },
           CHANGE_LOCATION: {
             actions: "changeLoction"
           }
@@ -138,7 +143,7 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
       battle: {
         on: {
           UPDATE_BATTLE: {
-            actions: ["updateBattle", "addLog"]
+            actions: ["updateBattle", "addLog", "persist"]
           },
           LOST_BATTLE: {
             target: "dead",
@@ -163,6 +168,9 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           },
           PICK_UP_ITEM: {
             actions: ["pickUpItem", "persist"]
+          },
+          CONSUME_FOOD: {
+            actions: ["consumeFood", "persist"]
           }
         }
       },
@@ -170,7 +178,7 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
         on: {
           REVIVE: {
             target: "explore",
-            actions: "emptyInventory"
+            actions: "onRevive"
           }
         }
       }
@@ -219,7 +227,27 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
       pickUpItem: assign((context, { itemKey, itemQuantity }) => ({
         inventory: addItemToInventory(context.inventory, itemKey, itemQuantity)
       })),
-      setBattle: assign((context, { monsterKey }) => {
+      consumeFood: assign((context, { itemKey }) => {
+        const newInventory = consumeInventoryFood(context.inventory, itemKey);
+        const healAmount = getHealAmountByItemKey(
+          context.character.health.max,
+          itemKey
+        );
+        const { current, max } = context.character.health;
+        const heal = healAmount + current <= max ? healAmount + current : max;
+
+        return {
+          character: {
+            ...context.character,
+            health: {
+              ...context.character.health,
+              current: heal
+            }
+          },
+          inventory: newInventory
+        };
+      }),
+      setBattle: assign((_, { monsterKey }) => {
         let battle = null;
         const monsterObj = getStatsByMonsterKey(monsterKey);
         const combatantType = monsterObj
@@ -229,31 +257,38 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           monsterKey,
           combatantType
         );
-        if (monsterObj) {
-          battle = {
-            monster: monsterObj,
-            player: {
-              health: context.character.health
-            }
-          };
-        }
+        if (monsterObj) battle = monsterObj;
         return { battle, log: `Prepare for battle with ${fullMonsterName}!` };
       }),
       updateBattle: assign((context, { monsterHealth, playerHealth }) => {
         if (!context.battle) return { battle: null };
-        const player = {
-          ...context.battle.player,
-          health: playerHealth
+        const character = {
+          ...context.character,
+          health: {
+            ...context.character.health,
+            current: playerHealth
+          }
         };
-        const monster = {
-          ...context.battle.monster,
+        const battle = {
+          ...context.battle,
           health: monsterHealth
         };
         return {
-          battle: {
-            player,
-            monster
-          }
+          character,
+          battle
+        };
+      }),
+      onRevive: assign((context, _) => {
+        return {
+          character: {
+            ...context.character,
+            health: {
+              ...context.character.health,
+              current: context.character.health.max
+            }
+          },
+          inventory: loseRandomInventoryOnDeath(context.inventory),
+          log: "After some rest, you have recovered to your full strength!"
         };
       }),
       addLog: assign((context, { log }): any => ({

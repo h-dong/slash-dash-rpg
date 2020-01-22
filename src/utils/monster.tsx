@@ -8,8 +8,18 @@ export function getMonsterNameWithCombatantType(
   const fullMonster = FULL_MONSTERS.find(elem => elem.key === monsterKey);
   if (!fullMonster) return "";
   if (combatantType === COMBATANT_TYPE.ELITE_MONSTER)
-    return `${COMBATANT_TYPE.ELITE_MONSTER} ${fullMonster.name}`;
+    return `${fullMonster.name} [Elite]`;
   if (combatantType === COMBATANT_TYPE.BOSS_MONSTER)
-    return `${COMBATANT_TYPE.BOSS_MONSTER} ${fullMonster.name}`;
+    return `${fullMonster.name} [Boss]`;
   return fullMonster.name;
+}
+
+export function getMonsterBorderColour(combatantType: COMBATANT_TYPE): string {
+  if (combatantType === COMBATANT_TYPE.ELITE_MONSTER) {
+    return "border-warning";
+  }
+  if (combatantType === COMBATANT_TYPE.BOSS_MONSTER) {
+    return "border-danger";
+  }
+  return "border-secondary";
 }
