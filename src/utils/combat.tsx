@@ -28,12 +28,47 @@ export enum COMBATANT_TYPE {
   BOSS_MONSTER = "BOSS_MONSTER"
 }
 
+export enum ATTACK_TYPE {
+  QUICK = "QUICK_ATTACK",
+  NORMAL = "NORMAL_ATTACK",
+  STRONG = "STRONG_ATTACK",
+  DEFENSIVE = "DEFENSIVE_ATTACK"
+}
+
+const COMBAT_MODIFIERS = {
+  QUICK_ATTACK: {
+    block: 0.75, // quick attacks are harder to react to
+    damage: 0.75, // deal less damage
+    crit: 1.25, // more likely to crit
+    defence: 1 // keeps you steady on your feet
+  },
+  NORMAL_ATTACK: {
+    block: 1,
+    damage: 1,
+    crit: 1,
+    defence: 1
+  },
+  STRONG_ATTACK: {
+    block: 1.25, // strong attacks are easier to react to
+    damage: 1.5, // deal a lot more damage
+    crit: 1, 
+    defence: 0.5 // throw you off balance
+  },
+  DEFENSIVE_ATTACK: {
+    block: 1,
+    damage: 0.75,
+    crit: 0.75,
+    defence: 1.5 
+  }
+}
+
 export interface CombatStatsInterface {
   health: number;
   attack: number;
   strength: number;
   defence: number;
   movementSpeed: number;
+  attackType: ATTACK_TYPE;
 }
 
 export interface CombatResultInterface {
@@ -101,6 +136,7 @@ function calcDamage(attackerStrength: number, defenderDefence: number): number {
   const baseDamage = getRandomNumByMinMax(1, attackerStrength);
   // then depending on attacker's strength and defender's defence, there could be more damage
   const attackDamage = Math.floor(attackerStrength * 2 - defenderDefence);
+  console.log("attack", baseDamage, attackDamage);
   const damage = baseDamage + attackDamage;
   let critChance = Math.floor(2 + 10 * attackerStrength);
   // max crit 10%
@@ -111,7 +147,7 @@ function calcDamage(attackerStrength: number, defenderDefence: number): number {
 
 export function attackForOneRound(
   player: CombatStatsInterface,
-  monster: CombatStatsInterface
+  monster: CombatStatsInterface,
 ): CombatResultsInterface {
   let damageDelt = 0;
   let blocked = false;
@@ -141,10 +177,17 @@ export function attackForOneRound(
   };
 }
 
+const getBlockChance = (attacker, defender) => {
+  const baseChance = 5;
+  const defenceCoefficient = 10;
+
+}
+
 export default function fight(
   attackSide: CombatStatsInterface,
   defendSide: CombatStatsInterface
 ): CombatResultInterface {
+  console.log(attackSide, defendSide);
   // block %: 5% + (10% * own defence) + item boosts (max 20%) (no dmg taken)
   const defendingSideBlockChance = Math.floor(
     (5 + 10 * defendSide.defence) * 100

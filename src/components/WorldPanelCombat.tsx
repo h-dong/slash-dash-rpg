@@ -10,7 +10,7 @@ import {
 import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
 import ProgressBar from "../atomic/ProgressBar";
 import CombatLevels from "../atomic/CombatLevels";
-import { attackForOneRound, CombatResultsInterface } from "../utils/combat";
+import { attackForOneRound, CombatResultsInterface, ATTACK_TYPE } from "../utils/combat";
 import {
   getMonsterNameWithCombatantType,
   getMonsterBorderColour
@@ -69,10 +69,10 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
 
   if (!fullMonster) return null;
 
-  function attack() {
+  function attack(attackType: ATTACK_TYPE) {
     const results: CombatResultsInterface = attackForOneRound(
-      { ...characterStatsWithItems, health: character.health.current },
-      { ...monster.stats, health: monster.health }
+      { ...characterStatsWithItems, health: character.health.current, attackType: attackType },
+      { ...monster.stats, health: monster.health },
     );
     const playerNewHealth =
       character.health.current - Number(results.damageRecieved);
@@ -162,7 +162,7 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
   function renderActions() {
     return (
       <ButtonWrapper>
-        <button className="btn btn-primary" onClick={() => attack()}>
+        <button className="btn btn-primary" onClick={() => attack(ATTACK_TYPE.QUICK)}>
           Attack
         </button>
         <button className="btn btn-warning" onClick={() => escapeFromBattle()}>
