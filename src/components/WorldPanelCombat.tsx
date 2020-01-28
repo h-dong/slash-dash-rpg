@@ -10,7 +10,8 @@ import {
 import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
 import ProgressBar from "../atomic/ProgressBar";
 import CombatLevels from "../atomic/CombatLevels";
-import { attackForOneRound, CombatResultsInterface, ATTACK_TYPE } from "../utils/combat";
+import { combat, CombatResultsInterface, AttackType } from "../utils/combat";
+import { generateMonsterCombatLog, generatePlayerCombatLog } from "../utils/logs";
 import {
   getMonsterNameWithCombatantType,
   getMonsterBorderColour
@@ -69,27 +70,47 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
 
   if (!fullMonster) return null;
 
-  function attack(attackType: ATTACK_TYPE) {
-    const results: CombatResultsInterface = attackForOneRound(
+  function attack(attackType: AttackType) {
+    const results: CombatResultsInterface = combat(
       { ...characterStatsWithItems, health: character.health.current, attackType: attackType },
       { ...monster.stats, health: monster.health },
     );
-    const playerNewHealth =
-      character.health.current - Number(results.damageRecieved);
-    const monsterNewHealth = monster.health - results.damageDelt;
-    if (playerNewHealth <= 0) {
-      defeated();
-      return;
+    let playerNewHealth;
+    let monsterNewHealth;
+
+    const playerAttacksMonster = () => {
+      monsterNewHealth = monster.health - results.damageDealt;
+      if (monsterNewHealth <= 0) {
+        won();
+        return;
+      }
     }
-    if (monsterNewHealth <= 0) {
-      won();
-      return;
+
+    const monsterAttacksPlayer = () => {
+      playerNewHealth = character.health.current - Number(results.damageReceived);
+      if (playerNewHealth <= 0) {
+        defeated();
+        return;
+      }   
+    }
+    
+    if (results.playerAttacksFirst) {
+      playerAttacksMonster();
+      monsterAttacksPlayer();
+   
+    } else {
+      monsterAttacksPlayer();
+      playerAttacksMonster();
     }
     send({
       type: "UPDATE_BATTLE",
       playerHealth: playerNewHealth,
       monsterHealth: monsterNewHealth,
-      log: `You have dealt ${results.damageDelt} damage, and recieved ${results.damageRecieved} damage.`
+      log: generatePlayerCombatLog(attackType, monster.monsterKey, results.damageDealt, results.playerAttackOutcome)
+    });
+    send({
+      type: "COMBAT_LOG",
+      log: generateMonsterCombatLog(monster.monsterKey, results.damageReceived, results.monsterAttackOutcome)
     });
     send({
       type: "ADD_LOG",
@@ -162,8 +183,17 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
   function renderActions() {
     return (
       <ButtonWrapper>
-        <button className="btn btn-primary" onClick={() => attack(ATTACK_TYPE.QUICK)}>
+        <button className="btn btn-primary" onClick={() => attack(AttackType.normal)}>
           Attack
+        </button>
+        <button className="btn btn-primary" onClick={() => attack(AttackType.quick)}>
+          Quick Attack
+        </button>
+        <button className="btn btn-primary" onClick={() => attack(AttackType.strong)}>
+          Strong Attack
+        </button>
+        <button className="btn btn-primary" onClick={() => attack(AttackType.defensive)}>
+          Defend
         </button>
         <button className="btn btn-warning" onClick={() => escapeFromBattle()}>
           Escape

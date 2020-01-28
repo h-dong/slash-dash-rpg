@@ -1,4 +1,5 @@
-import { COMBATANT_TYPE } from "./combat";
+import { COMBATANT_TYPE, AttackType } from "./combat";
+import sample from 'lodash.sample';
 
 export function getRandomNumByMinMax(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -17,6 +18,10 @@ export function getRandomMonsterType(): COMBATANT_TYPE {
   if (isBoss) return COMBATANT_TYPE.BOSS_MONSTER;
   if (isElite) return COMBATANT_TYPE.ELITE_MONSTER;
   return COMBATANT_TYPE.NORMAL_MONSTER;
+}
+
+export function getRandomAttackType(): AttackType {
+  return sample(Object.values(AttackType)) as AttackType
 }
 
 export function getRandomFlux(value: number): number {

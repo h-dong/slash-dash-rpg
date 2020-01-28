@@ -1,10 +1,10 @@
-import { getRandomNumByMinMax } from "./random";
+import { getRandomNumByMinMax, getRandomAttackType } from "./random";
 import { calcEquipmentsBonusStats } from "./itemHelper";
 import {
   CharacterInterface,
   EquipmentsInterface
 } from "../machines/GameMachine";
-import { ATTACK_TYPE } from "./combat";
+import { AttackType } from "./combat";
 
 /*
 Monster stats = level * 2
@@ -37,7 +37,7 @@ export function generateStatsByLevel(level: number) {
     strength: getRandomNumByMinMax(minLevel, maxLevel),
     defence: getRandomNumByMinMax(minLevel, maxLevel),
     movementSpeed: getRandomNumByMinMax(-50, 50),
-    attackType: ATTACK_TYPE.NORMAL
+    attackType: getRandomAttackType(),
   };
 }
 
