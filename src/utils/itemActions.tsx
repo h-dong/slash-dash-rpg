@@ -82,10 +82,7 @@ export function moveInventoryItemToEquipment(
   let newInventory = [...inventory];
 
   if (fullItem?.equipment) {
-    const itemKeyToUnequip: ITEM[] = calcEquipToTakeOff(
-      newEquipments,
-      itemKey
-    );
+    const itemKeyToUnequip: ITEM[] = calcEquipToTakeOff(newEquipments, itemKey);
 
     itemKeyToUnequip.forEach(id => {
       newInventory = addItemToInventory(newInventory, id, 1);
@@ -146,7 +143,7 @@ function removeItemFromInventory(
 
   if (inventoryItem) {
     if (inventoryItem.quantity > 1) {
-      // remove quality by 1
+      // remove quantity by 1
       inventoryItem.quantity -= 1;
     } else {
       // remove item completely from Inventory
