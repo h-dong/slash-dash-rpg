@@ -19,11 +19,11 @@ type Props = {
 
 const WorldPanel = ({ send, state }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
-  const { character, equipments, world, battle } = state.context;
+  const { character, equipments, world, battle, itemsInShop } = state.context;
 
   const renderActionsAndDrops = () => {
     if (world.location === MAP.INN) {
-      return <WorldPanelInn send={send} />;
+      return <WorldPanelInn send={send} itemsInShop={itemsInShop} />;
     } else {
       return (
         <div>

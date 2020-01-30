@@ -2,6 +2,7 @@ import { Machine } from "xstate";
 import { getData, setData, clearData, DataInterface } from "../services/data";
 import { getHealthByLevel } from "../utils/levelHelper";
 import { ITEM } from "../database/items";
+import { generateShopItems } from "../utils/shopHelper";
 
 export enum VIEW {
   DASHBOARD = "DASHBOARD",
@@ -26,7 +27,8 @@ const newCharacterStats: DataInterface = {
       itemKey: ITEM.WOODEN_SWORD,
       quantity: 1
     }
-  ]
+  ],
+  itemsInShop: generateShopItems()
 };
 
 const hasData = () =>

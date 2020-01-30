@@ -68,9 +68,20 @@ export interface GameMachineContextInterface {
   character: CharacterInterface;
   equipments: EquipmentsInterface;
   inventory: InventoryItemInterface[];
+  itemsInShop: ShopDataInterface;
   logs: string;
   world: WorldInterface;
   battle: BattleInterface | null;
+}
+
+export interface ShopDataItemInterface {
+  key: ITEM;
+  quantity: number;
+}
+
+export interface ShopDataInterface {
+  date: Date;
+  items: ShopDataItemInterface[];
 }
 
 export type GameMachineEvents = {
@@ -315,8 +326,8 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           logs: generateLog(context.logs, `Fast travelled to ${mapName}`)
         };
       }),
-      persist: ({ character, equipments, inventory }, _) => {
-        setData({ character, equipments, inventory });
+      persist: ({ character, equipments, inventory, itemsInShop }, _) => {
+        setData({ character, equipments, inventory, itemsInShop });
       }
     }
   }

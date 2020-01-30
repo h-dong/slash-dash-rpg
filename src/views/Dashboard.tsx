@@ -14,6 +14,8 @@ import "react-tippy/dist/tippy.css";
 import { generateLog } from "../utils/logs";
 import TravelPanel from "../components/TravelPanel";
 import RevivePanel from "../components/RevivePanel";
+import { generateShopItems } from "../utils/shopHelper";
+import { isSameDay } from "../utils/dateHelper";
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -28,8 +30,13 @@ const Wrapper = styled.div`
 `;
 
 const Dashboard = ({ sendToViewMachine }: any) => {
+  const { itemsInShop, ...savedData } = getData();
+  const shopItems = !isSameDay(new Date(itemsInShop?.date), new Date())
+    ? generateShopItems()
+    : itemsInShop;
   const MachineWithContext = GameMachine.withContext({
-    ...getData(),
+    ...savedData,
+    itemsInShop: shopItems,
     logs: generateLog("", "Welcome back, traveller!"),
     battle: null,
     world: {

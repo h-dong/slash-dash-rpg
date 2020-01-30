@@ -1,7 +1,8 @@
 import {
   CharacterInterface,
   EquipmentsInterface,
-  InventoryItemInterface
+  InventoryItemInterface,
+  ShopDataInterface
 } from "../machines/GameMachine";
 
 const name = "SLASH_DASH_RPG";
@@ -10,6 +11,7 @@ export interface DataInterface {
   character: CharacterInterface;
   equipments: EquipmentsInterface;
   inventory: InventoryItemInterface[];
+  itemsInShop: ShopDataInterface;
 }
 
 export function setData(data: DataInterface) {

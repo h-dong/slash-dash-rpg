@@ -1,7 +1,11 @@
 import React from "react";
-import FULL_ITEMS, { ITEM } from "../database/items";
 import { Tooltip } from "react-tippy";
 import styled from "styled-components";
+import {
+  ShopDataInterface,
+  ShopDataItemInterface
+} from "../machines/GameMachine";
+import { getItemByKey } from "../utils/itemHelper";
 
 const ShopWrapper = styled.div`
   .items {
@@ -37,25 +41,30 @@ const InnActionWrapper = styled.div`
 `;
 
 type Props = {
-  send: any,
+  send: any;
+  itemsInShop: ShopDataInterface;
 };
 
-const WorldPanelInn = ({ send }: Props) => {
-  const itemsForSale = FULL_ITEMS.filter(elem => elem.key !== ITEM.COIN).map(
-    elem => (
+const WorldPanelInn = ({ send, itemsInShop }: Props) => {
+  console.log("CLG: WorldPanelInn -> itemsInShop", itemsInShop);
+
+  const shopItems: ShopDataItemInterface[] = itemsInShop.items;
+  const itemsForSale = shopItems.map(elem => {
+    const fullItem = getItemByKey(elem.key);
+    return (
       <Tooltip
-        title={`${elem.name} - ${elem.description}`}
+        title={`${fullItem?.name} - ${fullItem?.description}`}
         position="right"
         trigger="mouseenter"
-        key={elem.id}
+        key={fullItem?.id}
       >
         <div className="item border border-dark">
-          <img alt={elem.name} src={elem.icon} />
-          <span className="label label-default">(0)</span>
+          <img alt={fullItem?.name} src={fullItem?.icon} />
+          <span className="label label-default">({elem.quantity})</span>
         </div>
       </Tooltip>
-    )
-  );
+    );
+  });
   return (
     <React.Fragment>
       <ShopWrapper>
@@ -68,7 +77,11 @@ const WorldPanelInn = ({ send }: Props) => {
           <button type="button" className="btn btn-primary" disabled>
             Quests
           </button>
-          <button type="button" className="btn btn-success" onClick={() => send({ type: 'HEAL_TO_FULL' })}>
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={() => send({ type: "HEAL_TO_FULL" })}
+          >
             Heal
           </button>
         </div>

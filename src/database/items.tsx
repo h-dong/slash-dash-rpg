@@ -23,6 +23,25 @@ export enum RARITY {
   LEGENDARY = 0.00001 // 0.001%
 }
 
+export enum COMBAT_TYPE {
+  SWORD = "SWORD",
+  HELMET = "HELMET",
+  PLATE_BODY = "PLATE_BODY",
+  PLATE_LEGS = "PLATE_LEGS",
+  SHIELD = "SHIELD",
+  SPEAR = "SPEAR",
+  BATTLE_AXE = "BATTLE_AXE"
+}
+
+export enum MATERIAL {
+  WOODEN = "WOODEN",
+  BRONZE = "BRONZE",
+  IRON = "IRON",
+  STEEL = "STEEL",
+  MITHRIL = "MITHRIL",
+  DRAGON = "DRAGON"
+}
+
 export interface FoodHealInterface {
   min?: number;
   max?: number;
@@ -45,6 +64,7 @@ export interface ItemCombatStatsInterface {
 }
 
 interface EquipmentInterface {
+  type: MATERIAL;
   wearable: boolean;
   position: WEAR_POSITION;
   requirements?: {
@@ -241,6 +261,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/31/Splitbark_helm.png/revision/latest?cb=20140726051922",
     equipment: {
+      type: MATERIAL.WOODEN,
       wearable: true,
       position: WEAR_POSITION.HEAD,
       combat: {
@@ -256,6 +277,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/6/60/Splitbark_body.png/revision/latest?cb=20140726051921",
     equipment: {
+      type: MATERIAL.WOODEN,
       wearable: true,
       position: WEAR_POSITION.BODY,
       combat: {
@@ -271,6 +293,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/8/80/Splitbark_legs.png/revision/latest?cb=20140726051923",
     equipment: {
+      type: MATERIAL.WOODEN,
       wearable: true,
       position: WEAR_POSITION.LEGS,
       combat: {
@@ -286,6 +309,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/d/db/Wooden_shield.png/revision/latest?cb=20140323033102",
     equipment: {
+      type: MATERIAL.WOODEN,
       wearable: true,
       position: WEAR_POSITION.OFF_HAND,
       combat: {
@@ -301,6 +325,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/f/fd/Wooden_sword.png/revision/latest?cb=20140218221209",
     equipment: {
+      type: MATERIAL.WOODEN,
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
@@ -315,6 +340,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/2/23/Gilded_spear.png/revision/latest?cb=20160706155543",
     equipment: {
+      type: MATERIAL.WOODEN,
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       requirements: {
@@ -333,6 +359,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/e/ef/Bronze_full_helm.png/revision/latest?cb=20131218080719",
     equipment: {
+      type: MATERIAL.BRONZE,
       wearable: true,
       position: WEAR_POSITION.HEAD,
       combat: {
@@ -348,6 +375,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/c/cd/Bronze_platebody.png/revision/latest?cb=20131218074731",
     equipment: {
+      type: MATERIAL.BRONZE,
       wearable: true,
       position: WEAR_POSITION.BODY,
       combat: {
@@ -363,6 +391,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/2/24/Bronze_platelegs.png/revision/latest?cb=20170603011603",
     equipment: {
+      type: MATERIAL.BRONZE,
       wearable: true,
       position: WEAR_POSITION.LEGS,
       combat: {
@@ -378,6 +407,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/6/68/Bronze_kiteshield.png/revision/latest?cb=20131215210817",
     equipment: {
+      type: MATERIAL.BRONZE,
       wearable: true,
       position: WEAR_POSITION.OFF_HAND,
       combat: {
@@ -393,6 +423,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/b/b8/Bronze_sword.png/revision/latest?cb=20140510170952",
     equipment: {
+      type: MATERIAL.BRONZE,
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
@@ -407,6 +438,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/0/0f/Bronze_battleaxe.png/revision/latest?cb=20130920174444",
     equipment: {
+      type: MATERIAL.BRONZE,
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
@@ -422,6 +454,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/4/41/Bronze_spear.png/revision/latest?cb=20130928222524",
     equipment: {
+      type: MATERIAL.BRONZE,
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       requirements: {
@@ -440,6 +473,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/0/00/Iron_full_helm.png/revision/latest?cb=20140309033528",
     equipment: {
+      type: MATERIAL.IRON,
       wearable: true,
       position: WEAR_POSITION.HEAD,
       combat: {
@@ -455,6 +489,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/c/cd/Iron_platebody.png/revision/latest?cb=20140124010347",
     equipment: {
+      type: MATERIAL.IRON,
       wearable: true,
       position: WEAR_POSITION.BODY,
       combat: {
@@ -470,6 +505,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/8/80/Iron_platelegs.png/revision/latest?cb=20130929002310",
     equipment: {
+      type: MATERIAL.IRON,
       wearable: true,
       position: WEAR_POSITION.LEGS,
       combat: {
@@ -485,6 +521,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/b/b6/Iron_kiteshield.png/revision/latest?cb=20131215211939",
     equipment: {
+      type: MATERIAL.IRON,
       wearable: true,
       position: WEAR_POSITION.OFF_HAND,
       combat: {
@@ -500,6 +537,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/3/3c/Iron_sword.png/revision/latest?cb=20140308075152",
     equipment: {
+      type: MATERIAL.IRON,
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
@@ -514,6 +552,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/6/63/Iron_battleaxe.png/revision/latest?cb=20140309044124",
     equipment: {
+      type: MATERIAL.IRON,
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
@@ -529,6 +568,7 @@ const rawData: ItemInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/c/cb/Iron_spear.png/revision/latest?cb=20130928222524",
     equipment: {
+      type: MATERIAL.IRON,
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       requirements: {
