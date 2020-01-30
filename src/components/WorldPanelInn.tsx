@@ -6,6 +6,8 @@ import {
   ShopDataItemInterface
 } from "../machines/GameMachine";
 import { getItemByKey } from "../utils/itemHelper";
+import SHOP from "../database/shop";
+import { toNumberWithUnits } from "../utils/shopHelper";
 
 const ShopWrapper = styled.div`
   .items {
@@ -49,9 +51,15 @@ const WorldPanelInn = ({ send, itemsInShop }: Props) => {
   const shopItems: ShopDataItemInterface[] = itemsInShop.items;
   const itemsForSale = shopItems.map(elem => {
     const fullItem = getItemByKey(elem.key);
+    const itemShopDetails = SHOP.items.find(
+      shopElem => shopElem.key === elem.key
+    );
+    const itemPrice = itemShopDetails?.price.purchase
+      ? `${toNumberWithUnits(itemShopDetails?.price.purchase)} coins`
+      : "?";
     return (
       <Tooltip
-        title={`${fullItem?.name} - ${fullItem?.description}`}
+        title={`${fullItem?.name} - ${itemPrice}`}
         position="right"
         trigger="mouseenter"
         key={fullItem?.id}

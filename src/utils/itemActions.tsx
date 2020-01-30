@@ -23,25 +23,38 @@ export interface InventoryItemActionInterface {
 }
 
 export function getInventoryItemActions(
-  fullItem: ItemInterface
+  fullItem: ItemInterface,
+  inShop: boolean
 ): InventoryItemActionInterface[] {
   const actions: InventoryItemActionInterface[] = [];
   if (fullItem) {
     actions.push({
       type: "EXAMINE_ITEM",
-      order: 2,
+      order: 4,
+      itemKey: fullItem.key
+    });
+    actions.push({
+      type: "DROP_ITEM",
+      order: 3,
       itemKey: fullItem.key
     });
     if (fullItem.equipment) {
       actions.push({
         type: "EQUIP_ITEM",
-        order: 1,
+        order: 2,
         itemKey: fullItem.key
       });
     }
     if (fullItem.food) {
       actions.push({
         type: "CONSUME_FOOD",
+        order: 2,
+        itemKey: fullItem.key
+      });
+    }
+    if (inShop) {
+      actions.push({
+        type: "SELL",
         order: 1,
         itemKey: fullItem.key
       });
@@ -134,7 +147,7 @@ export function addItemToInventory(
   return newInventory;
 }
 
-function removeItemFromInventory(
+export function removeItemFromInventory(
   inventory: InventoryItemInterface[],
   itemKey: ITEM
 ) {
@@ -212,7 +225,7 @@ export function addItemToDrops(
   const newDrops = [...drops];
   const index = newDrops.findIndex(elem => elem.itemKey === dropToAdd.itemKey);
   if (index !== -1) {
-    newDrops[index].quantity += 1;
+    newDrops[index].quantity += dropToAdd.quantity;
   } else {
     newDrops.push(dropToAdd);
   }

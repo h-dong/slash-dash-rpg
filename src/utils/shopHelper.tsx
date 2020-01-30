@@ -26,3 +26,9 @@ export function generateShopItems(): ShopDataInterface {
     items
   };
 }
+
+export function toNumberWithUnits(price: number): string {
+  if (price >= 1000000) return `${Math.floor(price / 1000000)}m`;
+  if (price >= 1000) return `${Math.floor(price / 1000)}k`;
+  return price.toString();
+}

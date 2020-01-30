@@ -5,15 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faQuestionCircle,
   faPlusSquare,
-  faUtensils
+  faUtensils,
+  faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import {
   getInventoryItemActions,
   InventoryItemActionInterface
 } from "../utils/itemActions";
-import { getItemByKey, getItemCombatStatsTextByKey } from "../utils/itemHelper";
+import { getItemByKey } from "../utils/itemHelper";
 import { InventoryItemInterface } from "../machines/GameMachine";
 import CollapseChevron from "../atomic/CollapseChevron";
+import { toNumberWithUnits } from "../utils/shopHelper";
+import ItemDetails from "../atomic/ItemDetails";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
@@ -65,23 +68,24 @@ const InventoryWrapper = styled.div`
 type Props = {
   send: any;
   inventory: InventoryItemInterface[];
+  isInShop: boolean;
 };
 
-const InventoryPanel = ({ send, inventory }: Props) => {
+const InventoryPanel = ({ send, inventory, isInShop }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
 
   const getIcon = (send: any, action: InventoryItemActionInterface) => {
+    const fullItem = getItemByKey(action.itemKey);
     switch (action.type) {
       case "EXAMINE_ITEM":
-        const fullItem = getItemByKey(action.itemKey);
-
         return (
           <Tooltip
             title="Examine"
-            position="right"
+            position="top"
             trigger="mouseenter"
             key="examine"
             className="item-action"
+            arrow
           >
             <FontAwesomeIcon
               icon={faQuestionCircle}
@@ -95,10 +99,11 @@ const InventoryPanel = ({ send, inventory }: Props) => {
         return (
           <Tooltip
             title="Equip"
-            position="right"
+            position="top"
             trigger="mouseenter"
             key="equip"
             className="item-action"
+            arrow
           >
             <FontAwesomeIcon
               icon={faPlusSquare}
@@ -112,10 +117,11 @@ const InventoryPanel = ({ send, inventory }: Props) => {
         return (
           <Tooltip
             title="Consume"
-            position="right"
+            position="top"
             trigger="mouseenter"
             key="consume"
             className="item-action"
+            arrow
           >
             <FontAwesomeIcon
               icon={faUtensils}
@@ -125,6 +131,26 @@ const InventoryPanel = ({ send, inventory }: Props) => {
             />
           </Tooltip>
         );
+      case "DROP_ITEM":
+        return (
+          <Tooltip
+            title={`Drop ${fullItem?.name}`}
+            position="top"
+            trigger="mouseenter"
+            key="drop"
+            className="item-action"
+            arrow
+          >
+            <FontAwesomeIcon
+              icon={faTrashAlt}
+              onClick={() =>
+                send({ type: action.type, itemKey: action.itemKey })
+              }
+            />
+          </Tooltip>
+        );
+      case "SELL":
+        return <span>Sell item</span>;
       default:
         return null;
     }
@@ -138,23 +164,21 @@ const InventoryPanel = ({ send, inventory }: Props) => {
 
     if (!fullItem) return null;
 
-    const actions = getInventoryItemActions(fullItem);
-
+    const actions = getInventoryItemActions(fullItem, isInShop);
     const availableActions = actions
       .sort((a, b) => a.order - b.order)
       .map(action => getIcon(send, action));
-
-    const itemCombatStatsText = getItemCombatStatsTextByKey(itemKey);
-    const tooltipText = itemCombatStatsText
-      ? `${fullItem.name} (${itemCombatStatsText})`
-      : fullItem.name;
+    const formattedQuantity = quantity ? toNumberWithUnits(quantity) : "?";
+    const html = (
+      <ItemDetails itemKey={itemKey} name={fullItem.name} quantity={quantity} />
+    );
 
     return (
       <div key={fullItem.id} className="item-row">
-        <Tooltip title={tooltipText} position="right" trigger="mouseenter">
+        <Tooltip position="right" trigger="mouseenter" html={html} arrow>
           <div className="item">
             <img alt={fullItem.name} src={fullItem.icon} />
-            <span className="label label-default">({quantity})</span>
+            <span className="label label-default">({formattedQuantity})</span>
           </div>
         </Tooltip>
         <div className="item-actions">{availableActions}</div>

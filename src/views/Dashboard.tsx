@@ -72,7 +72,11 @@ const Dashboard = ({ sendToViewMachine }: any) => {
           {state.value !== "dead" && (
             <React.Fragment>
               <EquipmentsPanel send={send} equipments={equipments} />
-              <InventoryPanel send={send} inventory={inventory} />
+              <InventoryPanel
+                send={send}
+                inventory={inventory}
+                isInShop={world.location === MAP.INN}
+              />
             </React.Fragment>
           )}
         </div>

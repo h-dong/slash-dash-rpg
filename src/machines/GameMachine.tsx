@@ -6,7 +6,8 @@ import {
   addItemToDrops,
   consumeInventoryFood,
   getHealAmountByItemKey,
-  loseRandomInventoryOnDeath
+  loseRandomInventoryOnDeath,
+  removeItemFromInventory
 } from "../utils/itemActions";
 import FULL_MAPS, { MAP } from "../database/maps";
 import { ITEM } from "../database/items";
@@ -101,6 +102,7 @@ export type GameMachineEvents = {
     | "HEAL_TO_FULL"
     | "SET_MONSTERS"
     | "SET_DROPS"
+    | "DROP_ITEM"
     | "ADD_LOG"
     | "CHANGE_LOCATION";
   itemKey: ITEM;
@@ -144,6 +146,9 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           PICK_UP_ITEM: {
             actions: ["pickUpItem", "persist"]
           },
+          DROP_ITEM: {
+            actions: "dropItem"
+          },
           CONSUME_FOOD: {
             actions: ["consumeFood", "persist"]
           },
@@ -183,6 +188,9 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           },
           PICK_UP_ITEM: {
             actions: ["pickUpItem", "persist"]
+          },
+          DROP_ITEM: {
+            actions: "dropItem"
           },
           CONSUME_FOOD: {
             actions: ["consumeFood", "persist"]
@@ -242,6 +250,23 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
       pickUpItem: assign((context, { itemKey, itemQuantity }) => ({
         inventory: addItemToInventory(context.inventory, itemKey, itemQuantity)
       })),
+      dropItem: assign((context, { itemKey }) => {
+        const newDrops = addItemToDrops(context.world.drops, {
+          itemKey,
+          quantity: 1
+        });
+        const newInventory = removeItemFromInventory(
+          context.inventory,
+          itemKey
+        );
+        return {
+          inventory: newInventory,
+          world: {
+            ...context.world,
+            drops: newDrops
+          }
+        };
+      }),
       consumeFood: assign((context, { itemKey }) => {
         const newInventory = consumeInventoryFood(context.inventory, itemKey);
         const healAmount = getHealAmountByItemKey(
