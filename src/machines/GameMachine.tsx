@@ -7,7 +7,9 @@ import {
   consumeInventoryFood,
   getHealAmountByItemKey,
   loseRandomInventoryOnDeath,
-  removeItemFromInventory
+  removeItemFromInventory,
+  sellItemFromInventory,
+  addItemToShop
 } from "../utils/itemActions";
 import FULL_MAPS, { MAP } from "../database/maps";
 import { ITEM } from "../database/items";
@@ -103,6 +105,7 @@ export type GameMachineEvents = {
     | "SET_MONSTERS"
     | "SET_DROPS"
     | "DROP_ITEM"
+    | "SELL_ITEM"
     | "ADD_LOG"
     | "CHANGE_LOCATION";
   itemKey: ITEM;
@@ -147,7 +150,10 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
             actions: ["pickUpItem", "persist"]
           },
           DROP_ITEM: {
-            actions: "dropItem"
+            actions: ["dropItem", "persist"]
+          },
+          SELL_ITEM: {
+            actions: ["sellItem", "persist"]
           },
           CONSUME_FOOD: {
             actions: ["consumeFood", "persist"]
@@ -190,7 +196,10 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
             actions: ["pickUpItem", "persist"]
           },
           DROP_ITEM: {
-            actions: "dropItem"
+            actions: ["dropItem", "persist"]
+          },
+          SELL_ITEM: {
+            actions: ["sellItem", "persist"]
           },
           CONSUME_FOOD: {
             actions: ["consumeFood", "persist"]
@@ -265,6 +274,15 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
             ...context.world,
             drops: newDrops
           }
+        };
+      }),
+      sellItem: assign((context, { itemKey }) => {
+        return {
+          itemsInShop: {
+            ...context.itemsInShop,
+            items: addItemToShop(context.itemsInShop.items, itemKey, 1)
+          },
+          inventory: sellItemFromInventory(context.inventory, itemKey)
         };
       }),
       consumeFood: assign((context, { itemKey }) => {

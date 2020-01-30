@@ -6,7 +6,8 @@ import {
   faQuestionCircle,
   faPlusSquare,
   faUtensils,
-  faTrashAlt
+  faTrashAlt,
+  faCoins
 } from "@fortawesome/free-solid-svg-icons";
 import {
   getInventoryItemActions,
@@ -17,6 +18,7 @@ import { InventoryItemInterface } from "../machines/GameMachine";
 import CollapseChevron from "../atomic/CollapseChevron";
 import { toNumberWithUnits } from "../utils/shopHelper";
 import ItemDetails from "../atomic/ItemDetails";
+import SHOP from "../database/shop";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
@@ -149,8 +151,26 @@ const InventoryPanel = ({ send, inventory, isInShop }: Props) => {
             />
           </Tooltip>
         );
-      case "SELL":
-        return <span>Sell item</span>;
+      case "SELL_ITEM":
+        const shopItem = SHOP.items.find(elem => elem.key === action.itemKey);
+        if (!shopItem) break;
+        return (
+          <Tooltip
+            title={`Sell ${fullItem?.name} for ${shopItem.price.sell} gp`}
+            position="top"
+            trigger="mouseenter"
+            key="sell"
+            className="item-action"
+            arrow
+          >
+            <FontAwesomeIcon
+              icon={faCoins}
+              onClick={() =>
+                send({ type: action.type, itemKey: action.itemKey })
+              }
+            />
+          </Tooltip>
+        );
       default:
         return null;
     }

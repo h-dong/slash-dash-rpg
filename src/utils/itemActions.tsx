@@ -6,10 +6,12 @@ import FULL_ITEMS, {
 import {
   EquipmentsInterface,
   InventoryItemInterface,
-  WorldDropsInterface
+  WorldDropsInterface,
+  ShopDataItemInterface
 } from "../machines/GameMachine";
 import { getItemByKey } from "./itemHelper";
 import { getRandomNumByMinMax } from "./random";
+import SHOP from "../database/shop";
 
 export interface EquipmentItemActionInterface {
   type: string;
@@ -54,7 +56,7 @@ export function getInventoryItemActions(
     }
     if (inShop) {
       actions.push({
-        type: "SELL",
+        type: "SELL_ITEM",
         order: 1,
         itemKey: fullItem.key
       });
@@ -132,11 +134,27 @@ function removeItemFromEquipment(
   return newEquipments;
 }
 
+export function sellItemFromInventory(
+  inventory: InventoryItemInterface[],
+  itemKey: ITEM
+): InventoryItemInterface[] {
+  const newInventory = [...inventory];
+  const shopItem = SHOP.items.find(elem => elem.key === itemKey);
+  const sellPrice = shopItem ? shopItem.price.sell : 0;
+  const inventoryMinusItem = removeItemFromInventory(newInventory, itemKey);
+  const inventoryPlusCoins = addItemToInventory(
+    inventoryMinusItem,
+    ITEM.COIN,
+    sellPrice
+  );
+  return inventoryPlusCoins;
+}
+
 export function addItemToInventory(
   inventory: InventoryItemInterface[],
   itemKey: ITEM,
   itemQuantity: number
-) {
+): InventoryItemInterface[] {
   const newInventory = [...inventory];
   const itemInInventory = newInventory.find(item => item.itemKey === itemKey);
 
@@ -245,6 +263,24 @@ export function consumeInventoryFood(
     newInventory = newInventory.filter(elem => elem.itemKey !== itemKey);
   }
   return newInventory;
+}
+
+export function addItemToShop(
+  itemsInShop: ShopDataItemInterface[],
+  itemKey: ITEM,
+  quantity: number
+): ShopDataItemInterface[] {
+  let newShopItems = [...itemsInShop];
+  const index = newShopItems.findIndex(elem => elem.key === itemKey);
+  if (newShopItems[index].quantity > 1) {
+    newShopItems[index].quantity += quantity;
+  } else {
+    newShopItems.push({
+      key: itemKey,
+      quantity
+    });
+  }
+  return newShopItems;
 }
 
 export function getHealAmountByItemKey(
