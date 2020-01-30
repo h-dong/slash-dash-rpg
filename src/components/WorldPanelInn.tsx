@@ -46,8 +46,6 @@ type Props = {
 };
 
 const WorldPanelInn = ({ send, itemsInShop }: Props) => {
-  console.log("CLG: WorldPanelInn -> itemsInShop", itemsInShop);
-
   const shopItems: ShopDataItemInterface[] = itemsInShop.items;
   const itemsForSale = shopItems.map(elem => {
     const fullItem = getItemByKey(elem.key);
