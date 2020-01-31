@@ -59,12 +59,15 @@ const WorldPanelInn = ({ send, itemsInShop }: Props) => {
       : "?";
     return (
       <Tooltip
-        title={`${fullItem?.name} - ${itemPrice}`}
+        title={`Buy ${fullItem?.name} for ${itemPrice}`}
         position="right"
         trigger="mouseenter"
         key={fullItem?.id}
       >
-        <div className="item border border-dark">
+        <div
+          className="item border border-dark"
+          onClick={() => send({ type: "BUY_ITEM", itemKey: elem.key })}
+        >
           <img alt={fullItem?.name} src={fullItem?.icon} />
           <span className="label label-default">({elem.quantity})</span>
         </div>

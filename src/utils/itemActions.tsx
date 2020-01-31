@@ -150,6 +150,23 @@ export function sellItemFromInventory(
   return inventoryPlusCoins;
 }
 
+export function addBoughtItemToInventory(
+  inventory: InventoryItemInterface[],
+  itemKey: ITEM
+): InventoryItemInterface[] {
+  const newInventory = [...inventory];
+  const shopItem = SHOP.items.find(elem => elem.key === itemKey);
+  const purchasePrice = shopItem ? shopItem.price.purchase : 0;
+  const inventoryPlusItem = addItemToInventory(newInventory, itemKey, 1);
+  const inventoryMinusCoins = removeItemFromInventory(
+    inventoryPlusItem,
+    ITEM.COIN,
+    purchasePrice
+  );
+  console.log("CLG: inventoryMinusCoins", inventoryMinusCoins);
+  return inventoryMinusCoins;
+}
+
 export function addItemToInventory(
   inventory: InventoryItemInterface[],
   itemKey: ITEM,
@@ -167,15 +184,16 @@ export function addItemToInventory(
 
 export function removeItemFromInventory(
   inventory: InventoryItemInterface[],
-  itemKey: ITEM
+  itemKey: ITEM,
+  quantity: number = 1
 ) {
   const newInventory = [...inventory];
   const inventoryItem = newInventory.find(item => item.itemKey === itemKey);
 
   if (inventoryItem) {
     if (inventoryItem.quantity > 1) {
-      // remove quantity by 1
-      inventoryItem.quantity -= 1;
+      // remove quantity
+      inventoryItem.quantity -= quantity;
     } else {
       // remove item completely from Inventory
       const index = newInventory.findIndex(item => item.itemKey === itemKey);
@@ -280,6 +298,28 @@ export function addItemToShop(
       quantity
     });
   }
+  return newShopItems;
+}
+
+export function removeItemFromShop(
+  itemsInShop: ShopDataItemInterface[],
+  itemKey: ITEM,
+  quantity: number
+): ShopDataItemInterface[] {
+  let newShopItems = [...itemsInShop];
+  const shopItem = newShopItems.find(item => item.key === itemKey);
+
+  if (shopItem) {
+    if (shopItem.quantity > 1) {
+      // remove quantity
+      shopItem.quantity -= quantity;
+    } else {
+      // remove item completely from Inventory
+      const index = newShopItems.findIndex(item => item.key === itemKey);
+      newShopItems.splice(index, 1);
+    }
+  }
+
   return newShopItems;
 }
 

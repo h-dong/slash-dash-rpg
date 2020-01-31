@@ -9,7 +9,9 @@ import {
   loseRandomInventoryOnDeath,
   removeItemFromInventory,
   sellItemFromInventory,
-  addItemToShop
+  addItemToShop,
+  removeItemFromShop,
+  addBoughtItemToInventory
 } from "../utils/itemActions";
 import FULL_MAPS, { MAP } from "../database/maps";
 import { ITEM } from "../database/items";
@@ -22,6 +24,7 @@ import {
   CombatStatsInterface
 } from "../utils/combat";
 import { getMonsterNameWithCombatantType } from "../utils/monster";
+import { canAffordItem } from "../utils/shopHelper";
 
 export interface CharacterHealthInterface {
   current: number;
@@ -87,6 +90,16 @@ export interface ShopDataInterface {
   items: ShopDataItemInterface[];
 }
 
+interface GameMachineStateSchema {
+  states: {
+    explore: {};
+    battle: {};
+    dead: {};
+  };
+  actions: {};
+  guards: {};
+}
+
 export type GameMachineEvents = {
   type:
     | "DIED"
@@ -106,6 +119,7 @@ export type GameMachineEvents = {
     | "SET_DROPS"
     | "DROP_ITEM"
     | "SELL_ITEM"
+    | "BUY_ITEM"
     | "ADD_LOG"
     | "CHANGE_LOCATION";
   itemKey: ITEM;
@@ -119,7 +133,11 @@ export type GameMachineEvents = {
   playerHealth: number;
 };
 
-const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
+const GameMachine = Machine<
+  GameMachineContextInterface,
+  GameMachineStateSchema,
+  GameMachineEvents
+>(
   {
     id: "game",
     initial: "explore",
@@ -155,6 +173,16 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           SELL_ITEM: {
             actions: ["sellItem", "persist"]
           },
+          BUY_ITEM: [
+            {
+              actions: ["buyItem", "persist"],
+              cond: "hasEnoughCoins"
+            },
+            {
+              actions: "addNotEnoughCoinsLog",
+              cond: "notEnoughCoins"
+            }
+          ],
           CONSUME_FOOD: {
             actions: ["consumeFood", "persist"]
           },
@@ -197,9 +225,6 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           },
           DROP_ITEM: {
             actions: ["dropItem", "persist"]
-          },
-          SELL_ITEM: {
-            actions: ["sellItem", "persist"]
           },
           CONSUME_FOOD: {
             actions: ["consumeFood", "persist"]
@@ -276,15 +301,20 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           }
         };
       }),
-      sellItem: assign((context, { itemKey }) => {
-        return {
-          itemsInShop: {
-            ...context.itemsInShop,
-            items: addItemToShop(context.itemsInShop.items, itemKey, 1)
-          },
-          inventory: sellItemFromInventory(context.inventory, itemKey)
-        };
-      }),
+      sellItem: assign((context, { itemKey }) => ({
+        itemsInShop: {
+          ...context.itemsInShop,
+          items: addItemToShop(context.itemsInShop.items, itemKey, 1)
+        },
+        inventory: sellItemFromInventory(context.inventory, itemKey)
+      })),
+      buyItem: assign((context, { itemKey }) => ({
+        itemsInShop: {
+          ...context.itemsInShop,
+          items: removeItemFromShop(context.itemsInShop.items, itemKey, 1)
+        },
+        inventory: addBoughtItemToInventory(context.inventory, itemKey)
+      })),
       consumeFood: assign((context, { itemKey }) => {
         const newInventory = consumeInventoryFood(context.inventory, itemKey);
         const healAmount = getHealAmountByItemKey(
@@ -346,7 +376,7 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
           battle
         };
       }),
-      onRevive: assign((context, _) => {
+      onRevive: assign(context => {
         return {
           character: {
             ...context.character,
@@ -362,6 +392,12 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
       addLog: assign((context, { log }): any => ({
         logs: generateLog(context.logs, log)
       })),
+      addNotEnoughCoinsLog: assign((context): any => ({
+        logs: generateLog(
+          context.logs,
+          "Not enough coins to make the purchase!"
+        )
+      })),
       changeLoction: assign((context, { location }) => {
         const mapName = FULL_MAPS.find(map => map.key === location)?.name;
         return {
@@ -372,6 +408,12 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
       persist: ({ character, equipments, inventory, itemsInShop }, _) => {
         setData({ character, equipments, inventory, itemsInShop });
       }
+    },
+    guards: {
+      hasEnoughCoins: (context, { itemKey }) =>
+        canAffordItem(context.inventory, itemKey),
+      notEnoughCoins: (context, { itemKey }) =>
+        !canAffordItem(context.inventory, itemKey)
     }
   }
 );
