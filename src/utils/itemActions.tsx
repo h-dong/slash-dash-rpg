@@ -6,10 +6,12 @@ import FULL_ITEMS, {
 import {
   EquipmentsInterface,
   InventoryItemInterface,
-  WorldDropsInterface
+  WorldDropsInterface,
+  ShopDataItemInterface
 } from "../machines/GameMachine";
 import { getItemByKey } from "./itemHelper";
 import { getRandomNumByMinMax } from "./random";
+import SHOP from "../database/shop";
 
 export interface EquipmentItemActionInterface {
   type: string;
@@ -23,25 +25,38 @@ export interface InventoryItemActionInterface {
 }
 
 export function getInventoryItemActions(
-  fullItem: ItemInterface
+  fullItem: ItemInterface,
+  inShop: boolean
 ): InventoryItemActionInterface[] {
   const actions: InventoryItemActionInterface[] = [];
   if (fullItem) {
     actions.push({
       type: "EXAMINE_ITEM",
-      order: 2,
+      order: 4,
+      itemKey: fullItem.key
+    });
+    actions.push({
+      type: "DROP_ITEM",
+      order: 3,
       itemKey: fullItem.key
     });
     if (fullItem.equipment) {
       actions.push({
         type: "EQUIP_ITEM",
-        order: 1,
+        order: 2,
         itemKey: fullItem.key
       });
     }
     if (fullItem.food) {
       actions.push({
         type: "CONSUME_FOOD",
+        order: 2,
+        itemKey: fullItem.key
+      });
+    }
+    if (inShop) {
+      actions.push({
+        type: "SELL_ITEM",
         order: 1,
         itemKey: fullItem.key
       });
@@ -119,11 +134,44 @@ function removeItemFromEquipment(
   return newEquipments;
 }
 
+export function sellItemFromInventory(
+  inventory: InventoryItemInterface[],
+  itemKey: ITEM
+): InventoryItemInterface[] {
+  const newInventory = [...inventory];
+  const shopItem = SHOP.items.find(elem => elem.key === itemKey);
+  const sellPrice = shopItem ? shopItem.price.sell : 0;
+  const inventoryMinusItem = removeItemFromInventory(newInventory, itemKey);
+  const inventoryPlusCoins = addItemToInventory(
+    inventoryMinusItem,
+    ITEM.COIN,
+    sellPrice
+  );
+  return inventoryPlusCoins;
+}
+
+export function addBoughtItemToInventory(
+  inventory: InventoryItemInterface[],
+  itemKey: ITEM
+): InventoryItemInterface[] {
+  const newInventory = [...inventory];
+  const shopItem = SHOP.items.find(elem => elem.key === itemKey);
+  const purchasePrice = shopItem ? shopItem.price.purchase : 0;
+  const inventoryPlusItem = addItemToInventory(newInventory, itemKey, 1);
+  const inventoryMinusCoins = removeItemFromInventory(
+    inventoryPlusItem,
+    ITEM.COIN,
+    purchasePrice
+  );
+  console.log("CLG: inventoryMinusCoins", inventoryMinusCoins);
+  return inventoryMinusCoins;
+}
+
 export function addItemToInventory(
   inventory: InventoryItemInterface[],
   itemKey: ITEM,
   itemQuantity: number
-) {
+): InventoryItemInterface[] {
   const newInventory = [...inventory];
   const itemInInventory = newInventory.find(item => item.itemKey === itemKey);
 
@@ -134,17 +182,18 @@ export function addItemToInventory(
   return newInventory;
 }
 
-function removeItemFromInventory(
+export function removeItemFromInventory(
   inventory: InventoryItemInterface[],
-  itemKey: ITEM
+  itemKey: ITEM,
+  quantity: number = 1
 ) {
   const newInventory = [...inventory];
   const inventoryItem = newInventory.find(item => item.itemKey === itemKey);
 
   if (inventoryItem) {
     if (inventoryItem.quantity > 1) {
-      // remove quantity by 1
-      inventoryItem.quantity -= 1;
+      // remove quantity
+      inventoryItem.quantity -= quantity;
     } else {
       // remove item completely from Inventory
       const index = newInventory.findIndex(item => item.itemKey === itemKey);
@@ -212,7 +261,7 @@ export function addItemToDrops(
   const newDrops = [...drops];
   const index = newDrops.findIndex(elem => elem.itemKey === dropToAdd.itemKey);
   if (index !== -1) {
-    newDrops[index].quantity += 1;
+    newDrops[index].quantity += dropToAdd.quantity;
   } else {
     newDrops.push(dropToAdd);
   }
@@ -232,6 +281,46 @@ export function consumeInventoryFood(
     newInventory = newInventory.filter(elem => elem.itemKey !== itemKey);
   }
   return newInventory;
+}
+
+export function addItemToShop(
+  itemsInShop: ShopDataItemInterface[],
+  itemKey: ITEM,
+  quantity: number
+): ShopDataItemInterface[] {
+  let newShopItems = [...itemsInShop];
+  const index = newShopItems.findIndex(elem => elem.key === itemKey);
+  if (newShopItems[index].quantity > 1) {
+    newShopItems[index].quantity += quantity;
+  } else {
+    newShopItems.push({
+      key: itemKey,
+      quantity
+    });
+  }
+  return newShopItems;
+}
+
+export function removeItemFromShop(
+  itemsInShop: ShopDataItemInterface[],
+  itemKey: ITEM,
+  quantity: number
+): ShopDataItemInterface[] {
+  let newShopItems = [...itemsInShop];
+  const shopItem = newShopItems.find(item => item.key === itemKey);
+
+  if (shopItem) {
+    if (shopItem.quantity > 1) {
+      // remove quantity
+      shopItem.quantity -= quantity;
+    } else {
+      // remove item completely from Inventory
+      const index = newShopItems.findIndex(item => item.key === itemKey);
+      newShopItems.splice(index, 1);
+    }
+  }
+
+  return newShopItems;
 }
 
 export function getHealAmountByItemKey(

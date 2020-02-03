@@ -6,6 +6,8 @@ import {
   ShopDataItemInterface
 } from "../machines/GameMachine";
 import { getItemByKey } from "../utils/itemHelper";
+import SHOP from "../database/shop";
+import { toNumberWithUnits } from "../utils/shopHelper";
 
 const ShopWrapper = styled.div`
   .items {
@@ -46,19 +48,26 @@ type Props = {
 };
 
 const WorldPanelInn = ({ send, itemsInShop }: Props) => {
-  console.log("CLG: WorldPanelInn -> itemsInShop", itemsInShop);
-
   const shopItems: ShopDataItemInterface[] = itemsInShop.items;
   const itemsForSale = shopItems.map(elem => {
     const fullItem = getItemByKey(elem.key);
+    const itemShopDetails = SHOP.items.find(
+      shopElem => shopElem.key === elem.key
+    );
+    const itemPrice = itemShopDetails?.price.purchase
+      ? `${toNumberWithUnits(itemShopDetails?.price.purchase)} coins`
+      : "?";
     return (
       <Tooltip
-        title={`${fullItem?.name} - ${fullItem?.description}`}
+        title={`Buy ${fullItem?.name} for ${itemPrice}`}
         position="right"
         trigger="mouseenter"
         key={fullItem?.id}
       >
-        <div className="item border border-dark">
+        <div
+          className="item border border-dark"
+          onClick={() => send({ type: "BUY_ITEM", itemKey: elem.key })}
+        >
           <img alt={fullItem?.name} src={fullItem?.icon} />
           <span className="label label-default">({elem.quantity})</span>
         </div>
