@@ -102,6 +102,7 @@ export type GameMachineEvents = {
     | "SET_MONSTERS"
     | "SET_DROPS"
     | "ADD_LOG"
+    | "COMBAT_LOG"
     | "CHANGE_LOCATION";
   itemKey: ITEM;
   itemQuantity: number;
@@ -159,6 +160,9 @@ const GameMachine = Machine<GameMachineContextInterface, GameMachineEvents>(
         on: {
           UPDATE_BATTLE: {
             actions: ["updateBattle", "addLog", "persist"]
+          },
+          COMBAT_LOG: {
+            actions: ["addLog"]
           },
           LOST_BATTLE: {
             target: "dead",

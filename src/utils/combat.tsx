@@ -2,7 +2,8 @@ import {
   getRandomNumByMinMax,
   getRandomBooleanByProbability,
   getRandomMonsterType,
-  getRandomFlux
+  getRandomFlux,
+  getRandomAttackType
 } from "./random";
 import FULL_MONSTERS, { MONSTER } from "../database/monsters";
 import { generateStatsByLevel } from "./levelHelper";
@@ -28,23 +29,67 @@ export enum COMBATANT_TYPE {
   BOSS_MONSTER = "BOSS_MONSTER"
 }
 
+export enum AttackType {
+  quick = "QUICK_ATTACK",
+  normal = "NORMAL_ATTACK",
+  strong = "STRONG_ATTACK",
+  defensive = "DEFENSIVE_ATTACK"
+}
+
+export enum AttackOutcome {
+  miss = "miss",
+  block = "block",
+  hit = "hit",
+  crit = "crit"
+}
+
+const COMBAT_MODIFIERS = {
+  QUICK_ATTACK: {
+    hit: 1.25, // quick attacks are harder to react to
+    damage: 0.75, // deal less damage
+    crit: 1.25, // more likely to crit
+    block: 1 // keep you steady on your feet
+  },
+  NORMAL_ATTACK: {
+    hit: 1,
+    damage: 1,
+    crit: 1,
+    block: 1
+  },
+  STRONG_ATTACK: {
+    hit: 0.75, // strong attacks are easier to react to
+    damage: 2, // deal a lot more damage
+    crit: 1, 
+    block: 0 // prevent you from blocking
+  },
+  DEFENSIVE_ATTACK: {
+    hit: 1,
+    damage: 0.5,
+    crit: 0.75,
+    block: 2 
+  }
+}
+
 export interface CombatStatsInterface {
   health: number;
   attack: number;
   strength: number;
   defence: number;
   movementSpeed: number;
+  attackType: AttackType;
 }
 
-export interface CombatResultInterface {
+export interface AttackResultInterface {
+  outcome: AttackOutcome;
   damage: number;
-  blocked: boolean;
 }
 
 export interface CombatResultsInterface {
-  damageDelt: number;
-  blocked: boolean;
-  damageRecieved: Number;
+  damageDealt: number;
+  playerAttackOutcome: AttackOutcome;
+  damageReceived: number;
+  monsterAttackOutcome: AttackOutcome;
+  playerAttacksFirst: boolean;
 }
 
 export function getMultiplierByCombatant(
@@ -96,74 +141,100 @@ function applyStatsBoosts(
   return boosted;
 }
 
-function calcDamage(attackerStrength: number, defenderDefence: number): number {
-  // always has a base damage
-  const baseDamage = getRandomNumByMinMax(1, attackerStrength);
+function calcDamage(attacker: CombatStatsInterface, defender: CombatStatsInterface, attackOutcome: AttackOutcome): number {
+  // always has a base damage based on strength;
+  const baseDamage = getRandomNumByMinMax(attacker.strength * 0.5, attacker.strength);
   // then depending on attacker's strength and defender's defence, there could be more damage
-  const attackDamage = Math.floor(attackerStrength * 2 - defenderDefence);
-  const damage = baseDamage + attackDamage;
-  let critChance = Math.floor(2 + 10 * attackerStrength);
-  // max crit 10%
-  if (critChance > 10) critChance = 10;
-  let isCrit = getRandomBooleanByProbability(critChance / 100);
-  return isCrit ? damage * 2 : damage;
+  const strengthVersusDefence = attacker.strength - defender.defence;
+  const attackerDamageModifier = COMBAT_MODIFIERS[attacker.attackType].damage
+  const modifiedDamage = (baseDamage + strengthVersusDefence) * attackerDamageModifier;
+  // Add some randomnesness
+  const finalDamage = getRandomNumByMinMax(modifiedDamage * 0.75, modifiedDamage * 1.25);
+  if (attackOutcome === AttackOutcome.block) {
+    return finalDamage * 0.5;
+  } else if (attackOutcome === AttackOutcome.crit) {
+    return finalDamage * 2;
+  }
+  return finalDamage;
 }
 
-export function attackForOneRound(
+export function combat(
   player: CombatStatsInterface,
-  monster: CombatStatsInterface
+  monster: CombatStatsInterface,
 ): CombatResultsInterface {
-  let damageDelt = 0;
+  let damageDealt = 0;
   let blocked = false;
-  let damageRecieved = 0;
+  let damageReceived = 0;
+  console.log(monster.attackType)
 
-  if (player.movementSpeed < monster.movementSpeed) {
-    const monsterAttack: CombatResultInterface = fight(monster, player);
-    const playerAttack: CombatResultInterface = fight(player, monster);
-    damageDelt = playerAttack.damage;
-    blocked = playerAttack.blocked;
-    damageRecieved = monsterAttack.damage;
-  } else {
-    const playerAttack: CombatResultInterface = fight(player, monster);
-    const monsterAttack: CombatResultInterface = fight(monster, player);
-    damageDelt = playerAttack.damage;
-    blocked = playerAttack.blocked;
-    damageRecieved = monsterAttack.damage;
-  }
-  damageDelt = getRandomFlux(damageDelt);
-  damageRecieved = getRandomFlux(damageRecieved);
-  if (damageDelt < 0) damageDelt = 0;
-  if (damageRecieved < 0) damageRecieved = 0;
+  const playerAttacksFirst = player.movementSpeed > monster.movementSpeed
+  monster.attackType = getRandomAttackType();
+  const monsterAttackOutcome: AttackOutcome = attack(monster, player);
+  const playerAttackOutcome: AttackOutcome = attack(player, monster);
+  damageDealt = playerAttackOutcome === AttackOutcome.miss ? 0 : calcDamage(player, monster, playerAttackOutcome);
+  damageReceived = monsterAttackOutcome === AttackOutcome.miss ? 0 : calcDamage(monster, player, monsterAttackOutcome);
+  console.log(playerAttackOutcome, monsterAttackOutcome);
   return {
-    damageDelt,
-    blocked,
-    damageRecieved
+    damageDealt,
+    playerAttackOutcome,
+    damageReceived,
+    monsterAttackOutcome,
+    playerAttacksFirst
   };
 }
 
-export default function fight(
+const getHitChance = (attacker: CombatStatsInterface, defender: CombatStatsInterface) => {
+  const baseChance = 85;
+  const speedDiff = attacker.movementSpeed - defender.movementSpeed;
+  const attackerHitModifier = COMBAT_MODIFIERS[attacker.attackType].hit;
+  return (baseChance + speedDiff) * attackerHitModifier;
+}
+
+const getBlockChance = (attacker: CombatStatsInterface, defender: CombatStatsInterface) => {
+  const baseChance = 5;
+  const defenceCoefficient = 10;
+  if (defender.defence < attacker.attack) {
+    return 0;
+  }
+  const defenceVersusAttack = defender.defence - attacker.attack + 1;
+  const defenderBlockModifier = COMBAT_MODIFIERS[defender.attackType].block;
+  return (baseChance + defenceVersusAttack * defenceCoefficient) * defenderBlockModifier;
+}
+
+const getAttackTable = (hitChance: number, blockChance: number, critChance: number): AttackOutcome  => {
+  /*
+    Shamelessly copying the attack table from World of Warcraft - attack can first miss, then be blocked, then crit. If all of these fail,
+    then the attack is a normal hit. This ensures that the crit chance and block chance are realistic and not just counted for the attacks that
+    actually land.
+  */
+  const roll = Math.random() * 100;
+  console.log(roll, hitChance);
+  if (roll > hitChance) {
+    return AttackOutcome.miss
+  } else if (roll > hitChance - blockChance) {
+    return AttackOutcome.block
+  } else if (roll > hitChance - blockChance - critChance) {
+    return AttackOutcome.crit
+  }
+  return AttackOutcome.hit
+}
+
+const getCritChance = (attacker: CombatStatsInterface, defender: CombatStatsInterface) => {
+  const baseChance = 5;
+  const attackCoefficient = 5;
+  const defenceCoefficient = 2;
+  const attackerCritModifier = COMBAT_MODIFIERS[attacker.attackType].crit;
+  return (baseChance + attacker.attack * attackCoefficient - defender.defence * defenceCoefficient) * attackerCritModifier;
+}
+
+export default function attack(
   attackSide: CombatStatsInterface,
   defendSide: CombatStatsInterface
-): CombatResultInterface {
+): AttackOutcome {
+  console.log(attackSide, defendSide);
   // block %: 5% + (10% * own defence) + item boosts (max 20%) (no dmg taken)
-  const defendingSideBlockChance = Math.floor(
-    (5 + 10 * defendSide.defence) * 100
-  );
-
-  let attackingSideStrikeChance = Math.floor(
-    50 + Math.log(attackSide.attack * 2) - (100 - attackSide.movementSpeed)
-  );
-
-  // Max strike chance is 85%
-  if (attackingSideStrikeChance > 85) attackingSideStrikeChance = 85;
-
-  const damage = calcDamage(attackSide.strength, defendSide.strength);
-
-  const landAttack = getRandomBooleanByProbability(
-    Math.floor(attackingSideStrikeChance - defendingSideBlockChance) / 100
-  );
-
-  if (!landAttack) return { damage, blocked: true };
-
-  return { damage, blocked: false };
-}
+  const hitChance = getHitChance(attackSide, defendSide);
+  const blockChance = getBlockChance(attackSide, defendSide);
+  const critChance = getCritChance(attackSide, defendSide);
+  return getAttackTable(hitChance, blockChance, critChance);
+};
