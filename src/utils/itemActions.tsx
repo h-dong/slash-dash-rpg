@@ -254,6 +254,24 @@ function calcEquipToTakeOff(
   return !itemInPosition ? [] : [itemInPosition.key];
 }
 
+export function addItemsToDrops(
+  drops: WorldDropsInterface[],
+  dropToAdd: WorldDropsInterface[]
+): WorldDropsInterface[] {
+  const newDrops = [...drops];
+
+  dropToAdd.forEach(drop => {
+    const index = newDrops.findIndex(elem => elem.itemKey === drop.itemKey);
+    if (index !== -1) {
+      newDrops[index].quantity += drop.quantity;
+    } else {
+      newDrops.push(drop);
+    }
+  });
+
+  return newDrops;
+}
+
 export function addItemToDrops(
   drops: WorldDropsInterface[],
   dropToAdd: WorldDropsInterface
