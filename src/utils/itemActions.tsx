@@ -290,7 +290,7 @@ export function addItemToShop(
 ): ShopDataItemInterface[] {
   let newShopItems = [...itemsInShop];
   const index = newShopItems.findIndex(elem => elem.key === itemKey);
-  if (newShopItems[index].quantity > 1) {
+  if (newShopItems[index].quantity > 0) {
     newShopItems[index].quantity += quantity;
   } else {
     newShopItems.push({
