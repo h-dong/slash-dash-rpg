@@ -11,7 +11,8 @@ import {
   sellItemFromInventory,
   addItemToShop,
   removeItemFromShop,
-  addBoughtItemToInventory
+  addBoughtItemToInventory,
+  addItemsToDrops
 } from "../utils/itemActions";
 import FULL_MAPS, { MAP } from "../database/maps";
 import { ITEM } from "../database/items";
@@ -272,12 +273,12 @@ const GameMachine = Machine<
         );
         return { world: { ...context.world, monsters: newMonsters } };
       }),
-      addDrops: assign((context, { drops }) => {
-        const newDrops = addItemToDrops(context.world.drops, drops[0]);
-        return {
-          world: { ...context.world, drops: newDrops }
-        };
-      }),
+      addDrops: assign((context, { drops }) => ({
+        world: {
+          ...context.world,
+          drops: addItemsToDrops(context.world.drops, drops)
+        }
+      })),
       setDrops: assign((context, { drops }) => ({
         world: { ...context.world, drops }
       })),

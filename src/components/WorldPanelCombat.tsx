@@ -99,13 +99,13 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
 
   function won() {
     const drops = fullMonster?.drops
-      .filter(drop => getRandomBooleanByProbability(drop.rarity))
-      .map((drop: MonsterDropInterface) => {
-        return {
-          itemKey: drop.itemKey,
-          quantity: getRandomNumByMinMax(drop.quantity.min, drop.quantity.max)
-        };
-      });
+      .filter((drop: MonsterDropInterface) =>
+        getRandomBooleanByProbability(drop.rarity)
+      )
+      .map((drop: MonsterDropInterface) => ({
+        itemKey: drop.itemKey,
+        quantity: getRandomNumByMinMax(drop.quantity.min, drop.quantity.max)
+      }));
 
     send({
       type: "WON_BATTLE",
