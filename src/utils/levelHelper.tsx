@@ -4,11 +4,22 @@ import {
   CharacterInterface,
   EquipmentsInterface
 } from "../machines/GameMachine";
+import { LEVEL_XP } from "../database/experience";
 
 /*
 Monster stats = level * 2
 Player stats = level * 3
 */
+
+export function getLevelFromXP(xp: number): number {
+  let level: number = 1;
+
+  LEVEL_XP.forEach((elem, index) => {
+    if (xp >= elem) level = index + 2;
+  });
+
+  return level;
+}
 
 export function getLevel(
   attack: number,
@@ -16,7 +27,9 @@ export function getLevel(
   defence: number
 ): number {
   // divide by 9 = 3 stats * 3 stat levels
-  const level = Math.floor((attack + strength + defence) / 3 / 3);
+  const allStatsLevels =
+    getLevelFromXP(attack) + getLevelFromXP(strength) + getLevelFromXP(defence);
+  const level: number = Math.floor(allStatsLevels / 3 / 3);
   if (level < 1) return 1;
   if (level > 10) return 10;
   return level;
@@ -44,9 +57,12 @@ export function calcCharacterStatsWithItems(
   equipments: EquipmentsInterface
 ) {
   const equipmentBonusStats = calcEquipmentsBonusStats(equipments);
-  const attack = character.attack + Number(equipmentBonusStats?.attack);
-  const strength = character.strength + Number(equipmentBonusStats?.strength);
-  const defence = character.defence + Number(equipmentBonusStats?.defence);
+  const attack =
+    getLevelFromXP(character.attack) + Number(equipmentBonusStats?.attack);
+  const strength =
+    getLevelFromXP(character.strength) + Number(equipmentBonusStats?.strength);
+  const defence =
+    getLevelFromXP(character.defence) + Number(equipmentBonusStats?.defence);
   const movementSpeed = 0 + Number(equipmentBonusStats?.movementSpeed);
   return { attack, strength, defence, movementSpeed };
 }

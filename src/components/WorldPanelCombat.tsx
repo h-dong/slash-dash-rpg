@@ -148,7 +148,11 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
           </span>
           <h6>{`${name} (Level ${fullMonster?.level})`}</h6>
         </div>
-        <ProgressBar now={monster.health} max={monster.stats.health} />
+        <ProgressBar
+          now={monster.health}
+          max={monster.stats.health}
+          progressiveColour
+        />
         <CombatLevels
           attack={monster.stats.attack}
           strength={monster.stats.strength}
@@ -185,6 +189,7 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
         <ProgressBar
           now={character.health.current}
           max={character.health.max}
+          progressiveColour
         />
         <CombatLevels
           attack={characterStatsWithItems.attack}

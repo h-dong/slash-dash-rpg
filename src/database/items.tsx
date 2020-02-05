@@ -39,7 +39,8 @@ export enum MATERIAL {
   IRON = "IRON",
   STEEL = "STEEL",
   MITHRIL = "MITHRIL",
-  DRAGON = "DRAGON"
+  DRAGON = "DRAGON",
+  STAR_DUST = "STAR_DUST"
 }
 
 export interface FoodHealInterface {

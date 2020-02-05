@@ -17,9 +17,9 @@ const newCharacterStats: DataInterface = {
       max: getHealthByLevel(1)
     },
     name: "",
-    attack: 1,
-    strength: 1,
-    defence: 1
+    attack: 0,
+    strength: 0,
+    defence: 0
   },
   equipments: {},
   inventory: [
