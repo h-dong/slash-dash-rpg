@@ -49,9 +49,9 @@ const ProgressBarWrapper = styled.div`
   text-align: center;
 `;
 
-function renderValue(value: number | string, xp: number | undefined) {
+function renderValue(value: number | string, xp: number) {
   let valueBlock = <strong>{value}</strong>;
-  if (xp && typeof value === "number") {
+  if (xp >= 0 && typeof value === "number") {
     const level = getLevelFromXP(xp);
     if (level !== value) {
       valueBlock = (
@@ -88,14 +88,14 @@ function renderProgressBar(xp: number) {
   );
 }
 
-function CharacterSkillStat({ label, value, xp }: Props) {
+function CharacterSkillStat({ label, value, xp = -1 }: Props) {
   return (
     <Wrapper>
       <StatsWrapper>
         <label>{label}</label>
         {renderValue(value, xp)}
       </StatsWrapper>
-      {xp && renderProgressBar(xp)}
+      {xp >= 0 && renderProgressBar(xp)}
     </Wrapper>
   );
 }
