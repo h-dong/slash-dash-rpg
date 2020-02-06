@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
+import {
+  getLevel,
+  calcCharacterStatsWithItems,
+  getMaxHpByLevel
+} from "../utils/levelHelper";
 import { MAX_LEVEL } from "../config";
 import {
   CharacterInterface,
@@ -61,7 +65,10 @@ const LevelPanel = ({ character, equipments }: Props) => {
       {!collapse && (
         <div className="card-body">
           <LevelWrapper>
-            <CharacterSkillStat label="HP" value={character.health} />
+            <CharacterSkillStat
+              label="HP"
+              value={`${character.health} / ${getMaxHpByLevel(characterLevel)}`}
+            />
             <CharacterSkillStat
               label="Attack"
               value={attack}
