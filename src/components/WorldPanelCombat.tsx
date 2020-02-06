@@ -7,10 +7,20 @@ import {
   EquipmentsInterface,
   BattleInterface
 } from "../machines/GameMachine";
-import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
+import {
+  getLevel,
+  calcCharacterStatsWithItems,
+  getMaxHpByLevel
+} from "../utils/levelHelper";
 import ProgressBar from "../atomic/ProgressBar";
 import CombatLevels from "../atomic/CombatLevels";
-import { attackForOneRound, CombatResultsInterface } from "../utils/combat";
+import {
+  attackForOneRound,
+  CombatResultsInterface,
+  getDefenceExp,
+  getStrengthExp,
+  getAttackExp
+} from "../utils/combat";
 import {
   getMonsterNameWithCombatantType,
   getMonsterBorderColour
@@ -19,6 +29,7 @@ import {
   getRandomNumByMinMax,
   getRandomBooleanByProbability
 } from "../utils/random";
+import { getImproveDropRates } from "../utils/itemHelper";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
@@ -71,26 +82,44 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
 
   function attack() {
     const results: CombatResultsInterface = attackForOneRound(
-      { ...characterStatsWithItems, health: character.health.current },
+      { ...characterStatsWithItems, health: character.health },
       { ...monster.stats, health: monster.health }
     );
-    const playerNewHealth =
-      character.health.current - Number(results.damageRecieved);
-    const monsterNewHealth = monster.health - results.damageDelt;
+    const playerNewHealth = results.blocked
+      ? character.health
+      : character.health - Number(results.damageRecieved);
+    const monsterNewHealth = results.missed
+      ? monster.health
+      : monster.health - results.damageDelt;
+
     if (playerNewHealth <= 0) {
       defeated();
       return;
     }
+
+    send({
+      type: "UPDATE_EXP",
+      attackExp: getAttackExp(results.missed, results.damageDelt),
+      defenceExp: getDefenceExp(results.blocked, results.damageRecieved),
+      strengthExp: getStrengthExp(results.damageDelt)
+    });
+
     if (monsterNewHealth <= 0) {
       won();
       return;
     }
+
     send({
       type: "UPDATE_BATTLE",
       playerHealth: playerNewHealth,
       monsterHealth: monsterNewHealth,
-      log: `You have dealt ${results.damageDelt} damage, and recieved ${results.damageRecieved} damage.`
+      log: `You have dealt ${
+        results.missed ? 0 : results.damageDelt
+      } damage, and recieved ${
+        results.blocked ? 0 : results.damageRecieved
+      } damage.`
     });
+
     send({
       type: "ADD_LOG",
       log: "You have won the battle! All hail the champion!"
@@ -98,9 +127,10 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
   }
 
   function won() {
+    const dropRateMultiplier = getImproveDropRates(monster.combatantType);
     const drops = fullMonster?.drops
       .filter((drop: MonsterDropInterface) =>
-        getRandomBooleanByProbability(drop.rarity)
+        getRandomBooleanByProbability(drop.rarity * dropRateMultiplier)
       )
       .map((drop: MonsterDropInterface) => ({
         itemKey: drop.itemKey,
@@ -148,7 +178,11 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
           </span>
           <h6>{`${name} (Level ${fullMonster?.level})`}</h6>
         </div>
-        <ProgressBar now={monster.health} max={monster.stats.health} />
+        <ProgressBar
+          now={monster.health}
+          max={monster.stats.health}
+          progressiveColour
+        />
         <CombatLevels
           attack={monster.stats.attack}
           strength={monster.stats.strength}
@@ -183,8 +217,9 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
       <CombatProfile>
         <h6>{title}</h6>
         <ProgressBar
-          now={character.health.current}
-          max={character.health.max}
+          now={character.health}
+          max={getMaxHpByLevel(level)}
+          progressiveColour
         />
         <CombatLevels
           attack={characterStatsWithItems.attack}

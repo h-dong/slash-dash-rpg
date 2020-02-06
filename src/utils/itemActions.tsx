@@ -163,7 +163,6 @@ export function addBoughtItemToInventory(
     ITEM.COIN,
     purchasePrice
   );
-  console.log("CLG: inventoryMinusCoins", inventoryMinusCoins);
   return inventoryMinusCoins;
 }
 
@@ -308,7 +307,7 @@ export function addItemToShop(
 ): ShopDataItemInterface[] {
   let newShopItems = [...itemsInShop];
   const index = newShopItems.findIndex(elem => elem.key === itemKey);
-  if (newShopItems[index].quantity > 0) {
+  if (newShopItems[index]?.quantity > 0) {
     newShopItems[index].quantity += quantity;
   } else {
     newShopItems.push({

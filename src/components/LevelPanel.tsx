@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
-import { MAX_LEVEL } from "../config";
+import {
+  getLevel,
+  calcCharacterStatsWithItems,
+  getMaxHpByLevel,
+  getMaxLevel
+} from "../utils/levelHelper";
 import {
   CharacterInterface,
   EquipmentsInterface
 } from "../machines/GameMachine";
 import CollapseChevron from "../atomic/CollapseChevron";
+import CharacterSkillStat from "../atomic/CharacterSkillStat";
 
 const MaxLevelWrapper = styled.small`
   margin-left: 0.5rem;
@@ -20,29 +25,6 @@ const CardHeaderWrapper = styled.div`
 const LevelWrapper = styled.div`
   display: flex;
   flex-direction: column;
-
-  ul {
-    display: flex;
-    justify-content: space-between;
-    margin: 0;
-    padding: 0.25rem 0.5rem 0 0.5rem;
-    font-size: small;
-    font-weight: bold;
-
-    &:first-child {
-      text-align: left;
-    }
-
-    &:last-child {
-      text-align: right;
-      padding-bottom: 0.25rem;
-    }
-
-    li {
-      list-style-type: none;
-      font-size: 1rem;
-    }
-  }
 `;
 
 type Props = {
@@ -60,7 +42,6 @@ const LevelPanel = ({ character, equipments }: Props) => {
     character.strength,
     character.defence
   );
-
   const {
     attack,
     strength,
@@ -75,7 +56,7 @@ const LevelPanel = ({ character, equipments }: Props) => {
           <div>
             {`${character.name} - Level ${characterLevel}`}
             <MaxLevelWrapper className="text-center">
-              (Max level {MAX_LEVEL})
+              (Max level {getMaxLevel()})
             </MaxLevelWrapper>
           </div>
           <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
@@ -84,26 +65,29 @@ const LevelPanel = ({ character, equipments }: Props) => {
       {!collapse && (
         <div className="card-body">
           <LevelWrapper>
-            <ul>
-              <li>HP</li>
-              <li>{character.health.current}</li>
-            </ul>
-            <ul>
-              <li>Attack</li>
-              <li>{attack}</li>
-            </ul>
-            <ul>
-              <li>Strength</li>
-              <li>{strength}</li>
-            </ul>
-            <ul>
-              <li>Defence</li>
-              <li>{defence}</li>
-            </ul>
-            <ul>
-              <li>Movement Speed</li>
-              <li>{movementSpeed}%</li>
-            </ul>
+            <CharacterSkillStat
+              label="HP"
+              value={`${character.health} / ${getMaxHpByLevel(characterLevel)}`}
+            />
+            <CharacterSkillStat
+              label="Attack"
+              value={attack}
+              xp={character.attack}
+            />
+            <CharacterSkillStat
+              label="Strength"
+              value={strength}
+              xp={character.strength}
+            />
+            <CharacterSkillStat
+              label="Defence"
+              value={defence}
+              xp={character.defence}
+            />
+            <CharacterSkillStat
+              label="Movement Speed"
+              value={`${movementSpeed}%`}
+            />
           </LevelWrapper>
         </div>
       )}

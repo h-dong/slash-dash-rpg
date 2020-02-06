@@ -20,6 +20,12 @@ export function getRandomMonsterType(): COMBATANT_TYPE {
 }
 
 export function getRandomFlux(value: number): number {
-  const min = Math.floor(value * 0.75);
+  const min = Math.ceil(value * 0.75);
   return getRandomNumByMinMax(min, value);
+}
+
+export function toValidProbability(value: number) {
+  if (value < 0) return 0;
+  if (value > 100) return 100;
+  return value;
 }

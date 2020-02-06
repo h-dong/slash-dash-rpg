@@ -169,12 +169,12 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
     icon:
       "https://vignette.wikia.nocookie.net/2007scape/images/d/d2/Goblin.png/revision/latest?cb=20170212092103",
     description: "An ugly green creature.",
-    level: 3,
+    level: 4,
     drops: [
       {
         itemKey: ITEM.COIN,
         rarity: RARITY.ALWAYS,
-        quantity: { min: 20, max: 60 }
+        quantity: { min: 20, max: 100 }
       },
       {
         itemKey: ITEM.LOW_QUALITY_MEAT,
@@ -259,7 +259,7 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
       {
         itemKey: ITEM.COIN,
         rarity: RARITY.ALWAYS,
-        quantity: { min: 30, max: 80 }
+        quantity: { min: 100, max: 300 }
       },
       {
         itemKey: ITEM.HIGH_QUALITY_MEAT,
@@ -273,62 +273,12 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
       },
       {
         itemKey: ITEM.MEDIUM_HEALTH_POTIONS,
-        rarity: RARITY.RARE,
+        rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
         itemKey: ITEM.LARGE_HEALTH_POTIONS,
-        rarity: RARITY.EPIC,
-        quantity: { min: 1, max: 1 }
-      },
-      {
-        itemKey: ITEM.BRONZE_SPEAR,
-        rarity: RARITY.COMMON,
-        quantity: { min: 1, max: 1 }
-      },
-      {
-        itemKey: ITEM.BRONZE_PLATE_BODY,
         rarity: RARITY.RARE,
-        quantity: { min: 1, max: 1 }
-      },
-      {
-        itemKey: ITEM.BRONZE_SWORD,
-        rarity: RARITY.RARE,
-        quantity: { min: 1, max: 1 }
-      }
-    ]
-  },
-  {
-    key: MONSTER.GOBLIN_SOLDIER,
-    name: "Goblin Soldier",
-    icon:
-      "https://vignette.wikia.nocookie.net/2007scape/images/5/5c/Goblin_Recruiter.png/revision/latest?cb=20141021185712",
-    description: "Looks somewhat important, not sure how you can tell though.",
-    level: 6,
-    drops: [
-      {
-        itemKey: ITEM.COIN,
-        rarity: RARITY.ALWAYS,
-        quantity: { min: 50, max: 100 }
-      },
-      {
-        itemKey: ITEM.HIGH_QUALITY_MEAT,
-        rarity: RARITY.COMMON,
-        quantity: { min: 1, max: 5 }
-      },
-      {
-        itemKey: ITEM.SMALL_HEALTH_POTIONS,
-        rarity: RARITY.COMMON,
-        quantity: { min: 1, max: 3 }
-      },
-      {
-        itemKey: ITEM.MEDIUM_HEALTH_POTIONS,
-        rarity: RARITY.RARE,
-        quantity: { min: 1, max: 1 }
-      },
-      {
-        itemKey: ITEM.LARGE_HEALTH_POTIONS,
-        rarity: RARITY.EPIC,
         quantity: { min: 1, max: 1 }
       },
       {
@@ -348,22 +298,137 @@ const FULL_MONSTERS: FullMonsterInterface[] = [
       },
       {
         itemKey: ITEM.BRONZE_PLATE_LEGS,
-        rarity: RARITY.RARE,
+        rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
         itemKey: ITEM.BRONZE_BATTLE_AXE,
-        rarity: RARITY.RARE,
+        rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
         itemKey: ITEM.BRONZE_SHIELD,
-        rarity: RARITY.RARE,
+        rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       },
       {
         itemKey: ITEM.BRONZE_HELMET,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.IRON_SWORD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.IRON_SHIELD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      }
+    ]
+  },
+  {
+    key: MONSTER.GOBLIN_SOLDIER,
+    name: "Goblin Soldier",
+    icon:
+      "https://vignette.wikia.nocookie.net/2007scape/images/5/5c/Goblin_Recruiter.png/revision/latest?cb=20141021185712",
+    description: "Looks somewhat important, not sure how you can tell though.",
+    level: 6,
+    drops: [
+      {
+        itemKey: ITEM.COIN,
+        rarity: RARITY.ALWAYS,
+        quantity: { min: 100, max: 500 }
+      },
+      {
+        itemKey: ITEM.HIGH_QUALITY_MEAT,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 5 }
+      },
+      {
+        itemKey: ITEM.SMALL_HEALTH_POTIONS,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 3 }
+      },
+      {
+        itemKey: ITEM.MEDIUM_HEALTH_POTIONS,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.LARGE_HEALTH_POTIONS,
         rarity: RARITY.RARE,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.BRONZE_SPEAR,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.BRONZE_PLATE_BODY,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.BRONZE_SWORD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.BRONZE_PLATE_LEGS,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.BRONZE_BATTLE_AXE,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.BRONZE_SHIELD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.BRONZE_HELMET,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.IRON_SWORD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.IRON_SHIELD,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.IRON_SPEAR,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.IRON_BATTLE_AXE,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.IRON_HELMET,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.IRON_PLATE_BODY,
+        rarity: RARITY.COMMON,
+        quantity: { min: 1, max: 1 }
+      },
+      {
+        itemKey: ITEM.IRON_PLATE_LEGS,
+        rarity: RARITY.COMMON,
         quantity: { min: 1, max: 1 }
       }
     ]

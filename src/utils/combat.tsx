@@ -8,19 +8,6 @@ import FULL_MONSTERS, { MONSTER } from "../database/monsters";
 import { generateStatsByLevel } from "./levelHelper";
 import { BattleInterface } from "../machines/GameMachine";
 
-/*
-defence xp:
-* block (2x dmg would have taken) or dmg taken (1x dmg)
-
-strength xp:
-* dmg delt * 2
-* crit * 1
-
-attack xp:
-* land attack (attack level) + (50% * dmg delt)
-
-*/
-
 export enum COMBATANT_TYPE {
   PLAYER = "PLAYER",
   NORMAL_MONSTER = "NORMAL_MONSTER",
@@ -44,7 +31,26 @@ export interface CombatResultInterface {
 export interface CombatResultsInterface {
   damageDelt: number;
   blocked: boolean;
-  damageRecieved: Number;
+  missed: boolean;
+  damageRecieved: number;
+}
+
+export function getDefenceExp(
+  blocked: boolean,
+  damageRecieved: number
+): number {
+  return blocked ? damageRecieved * 2 : Math.floor(damageRecieved * 0.5);
+}
+
+export function getAttackExp(missed: boolean, damageDelt: number): number {
+  let exp = Math.ceil(damageDelt * 0.6);
+  if (exp < 1) exp = 1;
+  return missed ? 0 : exp;
+}
+
+export function getStrengthExp(damageDelt: number): number {
+  const exp = Math.ceil(damageDelt * 0.2);
+  return exp < 1 ? 1 : exp;
 }
 
 export function getMultiplierByCombatant(
@@ -98,15 +104,18 @@ function applyStatsBoosts(
 
 function calcDamage(attackerStrength: number, defenderDefence: number): number {
   // always has a base damage
-  const baseDamage = getRandomNumByMinMax(1, attackerStrength);
+  const baseDamage = getRandomNumByMinMax(1, attackerStrength + 1);
   // then depending on attacker's strength and defender's defence, there could be more damage
-  const attackDamage = Math.floor(attackerStrength * 2 - defenderDefence);
+  let attackDamage = Math.floor(attackerStrength - defenderDefence);
+
+  if (attackDamage < 0) attackDamage = 0;
+
   const damage = baseDamage + attackDamage;
   let critChance = Math.floor(2 + 10 * attackerStrength);
   // max crit 10%
   if (critChance > 10) critChance = 10;
   let isCrit = getRandomBooleanByProbability(critChance / 100);
-  return isCrit ? damage * 2 : damage;
+  return isCrit ? Math.floor(damage * 1.5) : damage;
 }
 
 export function attackForOneRound(
@@ -115,19 +124,22 @@ export function attackForOneRound(
 ): CombatResultsInterface {
   let damageDelt = 0;
   let blocked = false;
+  let missed = false;
   let damageRecieved = 0;
 
   if (player.movementSpeed < monster.movementSpeed) {
     const monsterAttack: CombatResultInterface = fight(monster, player);
     const playerAttack: CombatResultInterface = fight(player, monster);
     damageDelt = playerAttack.damage;
-    blocked = playerAttack.blocked;
+    missed = playerAttack.blocked;
+    blocked = monsterAttack.blocked;
     damageRecieved = monsterAttack.damage;
   } else {
     const playerAttack: CombatResultInterface = fight(player, monster);
     const monsterAttack: CombatResultInterface = fight(monster, player);
     damageDelt = playerAttack.damage;
-    blocked = playerAttack.blocked;
+    missed = playerAttack.blocked;
+    blocked = monsterAttack.blocked;
     damageRecieved = monsterAttack.damage;
   }
   damageDelt = getRandomFlux(damageDelt);
@@ -137,6 +149,7 @@ export function attackForOneRound(
   return {
     damageDelt,
     blocked,
+    missed,
     damageRecieved
   };
 }
@@ -145,25 +158,21 @@ export default function fight(
   attackSide: CombatStatsInterface,
   defendSide: CombatStatsInterface
 ): CombatResultInterface {
-  // block %: 5% + (10% * own defence) + item boosts (max 20%) (no dmg taken)
-  const defendingSideBlockChance = Math.floor(
-    (5 + 10 * defendSide.defence) * 100
-  );
-
-  let attackingSideStrikeChance = Math.floor(
-    50 + Math.log(attackSide.attack * 2) - (100 - attackSide.movementSpeed)
-  );
+  const damage = calcDamage(attackSide.strength, defendSide.strength);
+  let strikeChange =
+    (80 +
+      attackSide.attack * 2 -
+      defendSide.defence +
+      defendSide.movementSpeed * 0.1) /
+    100;
 
   // Max strike chance is 85%
-  if (attackingSideStrikeChance > 85) attackingSideStrikeChance = 85;
+  if (strikeChange > 0.85) strikeChange = 0.85;
 
-  const damage = calcDamage(attackSide.strength, defendSide.strength);
+  // Min strike changce is 10%
+  if (strikeChange < 0.05) strikeChange = 0.05;
 
-  const landAttack = getRandomBooleanByProbability(
-    Math.floor(attackingSideStrikeChance - defendingSideBlockChance) / 100
-  );
+  const landAttack = getRandomBooleanByProbability(strikeChange);
 
-  if (!landAttack) return { damage, blocked: true };
-
-  return { damage, blocked: false };
+  return { damage, blocked: !landAttack };
 }

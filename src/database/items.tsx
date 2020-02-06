@@ -39,7 +39,8 @@ export enum MATERIAL {
   IRON = "IRON",
   STEEL = "STEEL",
   MITHRIL = "MITHRIL",
-  DRAGON = "DRAGON"
+  DRAGON = "DRAGON",
+  STAR_DUST = "STAR_DUST"
 }
 
 export interface FoodHealInterface {
@@ -329,6 +330,7 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
+        attack: 1,
         strength: 1
       }
     }
@@ -347,6 +349,7 @@ const rawData: ItemInterface[] = [
         twoHanded: true
       },
       combat: {
+        attack: 2,
         strength: 3,
         movementSpeed: -3
       }
@@ -427,6 +430,7 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
+        attack: 2,
         strength: 2
       }
     }
@@ -442,6 +446,7 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
+        attack: 3,
         strength: 3,
         movementSpeed: -2
       }
@@ -461,6 +466,7 @@ const rawData: ItemInterface[] = [
         twoHanded: true
       },
       combat: {
+        attack: 6,
         strength: 6,
         movementSpeed: -3
       }
@@ -541,6 +547,7 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
+        attack: 4,
         strength: 4
       }
     }
@@ -556,6 +563,7 @@ const rawData: ItemInterface[] = [
       wearable: true,
       position: WEAR_POSITION.MAIN_HAND,
       combat: {
+        attack: 6,
         strength: 6,
         movementSpeed: -2
       }
@@ -575,6 +583,7 @@ const rawData: ItemInterface[] = [
         twoHanded: true
       },
       combat: {
+        attack: 12,
         strength: 12,
         movementSpeed: -3
       }
