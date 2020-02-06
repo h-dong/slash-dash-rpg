@@ -3,9 +3,9 @@ import styled from "styled-components";
 import {
   getLevel,
   calcCharacterStatsWithItems,
-  getMaxHpByLevel
+  getMaxHpByLevel,
+  getMaxLevel
 } from "../utils/levelHelper";
-import { MAX_LEVEL } from "../config";
 import {
   CharacterInterface,
   EquipmentsInterface
@@ -56,7 +56,7 @@ const LevelPanel = ({ character, equipments }: Props) => {
           <div>
             {`${character.name} - Level ${characterLevel}`}
             <MaxLevelWrapper className="text-center">
-              (Max level {MAX_LEVEL})
+              (Max level {getMaxLevel()})
             </MaxLevelWrapper>
           </div>
           <CollapseChevron collapse={collapse} setCollapse={setCollapse} />
