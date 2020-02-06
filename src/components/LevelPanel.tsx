@@ -61,7 +61,7 @@ const LevelPanel = ({ character, equipments }: Props) => {
       {!collapse && (
         <div className="card-body">
           <LevelWrapper>
-            <CharacterSkillStat label="HP" value={character.health.current} />
+            <CharacterSkillStat label="HP" value={character.health} />
             <CharacterSkillStat
               label="Attack"
               value={attack}

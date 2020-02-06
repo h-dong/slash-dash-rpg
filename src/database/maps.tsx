@@ -49,7 +49,7 @@ const FULL_MAPS: MapInterface[] = [
     treasure: [
       {
         itemKey: ITEM.COIN,
-        rarity: RARITY.COMMON,
+        rarity: RARITY.RARE,
         quantity: { min: 1, max: 20 }
       },
       {
@@ -106,7 +106,7 @@ const FULL_MAPS: MapInterface[] = [
     treasure: [
       {
         itemKey: ITEM.COIN,
-        rarity: RARITY.COMMON,
+        rarity: RARITY.RARE,
         quantity: { min: 10, max: 50 }
       },
       {

@@ -1,6 +1,6 @@
 import { Machine } from "xstate";
 import { getData, setData, clearData, DataInterface } from "../services/data";
-import { getHealthByLevel } from "../utils/levelHelper";
+import { getStartingHp } from "../utils/levelHelper";
 import { ITEM } from "../database/items";
 import { generateShopItems } from "../utils/shopHelper";
 
@@ -12,10 +12,7 @@ export enum VIEW {
 
 const newCharacterStats: DataInterface = {
   character: {
-    health: {
-      current: getHealthByLevel(1),
-      max: getHealthByLevel(1)
-    },
+    health: getStartingHp(),
     name: "",
     attack: 0,
     strength: 0,

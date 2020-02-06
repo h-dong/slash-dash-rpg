@@ -41,6 +41,14 @@ export function getNextLevelExp(level: number): number {
   return level < getMaxLevel() ? LEVEL_XP[level] : getMaxExp();
 }
 
+export function getStartingHp(): number {
+  return 40;
+}
+
+export function getMaxHpByLevel(level: number): number {
+  return getStartingHp() + level;
+}
+
 export function getLevel(
   attack: number,
   strength: number,

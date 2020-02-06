@@ -7,7 +7,11 @@ import {
   EquipmentsInterface,
   BattleInterface
 } from "../machines/GameMachine";
-import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
+import {
+  getLevel,
+  calcCharacterStatsWithItems,
+  getMaxHpByLevel
+} from "../utils/levelHelper";
 import ProgressBar from "../atomic/ProgressBar";
 import CombatLevels from "../atomic/CombatLevels";
 import {
@@ -25,6 +29,7 @@ import {
   getRandomNumByMinMax,
   getRandomBooleanByProbability
 } from "../utils/random";
+import { getImproveDropRates } from "../utils/itemHelper";
 
 const CardHeaderWrapper = styled.div`
   display: flex;
@@ -77,15 +82,20 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
 
   function attack() {
     const results: CombatResultsInterface = attackForOneRound(
-      { ...characterStatsWithItems, health: character.health.current },
+      { ...characterStatsWithItems, health: character.health },
       { ...monster.stats, health: monster.health }
     );
     const playerNewHealth = results.blocked
-      ? character.health.current
-      : character.health.current - Number(results.damageRecieved);
+      ? character.health
+      : character.health - Number(results.damageRecieved);
     const monsterNewHealth = results.missed
       ? monster.health
       : monster.health - results.damageDelt;
+
+    if (playerNewHealth <= 0) {
+      defeated();
+      return;
+    }
 
     send({
       type: "UPDATE_EXP",
@@ -94,10 +104,6 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
       strengthExp: getStrengthExp(results.damageDelt)
     });
 
-    if (playerNewHealth <= 0) {
-      defeated();
-      return;
-    }
     if (monsterNewHealth <= 0) {
       won();
       return;
@@ -121,9 +127,10 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
   }
 
   function won() {
+    const dropRateMultiplier = getImproveDropRates(monster.combatantType);
     const drops = fullMonster?.drops
       .filter((drop: MonsterDropInterface) =>
-        getRandomBooleanByProbability(drop.rarity)
+        getRandomBooleanByProbability(drop.rarity * dropRateMultiplier)
       )
       .map((drop: MonsterDropInterface) => ({
         itemKey: drop.itemKey,
@@ -210,8 +217,8 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
       <CombatProfile>
         <h6>{title}</h6>
         <ProgressBar
-          now={character.health.current}
-          max={character.health.max}
+          now={character.health}
+          max={getMaxHpByLevel(level)}
           progressiveColour
         />
         <CombatLevels

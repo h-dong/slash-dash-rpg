@@ -4,6 +4,7 @@ import FULL_ITEMS, {
   ItemCombatStatsInterface
 } from "../database/items";
 import { EquipmentsInterface } from "../machines/GameMachine";
+import { COMBATANT_TYPE } from "./combat";
 
 export function getItemById(id: number) {
   return FULL_ITEMS.find(item => item.id === id);
@@ -81,4 +82,15 @@ export function calcEquipmentsBonusStats(
     defence: bonusDefence,
     movementSpeed: bonusMovementSpeed
   };
+}
+
+export function getImproveDropRates(combatantType: COMBATANT_TYPE): number {
+  switch (combatantType) {
+    case COMBATANT_TYPE.BOSS_MONSTER:
+      return 5;
+    case COMBATANT_TYPE.ELITE_MONSTER:
+      return 2;
+    default:
+      return 1;
+  }
 }

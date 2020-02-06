@@ -39,15 +39,18 @@ export function getDefenceExp(
   blocked: boolean,
   damageRecieved: number
 ): number {
-  return blocked ? damageRecieved * 5 : 0;
+  return blocked ? damageRecieved * 2 : Math.floor(damageRecieved * 0.5);
 }
 
 export function getAttackExp(missed: boolean, damageDelt: number): number {
-  return missed ? 0 : 1.2 * damageDelt;
+  let exp = Math.ceil(damageDelt * 0.6);
+  if (exp < 1) exp = 1;
+  return missed ? 0 : exp;
 }
 
 export function getStrengthExp(damageDelt: number): number {
-  return Math.ceil(damageDelt * 0.5);
+  const exp = Math.ceil(damageDelt * 0.2);
+  return exp < 1 ? 1 : exp;
 }
 
 export function getMultiplierByCombatant(

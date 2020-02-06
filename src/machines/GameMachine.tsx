@@ -26,15 +26,10 @@ import {
 } from "../utils/combat";
 import { getMonsterNameWithCombatantType } from "../utils/monster";
 import { canAffordItem } from "../utils/shopHelper";
-import { calcExpGain } from "../utils/levelHelper";
-
-export interface CharacterHealthInterface {
-  current: number;
-  max: number;
-}
+import { calcExpGain, getLevel, getMaxHpByLevel } from "../utils/levelHelper";
 
 export interface CharacterInterface {
-  health: CharacterHealthInterface;
+  health: number;
   name: string;
   attack: number;
   strength: number;
@@ -326,34 +321,41 @@ const GameMachine = Machine<
       })),
       consumeFood: assign((context, { itemKey }) => {
         const newInventory = consumeInventoryFood(context.inventory, itemKey);
-        const healAmount = getHealAmountByItemKey(
-          context.character.health.max,
-          itemKey
+        const level = getLevel(
+          context.character.attack,
+          context.character.strength,
+          context.character.defence
         );
-        const { current, max } = context.character.health;
-        const heal = healAmount + current <= max ? healAmount + current : max;
+        const maxHp = getMaxHpByLevel(level);
+        const healAmount = getHealAmountByItemKey(maxHp, itemKey);
+        const newHp =
+          healAmount + context.character.health <= maxHp
+            ? healAmount + context.character.health
+            : maxHp;
 
         return {
           character: {
             ...context.character,
-            health: {
-              ...context.character.health,
-              current: heal
-            }
+            health: newHp
           },
           inventory: newInventory
         };
       }),
-      healToFull: assign((context, _) => ({
-        character: {
-          ...context.character,
-          health: {
-            ...context.character.health,
-            current: context.character.health.max
-          }
-        },
-        log: "You have been fully healed!"
-      })),
+      healToFull: assign((context, _) => {
+        const level = getLevel(
+          context.character.attack,
+          context.character.strength,
+          context.character.defence
+        );
+        const maxHp = getMaxHpByLevel(level);
+        return {
+          character: {
+            ...context.character,
+            health: maxHp
+          },
+          log: "You have been fully healed!"
+        };
+      }),
       setBattle: assign((_, { monsterKey }) => {
         let battle = null;
         const monsterObj = getStatsByMonsterKey(monsterKey);
@@ -371,10 +373,7 @@ const GameMachine = Machine<
         if (!context.battle) return { battle: null };
         const character = {
           ...context.character,
-          health: {
-            ...context.character.health,
-            current: playerHealth
-          }
+          health: playerHealth
         };
         const battle = {
           ...context.battle,
@@ -394,13 +393,16 @@ const GameMachine = Machine<
         }
       })),
       onRevive: assign(context => {
+        const level = getLevel(
+          context.character.attack,
+          context.character.strength,
+          context.character.defence
+        );
+        const maxHp = getMaxHpByLevel(level);
         return {
           character: {
             ...context.character,
-            health: {
-              ...context.character.health,
-              current: context.character.health.max
-            }
+            health: maxHp
           },
           inventory: loseRandomInventoryOnDeath(context.inventory),
           log: "After some rest, you have recovered to your full strength!"
