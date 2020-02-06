@@ -1,8 +1,11 @@
 import React from "react";
 import ProgressBar from "./ProgressBar";
-import { LEVEL_XP } from "../database/experience";
 import styled from "styled-components";
-import { getLevelFromXP } from "../utils/levelHelper";
+import {
+  getLevelFromExp,
+  getNextLevelExp,
+  getCurrentLevelBaseExp
+} from "../utils/levelHelper";
 import { Tooltip } from "react-tippy";
 
 type Props = {
@@ -38,7 +41,7 @@ const ValueWrapper = styled.strong`
 
   small {
     font-weight: bold;
-    color: red;
+    color: green;
     margin-left: 0.5rem;
   }
 `;
@@ -52,7 +55,7 @@ const ProgressBarWrapper = styled.div`
 function renderValue(value: number | string, xp: number) {
   let valueBlock = <strong>{value}</strong>;
   if (xp >= 0 && typeof value === "number") {
-    const level = getLevelFromXP(xp);
+    const level = getLevelFromExp(xp);
     if (level !== value) {
       valueBlock = (
         <ValueWrapper>
@@ -66,23 +69,21 @@ function renderValue(value: number | string, xp: number) {
 }
 
 function renderProgressBar(xp: number) {
-  const level = getLevelFromXP(xp);
-  const nextLevelXp = LEVEL_XP[level - 1];
+  const level = getLevelFromExp(xp);
+  const currentBaseExp = getCurrentLevelBaseExp(level);
+  const nextLevelExp = getNextLevelExp(level);
+  const current = xp - currentBaseExp;
+  const goal = nextLevelExp - currentBaseExp;
   return (
     <ProgressBarWrapper>
       <Tooltip
-        title={`Experience: ${xp} / ${nextLevelXp}`}
+        title={`Experience: ${current} / ${goal}`}
         position="top"
         trigger="mouseenter"
         key="drop"
         arrow
       >
-        <ProgressBar
-          now={xp}
-          max={nextLevelXp}
-          height="1rem"
-          showText={false}
-        />
+        <ProgressBar now={current} max={goal} height="1rem" showText={false} />
       </Tooltip>
     </ProgressBarWrapper>
   );

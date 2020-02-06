@@ -10,7 +10,13 @@ import {
 import { getLevel, calcCharacterStatsWithItems } from "../utils/levelHelper";
 import ProgressBar from "../atomic/ProgressBar";
 import CombatLevels from "../atomic/CombatLevels";
-import { attackForOneRound, CombatResultsInterface } from "../utils/combat";
+import {
+  attackForOneRound,
+  CombatResultsInterface,
+  getDefenceExp,
+  getStrengthExp,
+  getAttackExp
+} from "../utils/combat";
 import {
   getMonsterNameWithCombatantType,
   getMonsterBorderColour
@@ -74,9 +80,20 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
       { ...characterStatsWithItems, health: character.health.current },
       { ...monster.stats, health: monster.health }
     );
-    const playerNewHealth =
-      character.health.current - Number(results.damageRecieved);
-    const monsterNewHealth = monster.health - results.damageDelt;
+    const playerNewHealth = results.blocked
+      ? character.health.current
+      : character.health.current - Number(results.damageRecieved);
+    const monsterNewHealth = results.missed
+      ? monster.health
+      : monster.health - results.damageDelt;
+
+    send({
+      type: "UPDATE_EXP",
+      attackExp: getAttackExp(results.missed, results.damageDelt),
+      defenceExp: getDefenceExp(results.blocked, results.damageRecieved),
+      strengthExp: getStrengthExp(results.damageDelt)
+    });
+
     if (playerNewHealth <= 0) {
       defeated();
       return;
@@ -85,12 +102,18 @@ const WorldPanelCombat = ({ send, battle, character, equipments }: Props) => {
       won();
       return;
     }
+
     send({
       type: "UPDATE_BATTLE",
       playerHealth: playerNewHealth,
       monsterHealth: monsterNewHealth,
-      log: `You have dealt ${results.damageDelt} damage, and recieved ${results.damageRecieved} damage.`
+      log: `You have dealt ${
+        results.missed ? 0 : results.damageDelt
+      } damage, and recieved ${
+        results.blocked ? 0 : results.damageRecieved
+      } damage.`
     });
+
     send({
       type: "ADD_LOG",
       log: "You have won the battle! All hail the champion!"

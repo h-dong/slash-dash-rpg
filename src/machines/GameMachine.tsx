@@ -26,6 +26,7 @@ import {
 } from "../utils/combat";
 import { getMonsterNameWithCombatantType } from "../utils/monster";
 import { canAffordItem } from "../utils/shopHelper";
+import { calcExpGain } from "../utils/levelHelper";
 
 export interface CharacterHealthInterface {
   current: number;
@@ -108,6 +109,7 @@ export type GameMachineEvents = {
     | "START_BATTLE"
     | "UPDATE_BATTLE"
     | "WON_BATTLE"
+    | "UPDATE_EXP"
     | "LOST_BATTLE"
     | "ESCAPE_BATTLE"
     | "UNEQUIP_ITEM"
@@ -132,6 +134,9 @@ export type GameMachineEvents = {
   drops: WorldDropsInterface[];
   monsterHealth: number;
   playerHealth: number;
+  attackExp: number;
+  defenceExp: number;
+  strengthExp: number;
 };
 
 const GameMachine = Machine<
@@ -199,6 +204,9 @@ const GameMachine = Machine<
         on: {
           UPDATE_BATTLE: {
             actions: ["updateBattle", "addLog", "persist"]
+          },
+          UPDATE_EXP: {
+            actions: ["updateExp", "persist"]
           },
           LOST_BATTLE: {
             target: "dead",
@@ -377,6 +385,14 @@ const GameMachine = Machine<
           battle
         };
       }),
+      updateExp: assign((context, { attackExp, defenceExp, strengthExp }) => ({
+        character: {
+          ...context.character,
+          attack: calcExpGain(context.character.attack, attackExp),
+          defence: calcExpGain(context.character.defence, defenceExp),
+          strength: calcExpGain(context.character.strength, strengthExp)
+        }
+      })),
       onRevive: assign(context => {
         return {
           character: {

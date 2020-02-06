@@ -11,14 +11,34 @@ Monster stats = level * 2
 Player stats = level * 3
 */
 
-export function getLevelFromXP(xp: number): number {
+export function getLevelFromExp(xp: number): number {
   let level: number = 1;
 
   LEVEL_XP.forEach((elem, index) => {
-    if (xp >= elem) level = index + 2;
+    if (xp >= elem) level = index + 1;
   });
 
   return level;
+}
+
+export function getMaxExp(): number {
+  return LEVEL_XP[LEVEL_XP.length - 1];
+}
+
+export function getMaxLevel(): number {
+  return getLevelFromExp(getMaxExp());
+}
+
+export function getCurrentLevelBaseExp(level: number): number {
+  return LEVEL_XP[level - 1];
+}
+
+export function getPreviousLevelExp(level: number): number {
+  return level > 1 ? LEVEL_XP[level - 2] : 0;
+}
+
+export function getNextLevelExp(level: number): number {
+  return level < getMaxLevel() ? LEVEL_XP[level] : getMaxExp();
 }
 
 export function getLevel(
@@ -26,12 +46,15 @@ export function getLevel(
   strength: number,
   defence: number
 ): number {
-  // divide by 9 = 3 stats * 3 stat levels
+  // divide by 3, average stats level
   const allStatsLevels =
-    getLevelFromXP(attack) + getLevelFromXP(strength) + getLevelFromXP(defence);
-  const level: number = Math.floor(allStatsLevels / 3 / 3);
+    getLevelFromExp(attack) +
+    getLevelFromExp(strength) +
+    getLevelFromExp(defence);
+  const level: number = Math.floor(allStatsLevels / 3);
   if (level < 1) return 1;
-  if (level > 10) return 10;
+  const maxLevel = getMaxLevel();
+  if (level > maxLevel) return maxLevel;
   return level;
 }
 
@@ -52,17 +75,32 @@ export function generateStatsByLevel(level: number) {
   };
 }
 
+export function calcExpGain(currentExp: number, addExp: number): number {
+  let newExp = currentExp;
+  const maxLevelExp = getMaxExp();
+
+  if (currentExp < maxLevelExp) {
+    if (currentExp + addExp <= maxLevelExp) {
+      newExp = currentExp + addExp;
+    } else {
+      newExp = maxLevelExp;
+    }
+  }
+
+  return newExp;
+}
+
 export function calcCharacterStatsWithItems(
   character: CharacterInterface,
   equipments: EquipmentsInterface
 ) {
   const equipmentBonusStats = calcEquipmentsBonusStats(equipments);
   const attack =
-    getLevelFromXP(character.attack) + Number(equipmentBonusStats?.attack);
+    getLevelFromExp(character.attack) + Number(equipmentBonusStats?.attack);
   const strength =
-    getLevelFromXP(character.strength) + Number(equipmentBonusStats?.strength);
+    getLevelFromExp(character.strength) + Number(equipmentBonusStats?.strength);
   const defence =
-    getLevelFromXP(character.defence) + Number(equipmentBonusStats?.defence);
+    getLevelFromExp(character.defence) + Number(equipmentBonusStats?.defence);
   const movementSpeed = 0 + Number(equipmentBonusStats?.movementSpeed);
   return { attack, strength, defence, movementSpeed };
 }

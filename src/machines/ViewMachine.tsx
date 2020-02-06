@@ -26,6 +26,10 @@ const newCharacterStats: DataInterface = {
     {
       itemKey: ITEM.WOODEN_SWORD,
       quantity: 1
+    },
+    {
+      itemKey: ITEM.WOODEN_SHIELD,
+      quantity: 1
     }
   ],
   itemsInShop: generateShopItems()

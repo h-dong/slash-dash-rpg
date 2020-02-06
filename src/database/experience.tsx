@@ -1,6 +1,7 @@
 // https://runescape.wiki/w/Experience/Table
 
 export const LEVEL_XP = [
+  0,
   83,
   174,
   276,
@@ -9,10 +10,10 @@ export const LEVEL_XP = [
   650,
   801,
   969,
-  1154,
-  1358,
-  1584,
-  1833,
-  2107,
-  2411
+  1154
+  // 1358,
+  // 1584,
+  // 1833,
+  // 2107,
+  // 2411
 ];

@@ -42,37 +42,37 @@ const SHOP: ShopInterface = {
       key: ITEM.LOW_QUALITY_MEAT,
       rarity: RARITY.ALWAYS,
       price: { purchase: 10, sell: 5 },
-      generatedStockLevel: { min: 1, max: 200 }
+      generatedStockLevel: { min: 500, max: 1000 }
     },
     {
       key: ITEM.HIGH_QUALITY_MEAT,
       rarity: RARITY.ALWAYS,
       price: { purchase: 30, sell: 15 },
-      generatedStockLevel: { min: 1, max: 200 }
+      generatedStockLevel: { min: 500, max: 1000 }
     },
     {
       key: ITEM.SMALL_HEALTH_POTIONS,
       rarity: RARITY.ALWAYS,
       price: { purchase: 200, sell: 100 },
-      generatedStockLevel: { min: 1, max: 200 }
+      generatedStockLevel: { min: 500, max: 1000 }
     },
     {
       key: ITEM.MEDIUM_HEALTH_POTIONS,
       rarity: RARITY.COMMON,
       price: { purchase: 350, sell: 200 },
-      generatedStockLevel: { min: 1, max: 200 }
+      generatedStockLevel: { min: 500, max: 1000 }
     },
     {
       key: ITEM.LARGE_HEALTH_POTIONS,
       rarity: RARITY.COMMON,
       price: { purchase: 500, sell: 300 },
-      generatedStockLevel: { min: 1, max: 200 }
+      generatedStockLevel: { min: 500, max: 1000 }
     },
     {
       key: ITEM.GREAT_HEALTH_POTIONS,
       rarity: RARITY.RARE,
       price: { purchase: 1000, sell: 500 },
-      generatedStockLevel: { min: 1, max: 200 }
+      generatedStockLevel: { min: 500, max: 1000 }
     },
     {
       key: ITEM.WOODEN_HELMET,
@@ -135,7 +135,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.HELMET * MATERIAL_PRICE.BRONZE,
         sell: (COMBAT_ITEM_PRICE.HELMET * MATERIAL_PRICE.BRONZE) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.BRONZE_PLATE_BODY,
@@ -144,7 +144,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.PLATE_BODY * MATERIAL_PRICE.BRONZE,
         sell: (COMBAT_ITEM_PRICE.PLATE_BODY * MATERIAL_PRICE.BRONZE) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.BRONZE_PLATE_LEGS,
@@ -153,7 +153,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.PLATE_LEGS * MATERIAL_PRICE.BRONZE,
         sell: (COMBAT_ITEM_PRICE.PLATE_LEGS * MATERIAL_PRICE.BRONZE) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.BRONZE_SHIELD,
@@ -162,7 +162,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.SHIELD * MATERIAL_PRICE.BRONZE,
         sell: (COMBAT_ITEM_PRICE.SHIELD * MATERIAL_PRICE.BRONZE) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.BRONZE_SWORD,
@@ -171,7 +171,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.SWORD * MATERIAL_PRICE.BRONZE,
         sell: (COMBAT_ITEM_PRICE.SWORD * MATERIAL_PRICE.BRONZE) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.BRONZE_BATTLE_AXE,
@@ -180,7 +180,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.BATTLE_AXE * MATERIAL_PRICE.BRONZE,
         sell: (COMBAT_ITEM_PRICE.BATTLE_AXE * MATERIAL_PRICE.BRONZE) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.BRONZE_SPEAR,
@@ -189,7 +189,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.SPEAR * MATERIAL_PRICE.BRONZE,
         sell: (COMBAT_ITEM_PRICE.SPEAR * MATERIAL_PRICE.BRONZE) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.IRON_HELMET,
@@ -198,7 +198,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.HELMET * MATERIAL_PRICE.IRON,
         sell: (COMBAT_ITEM_PRICE.HELMET * MATERIAL_PRICE.IRON) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.IRON_PLATE_BODY,
@@ -207,7 +207,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.PLATE_BODY * MATERIAL_PRICE.IRON,
         sell: (COMBAT_ITEM_PRICE.PLATE_BODY * MATERIAL_PRICE.IRON) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.IRON_PLATE_LEGS,
@@ -216,7 +216,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.PLATE_LEGS * MATERIAL_PRICE.IRON,
         sell: (COMBAT_ITEM_PRICE.PLATE_LEGS * MATERIAL_PRICE.IRON) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.IRON_SHIELD,
@@ -225,7 +225,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.SHIELD * MATERIAL_PRICE.IRON,
         sell: (COMBAT_ITEM_PRICE.SHIELD * MATERIAL_PRICE.IRON) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.IRON_SWORD,
@@ -234,7 +234,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.SWORD * MATERIAL_PRICE.IRON,
         sell: (COMBAT_ITEM_PRICE.SWORD * MATERIAL_PRICE.IRON) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.IRON_BATTLE_AXE,
@@ -243,7 +243,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.BATTLE_AXE * MATERIAL_PRICE.IRON,
         sell: (COMBAT_ITEM_PRICE.BATTLE_AXE * MATERIAL_PRICE.IRON) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     },
     {
       key: ITEM.IRON_SPEAR,
@@ -252,7 +252,7 @@ const SHOP: ShopInterface = {
         purchase: COMBAT_ITEM_PRICE.SPEAR * MATERIAL_PRICE.IRON,
         sell: (COMBAT_ITEM_PRICE.SPEAR * MATERIAL_PRICE.IRON) / 2
       },
-      generatedStockLevel: { min: 1, max: 1 }
+      generatedStockLevel: { min: 1, max: 5 }
     }
   ]
 };
