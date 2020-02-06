@@ -46,7 +46,7 @@ export function getStartingHp(): number {
 }
 
 export function getMaxHpByLevel(level: number): number {
-  return getStartingHp() + level;
+  return getStartingHp() + level - 1;
 }
 
 export function getLevel(

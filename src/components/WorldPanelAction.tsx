@@ -32,6 +32,12 @@ const Wrapper = styled.div`
     margin-bottom: 0;
     padding: 0.25rem;
 
+    p {
+      text-align: center;
+      width: 100%;
+      margin: 0;
+    }
+
     li {
       display: flex;
       list-style: none;
@@ -111,7 +117,7 @@ const WorldPanelActions = ({
   };
 
   const renderMonsters = () => {
-    return monsters.map((monsterKey, index) => {
+    const monstersForRender = monsters.map((monsterKey, index) => {
       const fullMonster = FULL_MONSTERS.find(elem => elem.key === monsterKey);
 
       if (!fullMonster) return null;
@@ -133,6 +139,11 @@ const WorldPanelActions = ({
         </Tooltip>
       );
     });
+
+    if (monstersForRender.length === 0)
+      return <p>Didn't find anything here, keep exploring!</p>;
+
+    return monstersForRender;
   };
 
   return (
