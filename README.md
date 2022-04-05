@@ -2,6 +2,9 @@
 
 This is a React based RPG game, using xState (state machine lib) to manage state.
 
+<img width="500" alt="Screenshot 2022-04-05 at 01 25 09" src="https://user-images.githubusercontent.com/1476807/161654730-258050c7-7304-40ef-aaa7-75865e91ddb1.png">
+
+
 ## Development
 
 In the project directory, you can run:
