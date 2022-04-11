@@ -3,7 +3,7 @@ import { Tooltip } from "react-tippy";
 import styled from "styled-components";
 import {
   ShopDataInterface,
-  ShopDataItemInterface
+  ShopDataItemInterface,
 } from "../machines/GameMachine";
 import { getItemByKey } from "../utils/itemHelper";
 import SHOP from "../database/shop";
@@ -49,10 +49,10 @@ type Props = {
 
 const WorldPanelInn = ({ send, itemsInShop }: Props) => {
   const shopItems: ShopDataItemInterface[] = itemsInShop.items;
-  const itemsForSale = shopItems.map(elem => {
+  const itemsForSale = shopItems.map((elem) => {
     const fullItem = getItemByKey(elem.key);
     const itemShopDetails = SHOP.items.find(
-      shopElem => shopElem.key === elem.key
+      (shopElem) => shopElem.key === elem.key
     );
     const itemPrice = itemShopDetails?.price.purchase
       ? `${toNumberWithUnits(itemShopDetails?.price.purchase)} coins`
@@ -83,7 +83,7 @@ const WorldPanelInn = ({ send, itemsInShop }: Props) => {
       <InnActionWrapper>
         <h6 className="text-center">Inn Services</h6>
         <div className="buttons">
-          <button type="button" className="btn btn-primary" disabled>
+          <button type="button" className="btn btn-primary" hidden>
             Quests
           </button>
           <button

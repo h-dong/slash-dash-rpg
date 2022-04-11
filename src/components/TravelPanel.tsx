@@ -35,12 +35,13 @@ const TravelPanel = ({ send, location }: Props) => {
   const [collapse, setCollapse] = useState<boolean>(false);
 
   const renderButtons = () => {
-    return FULL_MAPS.map(map => (
+    return FULL_MAPS.map((map) => (
       <li key={map.name}>
         <button
           type="button"
           className="btn btn-link btn-sm"
-          disabled={map.key === location || map.key === MAP.DARK_FOREST}
+          disabled={map.key === location}
+          hidden={map.key === MAP.DARK_FOREST}
           onClick={() => send({ type: "CHANGE_LOCATION", location: map.key })}
         >
           {map.name}
